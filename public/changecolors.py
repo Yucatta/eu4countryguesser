@@ -7,9 +7,9 @@ with open("terrcolors.json",mode="r") as f:
 
 for i,province in enumerate(colors):
     # print(province[1])
-    if(province[1] ==  "rgb(185,212,184)"):
+    if(province[1] =="rgb(57,138,54)"):
         # print(colors[i][1],"before")
-        colors[i][1] = "rgb(126,158,125)"
+        colors[i][1] =  "rgb(40,77,42)"
         # print(colors[i][1],"after")
 
 

@@ -36,7 +36,7 @@ function loadAllDataOnce(): AppData {
     );
 
     const pathsJson = JSON.parse(
-      fs.readFileSync(path.join(root, "completemap.json"), "utf-8")
+      fs.readFileSync(path.join(root, "provinces.json"), "utf-8")
     );
     const Countries: Array<[string, string, string, number[]]> = JSON.parse(
       fs.readFileSync(path.join(root, "countryprovinces.json"), "utf-8")

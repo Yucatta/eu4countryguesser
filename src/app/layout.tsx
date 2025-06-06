@@ -1,8 +1,9 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import { DataProvider } from "@/context/DataContext";
 import { loadAppData } from "@/lib/data";
+import { GameContextProvider } from "@/context/GameContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,19 +31,21 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <DataProvider
-          value={{
-            countries: fetcheddata.countries,
-            countryprovinces: fetcheddata.countryprovinces,
-            paths: fetcheddata.paths,
-            emptylands: fetcheddata.emptylands,
-            areapaths: fetcheddata.areapaths,
-            countryoutlines: fetcheddata.countryoutlines,
-            terraincolors: fetcheddata.terraincolors,
-          }}
-        >
-          {children}
-        </DataProvider>
+        <GameContextProvider>
+          <DataProvider
+            value={{
+              countries: fetcheddata.countries,
+              countryprovinces: fetcheddata.countryprovinces,
+              paths: fetcheddata.paths,
+              emptylands: fetcheddata.emptylands,
+              areapaths: fetcheddata.areapaths,
+              countryoutlines: fetcheddata.countryoutlines,
+              terraincolors: fetcheddata.terraincolors,
+            }}
+          >
+            {children}
+          </DataProvider>
+        </GameContextProvider>
       </body>
     </html>
   );
