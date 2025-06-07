@@ -34,6 +34,7 @@ export default async function RootLayout({
         <GameContextProvider>
           <DataProvider
             value={{
+              regions: fetcheddata.regions,
               countries: fetcheddata.countries,
               countryprovinces: fetcheddata.countryprovinces,
               paths: fetcheddata.paths,
@@ -41,6 +42,7 @@ export default async function RootLayout({
               areapaths: fetcheddata.areapaths,
               countryoutlines: fetcheddata.countryoutlines,
               terraincolors: fetcheddata.terraincolors,
+              regionnames: fetcheddata.regionnames,
             }}
           >
             {children}

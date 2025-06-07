@@ -9,6 +9,8 @@ type DataContextType = {
   countryoutlines: Array<[number, string[]]>;
   terraincolors: Array<[number, string]>;
   paths: string[][];
+  regions: [string, number[]][][];
+  regionnames: string[][];
 };
 
 const DataContext = createContext<DataContextType | null>(null);

@@ -1,17 +1,20 @@
 "use client";
 import CurrentCountry from "@/Components/CurrentCountry";
+import RegionSelect from "@/Components/RegionSelect";
 import SvgMap from "@/Components/SvgMap";
-import { useDataContext } from "@/context/DataContext";
-import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
-import svgPanZoom from "svg-pan-zoom";
+import { useGameContext } from "@/context/GameContext";
 export default function Home() {
   return (
     <>
-      <div className="w-full bg-neutral-900 flex h-full flex-col ">
-        <CurrentCountry></CurrentCountry>
-        <div>
+      <div className=" h-screen  flex justify-center items-start">
+        <div
+          className={
+            "w-[clamp(100vh,70vw,70vw)] h-max bg-[rgb(29,29,29)] flex flex-col items-center  pb-20"
+          }
+        >
+          <CurrentCountry></CurrentCountry>
           <SvgMap></SvgMap>
+          <RegionSelect></RegionSelect>
         </div>
       </div>
     </>

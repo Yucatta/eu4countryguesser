@@ -3,8 +3,9 @@ import { useGameContext } from "@/context/GameContext";
 import React, { useMemo, useState } from "react";
 interface Props {
   countryindex: number;
+  isitin: boolean;
 }
-const Countries = ({ countryindex }: Props) => {
+const Countries = ({ countryindex, isitin }: Props) => {
   const {
     paths,
     areapaths,
@@ -29,13 +30,15 @@ const Countries = ({ countryindex }: Props) => {
           stroke="rgb(20,20,20)"
           strokeWidth={1}
           fill={
-            isclicked
-              ? `rgb(255,255,255)`
-              : currentcountry[1] === countryindex
-              ? `rgb(${Math.floor((Number(rgbs[0]) / 7) * 10)},${Math.floor(
-                  (Number(rgbs[1]) / 7) * 10
-                )},${Math.floor((Number(rgbs[2]) / 7) * 10)}`
-              : countries[countryindex][1]
+            isitin
+              ? isclicked
+                ? `rgb(255,255,255)`
+                : currentcountry[1] === countryindex
+                ? `rgb(${Math.floor((Number(rgbs[0]) / 7) * 10)},${Math.floor(
+                    (Number(rgbs[1]) / 7) * 10
+                  )},${Math.floor((Number(rgbs[2]) / 7) * 10)}`
+                : countries[countryindex][1]
+              : "rgb(50,50,50)"
           }
           onMouseEnter={() =>
             setcurrentcountry([currentcountry[1], countryindex])
@@ -59,6 +62,7 @@ const Countries = ({ countryindex }: Props) => {
     countryoutlines,
     countries,
     isclicked,
+    isitin,
   ]);
   return <>{countryPaths}</>;
 };
