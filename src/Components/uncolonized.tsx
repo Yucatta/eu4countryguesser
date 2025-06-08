@@ -6,7 +6,7 @@ interface Props {
   isitin: boolean;
 }
 const Uncolonized = ({ countryindex, isitin }: Props) => {
-  const { countryoutlines, countries, countryprovinces } = useDataContext();
+  const { countryoutlines, countries } = useDataContext();
   const { currentcountry, setcurrentcountry } = useGameContext();
   const countryPaths = useMemo(() => {
     const rgbs = countries[countryindex][1]

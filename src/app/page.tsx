@@ -2,7 +2,6 @@
 import CurrentCountry from "@/Components/CurrentCountry";
 import RegionSelect from "@/Components/RegionSelect";
 import SvgMap from "@/Components/SvgMap";
-import { useGameContext } from "@/context/GameContext";
 export default function Home() {
   return (
     <>

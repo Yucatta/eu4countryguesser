@@ -1,6 +1,6 @@
 "use client";
 import { useDataContext } from "@/context/DataContext";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 export default function ProvinceMap() {
   const [terraincolors, setterraincolors] = useState<[number, string][] | null>(
     null
