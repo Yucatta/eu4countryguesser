@@ -1,18 +1,13 @@
 "use client";
 import { useDataContext } from "@/context/DataContext";
-import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import Countries from "./Countries";
 import Uncolonized from "./uncolonized";
 import { useGameContext } from "@/context/GameContext";
 import Provinces from "./Provinces";
 export default function SvgMap() {
-  // const [terraincolors, setterraincolors] = useState<[number, string][] | null>(
-  //   null
-  // );
   const {
     paths,
-    areapaths,
     countryoutlines,
     countries,
     countryprovinces,
@@ -20,28 +15,11 @@ export default function SvgMap() {
     regions,
     terraincolors,
   } = useDataContext();
-  const {
-    currentregion,
-    setanswercorrectness,
-    setcorrectanswer,
-    correctanswer,
-  } = useGameContext();
+  const { currentregion, setanswercorrectness, setcorrectanswer } =
+    useGameContext();
   const svgRef = useRef<SVGSVGElement | null>(null);
   const correctanswerref = useRef<number | undefined>(undefined);
-  function shuffle(array: number[]) {
-    let m = array.length;
-    let t: number, i: number;
 
-    while (m) {
-      i = Math.floor(Math.random() * m--);
-
-      t = array[m];
-      array[m] = array[i];
-      array[i] = t;
-    }
-
-    return array;
-  }
   function GetCorrectAnswer(list: number[]) {
     const filteredids = list.filter((countryid) => countryid < 665);
     return filteredids[Math.floor(Math.random() * filteredids.length)];

@@ -1,9 +1,6 @@
 "use client";
 import { useDataContext } from "@/context/DataContext";
-import Image from "next/image";
-import path from "path";
-import { useEffect, useMemo, useRef, useState, useTransition } from "react";
-import svgPanZoom from "svg-pan-zoom";
+import { useEffect, useMemo, useRef, useState } from "react";
 export default function ProvinceMap() {
   const [terraincolors, setterraincolors] = useState<[number, string][] | null>(
     null

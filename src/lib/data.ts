@@ -2,7 +2,6 @@ import Papa from "papaparse";
 import { cache as reactCache } from "react";
 import fs from "fs";
 import path from "path";
-import { count } from "console";
 
 interface AppData {
   emptylands: number[];

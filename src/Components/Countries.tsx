@@ -1,20 +1,13 @@
 import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 interface Props {
   countryindex: number;
   isitin: boolean;
   countryclick: () => void;
 }
 const Countries = ({ countryindex, countryclick, isitin }: Props) => {
-  const {
-    paths,
-    areapaths,
-    countryoutlines,
-    countries,
-    countryprovinces,
-    emptylands,
-  } = useDataContext();
+  const { countryoutlines, countries } = useDataContext();
   const {
     currentcountry,
     clickedcountry,
