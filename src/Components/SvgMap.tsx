@@ -27,14 +27,7 @@ export default function SvgMap() {
     correctanswer,
   } = useGameContext();
   const svgRef = useRef<SVGSVGElement | null>(null);
-  // useEffect(() => {
-  //   async function FetchData() {
-  //     const response = await fetch("/terrcolors.json");
-  //     const text = await response.json();
-  //     setterraincolors(text);
-  //   }
-  //   FetchData();
-  // }, []);
+  const correctanswerref = useRef<number | undefined>(undefined);
   function shuffle(array: number[]) {
     let m = array.length;
     let t: number, i: number;
@@ -54,42 +47,22 @@ export default function SvgMap() {
     return filteredids[Math.floor(Math.random() * filteredids.length)];
   }
   useEffect(() => {
-    const a = GetCorrectAnswer(regions[currentregion[0]][currentregion[1]][1]);
-    setcorrectanswer(a);
+    correctanswerref.current = GetCorrectAnswer(
+      regions[currentregion[0]][currentregion[1]][1]
+    );
+    setcorrectanswer(correctanswerref.current);
     setanswercorrectness(Array(665).fill(0));
   }, [currentregion, regions]);
+  const thisregion = regions[currentregion[0]][currentregion[1]];
   const Image = useMemo(() => {
-    let answercount = 0;
-    const thisregion = regions[currentregion[0]][currentregion[1]];
-    let insidecorrect = correctanswer;
-    const answercorrectness = Array(665).fill(0);
-    const correctguessses: number[] = [];
-    if (terraincolors && regions) {
+    if (terraincolors && regions && correctanswerref.current) {
+      let answercount = 0;
+      let insidecorrect = correctanswerref.current;
+      console.log(insidecorrect, insidecorrect, !!insidecorrect);
+      const answercorrectness = Array(665).fill(0);
+      const correctguessses: number[] = [];
       return (
-        <svg
-          className="w-auto h-auto  bg-[rgb(0,0,200)]"
-          // className="w-[1536px] h-[552px]  bg-[rgb(0,0,200)]"
-          viewBox={thisregion[0]}
-          xmlns="http://www.w3.org/2000/svg"
-          width="100%"
-          height="100%"
-          ref={svgRef}
-        >
-          {Array.from({ length: 24 }, (_, i) => i + 665).map((i) => (
-            <Uncolonized
-              countryindex={i}
-              key={i}
-              isitin={thisregion[1].includes(i)}
-            ></Uncolonized>
-          ))}
-          <Uncolonized countryindex={699} isitin={true}></Uncolonized>
-          {Array.from({ length: 10 }, (_, i) => i + 689).map((i) => (
-            <Uncolonized
-              countryindex={i}
-              key={i}
-              isitin={thisregion[1].includes(i)}
-            ></Uncolonized>
-          ))}
+        <>
           {answercorrectness.map((i, index) => (
             <Countries
               countryindex={index}
@@ -133,8 +106,7 @@ export default function SvgMap() {
               isitin={thisregion[1].includes(index)}
             ></Countries>
           ))}
-          <Provinces></Provinces>
-        </svg>
+        </>
       );
     }
   }, [
@@ -146,6 +118,7 @@ export default function SvgMap() {
     countryoutlines,
     regions,
     currentregion,
+    correctanswerref.current,
   ]);
   // useEffect(() => {
   //   import("svg-pan-zoom").then((svgPanZoom) => {
@@ -162,7 +135,34 @@ export default function SvgMap() {
   return (
     <>
       <div className="w-full h-[60vh] p-0 mt-[2vh] flex object-contain object-center bg-[rgb(50,50,50)] ">
-        {Image ? Image : ""}
+        <svg
+          className="w-auto h-auto  bg-[rgb(0,0,200)]"
+          // className="w-[1536px] h-[552px]  bg-[rgb(0,0,200)]"
+          viewBox={thisregion[0]}
+          xmlns="http://www.w3.org/2000/svg"
+          width="100%"
+          height="100%"
+          ref={svgRef}
+        >
+          {Array.from({ length: 24 }, (_, i) => i + 665).map((i) => (
+            <Uncolonized
+              countryindex={i}
+              key={i}
+              isitin={thisregion[1].includes(i)}
+            ></Uncolonized>
+          ))}
+          <Uncolonized countryindex={699} isitin={true}></Uncolonized>
+          {Array.from({ length: 10 }, (_, i) => i + 689).map((i) => (
+            <Uncolonized
+              countryindex={i}
+              key={i}
+              isitin={thisregion[1].includes(i)}
+            ></Uncolonized>
+          ))}
+
+          {Image ? Image : ""}
+          <Provinces></Provinces>
+        </svg>
       </div>
     </>
   );

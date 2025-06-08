@@ -21,6 +21,7 @@ const Countries = ({ countryindex, countryclick, isitin }: Props) => {
     setclickedcountry,
     answercorrectness,
     setcurrentcountry,
+    currentregion,
   } = useGameContext();
   const countryPaths = useMemo(() => {
     const correctness = answercorrectness[countryindex];
@@ -68,6 +69,7 @@ const Countries = ({ countryindex, countryclick, isitin }: Props) => {
     countryoutlines,
     clickedcountry === countryindex ? answercorrectness : null,
     countries,
+    currentregion,
     setcurrentcountry,
     setclickedcountry,
     isitin,
