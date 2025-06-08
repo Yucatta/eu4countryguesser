@@ -6,16 +6,18 @@ import { useGameContext } from "@/context/GameContext";
 export default function Home() {
   return (
     <>
-      <div className=" h-screen  flex justify-center items-start">
-        <div
+      <div className="flex justify-center items-start">
+        {/* <div
           className={
             "w-[clamp(100vh,70vw,70vw)] h-max bg-[rgb(29,29,29)] flex flex-col items-center  pb-20"
           }
-        >
-          <CurrentCountry></CurrentCountry>
+        > */}
+        {/* <CurrentCountry></CurrentCountry> */}
+        <div>
           <SvgMap></SvgMap>
-          <RegionSelect></RegionSelect>
         </div>
+        {/* <RegionSelect></RegionSelect> */}
+        {/* </div> */}
       </div>
     </>
   );

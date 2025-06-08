@@ -1,27 +1,16 @@
-hre
-japan
-British Isles
-Rightfull Ottoman Lands
-Middle East
-Horn of Africa
-Mongol Empire
-Malayan 
-India
-Roman Empire
-West Afria
-East Africa
-Central Afria
-South East Asia
-Mexico
-Incan
-Oceania
-South North American Tribes
-North North American Tribes
-Western Europe
-Central Europe
-Eastern Europe
-Africa
-Europe
-Asia
-North America
-South America
+Italy
+France
+Balkan
+Caucassia
+Arabia
+Hordes  
+Burma
+Indochina
+Malacca
+Moluccas
+South India
+East India
+West India
+Persia
+North Africa
+Tibet

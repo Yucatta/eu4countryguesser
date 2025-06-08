@@ -1,24 +1,19 @@
 
-Countries.tsx:47 612
-Countries.tsx:47 524
-Countries.tsx:47 384
-Countries.tsx:47 601
-Countries.tsx:47 385
-Countries.tsx:47 386
-Countries.tsx:47 388
-Countries.tsx:47 387
-Countries.tsx:47 389
-Countries.tsx:47 610
-Countries.tsx:47 611
-Countries.tsx:47 390
-Countries.tsx:47 397
-Countries.tsx:47 392
-Countries.tsx:47 391
-Countries.tsx:47 393
-Countries.tsx:47 609
-Countries.tsx:47 608
-Countries.tsx:47 394
-Countries.tsx:47 607
-Countries.tsx:47 605
-Countries.tsx:47 604
-Countries.tsx:47 602
+Countries.tsx:50 240
+Countries.tsx:50 513
+Countries.tsx:50 217
+Countries.tsx:50 216
+Countries.tsx:50 514
+Countries.tsx:50 239
+uncolonized.tsx:41 682 'Himalayas'
+Countries.tsx:50 241
+Countries.tsx:50 474
+Countries.tsx:50 237
+Countries.tsx:50 219
+Countries.tsx:50 577
+Countries.tsx:50 517
+Countries.tsx:50 578
+Countries.tsx:50 215
+Countries.tsx:50 516
+Countries.tsx:50 584
+uncolonized.tsx:41 687 'Tibet'

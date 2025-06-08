@@ -6,9 +6,7 @@ import Countries from "./Countries";
 import Uncolonized from "./uncolonized";
 import { useGameContext } from "@/context/GameContext";
 export default function SvgMap() {
-  const [terraincolors, setterraincolors] = useState<[number, string][] | null>(
-    null
-  );
+  const [regions, setregions] = useState<[string, number[]][][] | null>(null);
   const {
     paths,
     areapaths,
@@ -16,14 +14,19 @@ export default function SvgMap() {
     countries,
     countryprovinces,
     emptylands,
-    regions,
+    // regions,
+    terraincolors,
   } = useDataContext();
   const svgRef = useRef<SVGSVGElement | null>(null);
   useEffect(() => {
     async function FetchData() {
-      const response = await fetch("/terrcolors.json");
-      const text = await response.json();
-      setterraincolors(text);
+      const response = await fetch("/regions.json");
+      const text: [string, string, number[]][][] = await response.json();
+      setregions(
+        text.map((continent) =>
+          continent.map((region) => [region[1], region[2]])
+        )
+      );
     }
     FetchData();
   }, []);
@@ -42,13 +45,14 @@ export default function SvgMap() {
     return array;
   }
   const { currentregion } = useGameContext();
-  const thisregion = regions[currentregion[0]][currentregion[1]];
+  // const thisregion = regions ? regions[currentregion[0]][currentregion[1]] : [];
   const Image = useMemo(() => {
-    if (terraincolors && regions) {
+    if (regions) {
       return (
         <svg
-          className="w-auto h-auto  bg-[rgb(0,0,200)]"
-          viewBox={thisregion[0]}
+          // className="w-auto h-auto  bg-[rgb(0,0,200)]"
+          className="w-[1536px] h-[552px]  bg-[rgb(0,0,200)]"
+          viewBox={regions[currentregion[0]][currentregion[1]][0]}
           xmlns="http://www.w3.org/2000/svg"
           width="100%"
           height="100%"
@@ -58,7 +62,9 @@ export default function SvgMap() {
             <Uncolonized
               countryindex={i}
               key={i}
-              isitin={thisregion[1].includes(i)}
+              isitin={regions[currentregion[0]][currentregion[1]][1].includes(
+                i
+              )}
             ></Uncolonized>
           ))}
           <Uncolonized countryindex={699} isitin={true}></Uncolonized>
@@ -66,7 +72,9 @@ export default function SvgMap() {
             <Uncolonized
               countryindex={i}
               key={i}
-              isitin={thisregion[1].includes(i)}
+              isitin={regions[currentregion[0]][currentregion[1]][1].includes(
+                i
+              )}
             ></Uncolonized>
           ))}
           {/* <Uncolonized countryindex={671}></Uncolonized>
@@ -77,7 +85,9 @@ export default function SvgMap() {
             <Countries
               countryindex={i}
               key={i}
-              isitin={thisregion[1].includes(i)}
+              isitin={regions[currentregion[0]][currentregion[1]][1].includes(
+                i
+              )}
             ></Countries>
           ))}
           {paths.map((path, index) => {
@@ -116,7 +126,7 @@ export default function SvgMap() {
                 }
                 key={+path[0]}
                 onClick={() => {
-                  console.log(`"${terraincolors[index][1]}"`, index + 1);
+                  // console.log(`"${terraincolors[index][1]}"`, index + 1);
                 }}
               ></path>
             );
@@ -160,9 +170,9 @@ export default function SvgMap() {
   // }, []);
   return (
     <>
-      <div className="w-full h-[60vh] p-0 mt-[2vh] flex object-contain object-center bg-[rgb(50,50,50)] ">
-        {Image ? Image : ""}
-      </div>
+      {Image ? Image : ""}
+      {/* <div className="w-full h-[60vh] p-0 mt-[2vh] flex object-contain object-center bg-[rgb(50,50,50)] ">
+      </div> */}
     </>
   );
 }
