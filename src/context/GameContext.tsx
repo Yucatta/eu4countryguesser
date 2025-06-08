@@ -6,6 +6,12 @@ type GameContextType = {
   setcurrentcountry: (e: number[]) => void;
   currentregion: number[];
   setcurrentregion: (e: number[]) => void;
+  correctanswer: number | undefined;
+  setcorrectanswer: (e: number) => void;
+  answercorrectness: number[];
+  setanswercorrectness: (e: number[]) => void;
+  clickedcountry: number;
+  setclickedcountry: (e: number) => void;
 };
 
 const GameContext = createContext<GameContextType | null>(null);
@@ -13,6 +19,13 @@ const GameContext = createContext<GameContextType | null>(null);
 export const GameContextProvider = ({ children }: { children: ReactNode }) => {
   const [currentcountry, setcurrentcountry] = useState([-1, -1]);
   const [currentregion, setcurrentregion] = useState([4, 0]);
+  const [correctanswer, setcorrectanswer] = useState<number | undefined>(
+    undefined
+  );
+  const [answercorrectness, setanswercorrectness] = useState(
+    Array(665).fill(0)
+  );
+  const [clickedcountry, setclickedcountry] = useState(-1);
   return (
     <GameContext.Provider
       value={{
@@ -20,6 +33,12 @@ export const GameContextProvider = ({ children }: { children: ReactNode }) => {
         currentcountry: currentcountry,
         setcurrentcountry: setcurrentcountry,
         setcurrentregion: setcurrentregion,
+        setcorrectanswer: setcorrectanswer,
+        correctanswer: correctanswer,
+        answercorrectness: answercorrectness,
+        setanswercorrectness: setanswercorrectness,
+        clickedcountry: clickedcountry,
+        setclickedcountry: setclickedcountry,
       }}
     >
       {children}

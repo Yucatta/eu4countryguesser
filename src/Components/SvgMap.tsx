@@ -5,8 +5,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Countries from "./Countries";
 import Uncolonized from "./uncolonized";
 import { useGameContext } from "@/context/GameContext";
+import Provinces from "./Provinces";
 export default function SvgMap() {
-  const [regions, setregions] = useState<[string, number[]][][] | null>(null);
+  // const [terraincolors, setterraincolors] = useState<[number, string][] | null>(
+  //   null
+  // );
   const {
     paths,
     areapaths,
@@ -14,22 +17,24 @@ export default function SvgMap() {
     countries,
     countryprovinces,
     emptylands,
-    // regions,
+    regions,
     terraincolors,
   } = useDataContext();
+  const {
+    currentregion,
+    setanswercorrectness,
+    setcorrectanswer,
+    correctanswer,
+  } = useGameContext();
   const svgRef = useRef<SVGSVGElement | null>(null);
-  useEffect(() => {
-    async function FetchData() {
-      const response = await fetch("/regions.json");
-      const text: [string, string, number[]][][] = await response.json();
-      setregions(
-        text.map((continent) =>
-          continent.map((region) => [region[1], region[2]])
-        )
-      );
-    }
-    FetchData();
-  }, []);
+  // useEffect(() => {
+  //   async function FetchData() {
+  //     const response = await fetch("/terrcolors.json");
+  //     const text = await response.json();
+  //     setterraincolors(text);
+  //   }
+  //   FetchData();
+  // }, []);
   function shuffle(array: number[]) {
     let m = array.length;
     let t: number, i: number;
@@ -44,15 +49,27 @@ export default function SvgMap() {
 
     return array;
   }
-  const { currentregion } = useGameContext();
-  // const thisregion = regions ? regions[currentregion[0]][currentregion[1]] : [];
+  function GetCorrectAnswer(list: number[]) {
+    const filteredids = list.filter((countryid) => countryid < 665);
+    return filteredids[Math.floor(Math.random() * filteredids.length)];
+  }
+  useEffect(() => {
+    const a = GetCorrectAnswer(regions[currentregion[0]][currentregion[1]][1]);
+    setcorrectanswer(a);
+    setanswercorrectness(Array(665).fill(0));
+  }, [currentregion, regions]);
   const Image = useMemo(() => {
-    if (regions) {
+    let answercount = 0;
+    const thisregion = regions[currentregion[0]][currentregion[1]];
+    let insidecorrect = correctanswer;
+    const answercorrectness = Array(665).fill(0);
+    const correctguessses: number[] = [];
+    if (terraincolors && regions) {
       return (
         <svg
-          // className="w-auto h-auto  bg-[rgb(0,0,200)]"
-          className="w-[1536px] h-[552px]  bg-[rgb(0,0,200)]"
-          viewBox={regions[currentregion[0]][currentregion[1]][0]}
+          className="w-auto h-auto  bg-[rgb(0,0,200)]"
+          // className="w-[1536px] h-[552px]  bg-[rgb(0,0,200)]"
+          viewBox={thisregion[0]}
           xmlns="http://www.w3.org/2000/svg"
           width="100%"
           height="100%"
@@ -62,9 +79,7 @@ export default function SvgMap() {
             <Uncolonized
               countryindex={i}
               key={i}
-              isitin={regions[currentregion[0]][currentregion[1]][1].includes(
-                i
-              )}
+              isitin={thisregion[1].includes(i)}
             ></Uncolonized>
           ))}
           <Uncolonized countryindex={699} isitin={true}></Uncolonized>
@@ -72,77 +87,53 @@ export default function SvgMap() {
             <Uncolonized
               countryindex={i}
               key={i}
-              isitin={regions[currentregion[0]][currentregion[1]][1].includes(
-                i
-              )}
+              isitin={thisregion[1].includes(i)}
             ></Uncolonized>
           ))}
-          {/* <Uncolonized countryindex={671}></Uncolonized>
-          {Array.from({ length: 4 }, (_, i) => i + 667).map((i) => (
-            <Uncolonized countryindex={i} key={i}></Uncolonized>
-          ))} */}
-          {Array.from({ length: 665 }, (_, i) => i).map((i) => (
+          {answercorrectness.map((i, index) => (
             <Countries
-              countryindex={i}
-              key={i}
-              isitin={regions[currentregion[0]][currentregion[1]][1].includes(
-                i
-              )}
+              countryindex={index}
+              key={index}
+              countryclick={() => {
+                if (insidecorrect === index) {
+                  correctguessses.push(index);
+                  const a = GetCorrectAnswer(
+                    thisregion[1].filter(
+                      (countryid) => !correctguessses.includes(countryid)
+                    )
+                  );
+                  answercorrectness[index] = answercount + 1;
+                  console.log(answercorrectness[index], "a");
+                  setanswercorrectness(answercorrectness);
+                  setcorrectanswer(a);
+                  insidecorrect = a;
+                  console.log("this is a correct guess", insidecorrect);
+                  answercount = 0;
+                } else {
+                  answercount++;
+                  // console.log(answercount, answercorrectness[index]);
+                  if (answercount === 4) {
+                    answercount++;
+                    correctguessses.push(index);
+                    const a = GetCorrectAnswer(
+                      thisregion[1].filter(
+                        (countryid) => !correctguessses.includes(countryid)
+                      )
+                    );
+                    answercorrectness[index] = answercount;
+                    console.log(answercorrectness[index], "a");
+                    setanswercorrectness(answercorrectness);
+                    setcorrectanswer(a);
+                    insidecorrect = a;
+                    console.log("wronglyguessed", insidecorrect);
+                    answercount = 0;
+                  }
+                }
+              }}
+              isitin={thisregion[1].includes(index)}
             ></Countries>
           ))}
-          {paths.map((path, index) => {
-            const b = (
-              <path
-                d={path[1]}
-                fill={
-                  // "none"
-                  countryprovinces
-                    .map((row) => {
-                      return row.flat().includes(index + 1);
-                    })
-                    .indexOf(true) > -1
-                    ? "none"
-                    : emptylands.includes(index + 1)
-                    ? "none"
-                    : terraincolors[index][1]
-                }
-                stroke={
-                  countryprovinces
-                    .map((row) => {
-                      return row.flat().includes(index + 1);
-                    })
-                    .indexOf(true) > -1
-                    ? "rgb(50,50,50)"
-                    : "none"
-                }
-                strokeWidth={
-                  countryprovinces
-                    .map((row) => {
-                      return row.flat().includes(index + 1);
-                    })
-                    .indexOf(true) > -1
-                    ? "0.2"
-                    : "2"
-                }
-                key={+path[0]}
-                onClick={() => {
-                  // console.log(`"${terraincolors[index][1]}"`, index + 1);
-                }}
-              ></path>
-            );
-            return b;
-          })}
-          {/* {areapaths.map((path, index) => {
-            return (
-              <path
-                d={String(path[1])}
-                fill={"none"}
-                stroke={"rgb(50,50,50)"}
-                strokeWidth={"0.5"}
-                key={index}
-              ></path>
-            );
-          })} */}
+          <Provinces></Provinces>
         </svg>
       );
     }
@@ -170,9 +161,9 @@ export default function SvgMap() {
   // }, []);
   return (
     <>
-      {Image ? Image : ""}
-      {/* <div className="w-full h-[60vh] p-0 mt-[2vh] flex object-contain object-center bg-[rgb(50,50,50)] ">
-      </div> */}
+      <div className="w-full h-[60vh] p-0 mt-[2vh] flex object-contain object-center bg-[rgb(50,50,50)] ">
+        {Image ? Image : ""}
+      </div>
     </>
   );
 }

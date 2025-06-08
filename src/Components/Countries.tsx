@@ -4,8 +4,9 @@ import React, { useMemo, useState } from "react";
 interface Props {
   countryindex: number;
   isitin: boolean;
+  countryclick: () => void;
 }
-const Countries = ({ countryindex, isitin }: Props) => {
+const Countries = ({ countryindex, countryclick, isitin }: Props) => {
   const {
     paths,
     areapaths,
@@ -14,9 +15,15 @@ const Countries = ({ countryindex, isitin }: Props) => {
     countryprovinces,
     emptylands,
   } = useDataContext();
-  const { currentcountry, setcurrentcountry } = useGameContext();
-  const [isclicked, setisclicked] = useState(false);
+  const {
+    currentcountry,
+    clickedcountry,
+    setclickedcountry,
+    answercorrectness,
+    setcurrentcountry,
+  } = useGameContext();
   const countryPaths = useMemo(() => {
+    const correctness = answercorrectness[countryindex];
     const rgbs = countries[countryindex][1]
       .replace(",", " ")
       .replace(",", " ")
@@ -31,27 +38,26 @@ const Countries = ({ countryindex, isitin }: Props) => {
           strokeWidth={1}
           fill={
             isitin
-              ? isclicked
-                ? `rgb(255,255,255)`
-                : currentcountry[1] === countryindex
-                ? `rgb(${Math.floor((Number(rgbs[0]) / 7) * 10)},${Math.floor(
-                    (Number(rgbs[1]) / 7) * 10
-                  )},${Math.floor((Number(rgbs[2]) / 7) * 10)}`
-                : countries[countryindex][1]
+              ? !correctness
+                ? currentcountry[1] === countryindex
+                  ? `rgb(${Math.floor((Number(rgbs[0]) / 7) * 10)},${Math.floor(
+                      (Number(rgbs[1]) / 7) * 10
+                    )},${Math.floor((Number(rgbs[2]) / 7) * 10)}`
+                  : countries[countryindex][1]
+                : `rgb(255,${255 - 60 * (correctness - 1)},${
+                    255 - 60 * (correctness - 1)
+                  } )`
               : "rgb(50,50,50)"
           }
           onMouseEnter={() =>
             setcurrentcountry([currentcountry[1], countryindex])
           }
-          // className={classname1}
-          // onMouseEnter={() => setcurrentcountry(index)}
           onClick={() => {
-            setisclicked(true);
-            console.log(
-              countryindex
-              // countries[countryindex],
-              // countryprovinces[countryindex]
-            );
+            if (isitin) {
+              countryclick();
+              console.log(correctness);
+              setclickedcountry(countryindex);
+            }
           }}
           key={index2}
         ></path>
@@ -60,10 +66,13 @@ const Countries = ({ countryindex, isitin }: Props) => {
   }, [
     currentcountry.includes(countryindex) ? currentcountry : null,
     countryoutlines,
+    clickedcountry === countryindex ? answercorrectness : null,
     countries,
-    isclicked,
+    setcurrentcountry,
+    setclickedcountry,
     isitin,
   ]);
+
   return <>{countryPaths}</>;
 };
 
