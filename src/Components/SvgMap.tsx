@@ -65,14 +65,14 @@ export default function SvgMap() {
                   // console.log(answercount, answercorrectness[index]);
                   if (answercount === 4) {
                     answercount++;
-                    correctguessses.push(index);
+                    correctguessses.push(insidecorrect);
                     const a = GetCorrectAnswer(
                       thisregion[1].filter(
                         (countryid) => !correctguessses.includes(countryid)
                       )
                     );
-                    answercorrectness[index] = answercount;
-                    console.log(answercorrectness[index], "a");
+                    answercorrectness[insidecorrect] = answercount;
+                    console.log(answercorrectness[insidecorrect], "a");
                     setanswercorrectness(answercorrectness);
                     setcorrectanswer(a);
                     insidecorrect = a;

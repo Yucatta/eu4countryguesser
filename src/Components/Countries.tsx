@@ -49,12 +49,23 @@ const Countries = ({ countryindex, countryclick, isitin }: Props) => {
           onClick={() => {
             if (isitin) {
               countryclick();
-              console.log(correctness);
+              console.log(clickedcountry, countryindex, "aaa");
               setclickedcountry(countryindex);
             }
           }}
           key={index2}
-        ></path>
+        >
+          <path
+            className={
+              // clickedcountry === countryindex
+              //   ?
+              "opacity-100 transition-all w-100 h-100 z-100 bg-black"
+              // : " opacity-0 transition-all"
+            }
+          >
+            {countries[countryindex][2]}
+          </path>
+        </path>
       );
     });
   }, [
