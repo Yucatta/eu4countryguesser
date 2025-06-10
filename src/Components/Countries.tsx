@@ -1,12 +1,16 @@
 import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
 interface Props {
   countryindex: number;
   isitin: boolean;
-  countryclick: () => void;
+  countryclick: (
+    mouse: React.MouseEvent<SVGPathElement, MouseEvent>,
+    bbox: DOMRect
+  ) => void;
 }
 const Countries = ({ countryindex, countryclick, isitin }: Props) => {
+  const pathref = useRef<Array<SVGPathElement | null>>([]);
   const { countryoutlines, countries } = useDataContext();
   const {
     currentcountry,
@@ -30,6 +34,9 @@ const Countries = ({ countryindex, countryclick, isitin }: Props) => {
           d={path}
           stroke="rgb(20,20,20)"
           strokeWidth={1}
+          ref={(el) => {
+            pathref.current[index2] = el;
+          }}
           fill={
             isitin
               ? !correctness
@@ -46,26 +53,15 @@ const Countries = ({ countryindex, countryclick, isitin }: Props) => {
           onMouseEnter={() =>
             setcurrentcountry([currentcountry[1], countryindex])
           }
-          onClick={() => {
-            if (isitin) {
-              countryclick();
-              console.log(clickedcountry, countryindex, "aaa");
+          onClick={(e) => {
+            if (isitin && pathref.current.length) {
+              countryclick(e, pathref.current[index2]!.getBoundingClientRect());
+
               setclickedcountry(countryindex);
             }
           }}
           key={index2}
-        >
-          <path
-            className={
-              // clickedcountry === countryindex
-              //   ?
-              "opacity-100 transition-all w-100 h-100 z-100 bg-black"
-              // : " opacity-0 transition-all"
-            }
-          >
-            {countries[countryindex][2]}
-          </path>
-        </path>
+        ></path>
       );
     });
   }, [

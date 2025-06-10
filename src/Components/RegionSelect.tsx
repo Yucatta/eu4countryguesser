@@ -37,7 +37,7 @@ const RegionSelect = () => {
   const { regionnames } = useDataContext();
   const { setcurrentregion } = useGameContext();
   return (
-    <div className="flex flex-wrap w-11/12 h-screen items-center justify-evenly">
+    <div className="flex flex-wrap w-11/12 h-screen items-center  mt-[calc(60vh+40px)] justify-evenly">
       {regionnames.map((continent, index) => {
         return (
           <div

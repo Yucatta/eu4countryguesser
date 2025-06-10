@@ -4,14 +4,22 @@ import React from "react";
 
 const CurrentCountry = () => {
   const { countries } = useDataContext();
-  const { correctanswer } = useGameContext();
+  const { correctanswer, isitmobile } = useGameContext();
   return (
     <>
-      {correctanswer ? (
-        <div className="bg-neutral-700 w-1/2 h-2/12">
-          <img src={`/flags/${countries[correctanswer][0]}.png`}></img>
+      {correctanswer + 1 ? (
+        <div className="bg-neutral-700 flex flex-row items-center justify-center w-full h-20">
+          <img
+            style={{
+              left: isitmobile ? "0" : "15vw",
+            }}
+            className="w-20 absolute  top-0 h-20"
+            src={`/flags/${countries[correctanswer][0]}.png`}
+          ></img>
           {/* <div className="w-40 h-30">see this as ottoman flag</div> */}
-          {countries[correctanswer][2]}
+          <div className="text-bold text-3xl">
+            {countries[correctanswer][2]}
+          </div>
         </div>
       ) : (
         ""
