@@ -33,13 +33,9 @@ const AllCountries = () => {
               countryclick={() => {
                 answercount++;
                 if (index === insidecorrtect) {
-                  console.log(correctguessses);
+                  // console.log(correctguessses);
                   answercorrectness[index] = answercount;
-                  console.log(
-                    answercorrectness[index],
-                    answercount,
-                    "this should be same"
-                  );
+
                   setanswercorrectness(answercorrectness);
                   correctguessses[index] = answercount;
                   const nextone = GetCorrectAnswer(
@@ -50,13 +46,7 @@ const AllCountries = () => {
                   insidecorrtect = nextone;
                   answercount = 0;
                 } else if (answercount === 4) {
-                  console.log(correctguessses);
                   answercorrectness[index] = answercount;
-                  console.log(
-                    answercorrectness[index],
-                    answercount,
-                    "this should be same"
-                  );
                   setanswercorrectness(answercorrectness);
                   correctguessses[index] = insidecorrtect!;
                   const nextone = GetCorrectAnswer(

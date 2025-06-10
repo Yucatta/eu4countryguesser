@@ -38,7 +38,7 @@ const Uncolonized = ({ countryindex, isitin }: Props) => {
               : "rgb(50,50,50)"
           }
           onMouseEnter={() => setcurrentcountry([currentcountry[1], -1])}
-          onClick={() => console.log(countryindex, countries[countryindex][2])}
+          // onClick={() => console.log(countryindex, countries[countryindex][2])}
           key={index2}
         ></path>
       );

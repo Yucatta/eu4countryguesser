@@ -39,7 +39,7 @@ const Countries = ({ countryindex, countryclick, isitin }: Props) => {
           }}
           fill={
             isitin
-              ? !correctness
+              ? correctness < 1
                 ? currentcountry[1] === countryindex
                   ? `rgb(${Math.floor((Number(rgbs[0]) / 7) * 10)},${Math.floor(
                       (Number(rgbs[1]) / 7) * 10

@@ -46,7 +46,6 @@ export default function SvgMap() {
   const thisregion = regions[currentregion[0]][currentregion[1]];
   const Image = useMemo(() => {
     if (terraincolors && regions && correctanswerref.current) {
-      let answercount = 0;
       return (
         <>
           {answercorrectness.current.map((i, index) => (
@@ -54,7 +53,6 @@ export default function SvgMap() {
               countryindex={index}
               key={index}
               countryclick={(e, bbox) => {
-                answercount++;
                 setcountrynamevisiblity(true);
                 setTimeout(() => {
                   setcountrynamevisiblity(false);
@@ -66,13 +64,10 @@ export default function SvgMap() {
                   e.clientX,
                   e.clientY,
                 ]);
-                console.log(
-                  index,
-                  correctanswerref.current,
-                  countries[index][2]
-                );
+
+                answercorrectness.current[correctanswerref.current] -= 1;
+
                 if (correctanswerref.current === index) {
-                  answercorrectness.current[index] = answercount;
                   const a = GetCorrectAnswer(
                     thisregion[1],
                     answercorrectness.current
@@ -85,9 +80,20 @@ export default function SvgMap() {
                   setTimeout(() => {
                     setcirclevisibilty(false);
                   }, 150);
-                  setanswercorrectness(answercorrectness.current);
+                  console.log(
+                    answercorrectness.current[correctanswerref.current],
+                    "right before it goes downhill",
+                    correctanswerref.current
+                  );
+                  console.log(answercorrectness.current, index, "before");
 
-                  answercount = 0;
+                  answercorrectness.current = answercorrectness.current.map(
+                    (correctness) => Math.abs(correctness)
+                  );
+                  console.log(answercorrectness.current, index, "after");
+                  setanswercorrectness(answercorrectness.current);
+                } else {
+                  setanswercorrectness(answercorrectness.current);
                 }
               }}
               isitin={thisregion[1].includes(index)}
@@ -174,7 +180,7 @@ export default function SvgMap() {
               style={{
                 left: isitmobile
                   ? `calc(${clickedcountry[1] - 100}px)`
-                  : `calc(${clickedcountry[1] - 100}px - 15vw)`,
+                  : `calc(${clickedcountry[1] - 100}px - (100vw - 985px)/2)`,
                 top: clickedcountry[4] - 180,
               }}
             ></div>
@@ -189,7 +195,7 @@ export default function SvgMap() {
               style={{
                 left: isitmobile
                   ? `calc(${clickedcountry[3] - 15}px)`
-                  : `calc(${clickedcountry[3] - 15}px - 15vw)`,
+                  : `calc(${clickedcountry[3] - 15}px - (100vw - 985px)/2)`,
                 top: clickedcountry[4] - 110,
               }}
               // onMouseDown={}
