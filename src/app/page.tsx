@@ -9,12 +9,12 @@ export default function Home() {
   useEffect(() => {
     function checkmible() {
       if (typeof window !== "undefined" && window.innerWidth < 977) {
-        console.log(isitmobile, "check");
         setisitmobile(true);
       } else {
         setisitmobile(false);
       }
     }
+    checkmible();
     addEventListener("resize", checkmible);
     return () => removeEventListener("resize", checkmible);
   }, []);

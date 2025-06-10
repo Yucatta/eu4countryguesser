@@ -80,17 +80,9 @@ export default function SvgMap() {
                   setTimeout(() => {
                     setcirclevisibilty(false);
                   }, 150);
-                  console.log(
-                    answercorrectness.current[correctanswerref.current],
-                    "right before it goes downhill",
-                    correctanswerref.current
-                  );
-                  console.log(answercorrectness.current, index, "before");
-
                   answercorrectness.current = answercorrectness.current.map(
                     (correctness) => Math.abs(correctness)
                   );
-                  console.log(answercorrectness.current, index, "after");
                   setanswercorrectness(answercorrectness.current);
                 } else {
                   setanswercorrectness(answercorrectness.current);
