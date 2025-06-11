@@ -1,6 +1,6 @@
 import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 interface Props {
   countryindex: number;
   isitin: boolean;
@@ -12,6 +12,7 @@ interface Props {
 const Countries = ({ countryindex, countryclick, isitin }: Props) => {
   const pathref = useRef<Array<SVGPathElement | null>>([]);
   const { countryoutlines, countries } = useDataContext();
+  const [colorpulse, setcolorpulse] = useState(false);
   const {
     currentcountry,
     clickedcountry,
@@ -20,6 +21,14 @@ const Countries = ({ countryindex, countryclick, isitin }: Props) => {
     setcurrentcountry,
     currentregion,
   } = useGameContext();
+  useEffect(() => {
+    if (answercorrectness[countryindex] < -4) {
+      const interval = setInterval(() => {
+        setcolorpulse(!colorpulse);
+      }, 500);
+      return () => clearInterval(interval);
+    }
+  }, [answercorrectness[countryindex], colorpulse]);
   const countryPaths = useMemo(() => {
     const correctness = answercorrectness[countryindex];
     const rgbs = countries[countryindex][1]
@@ -50,6 +59,11 @@ const Countries = ({ countryindex, countryclick, isitin }: Props) => {
                   } )`
               : "rgb(50,50,50)"
           }
+          style={
+            correctness < -4
+              ? { fill: colorpulse ? "rgb(255,0,0)" : "rgb(255,255,255)" }
+              : undefined
+          }
           onMouseEnter={() =>
             setcurrentcountry([currentcountry[1], countryindex])
           }
@@ -73,6 +87,7 @@ const Countries = ({ countryindex, countryclick, isitin }: Props) => {
     setcurrentcountry,
     setclickedcountry,
     isitin,
+    colorpulse,
   ]);
 
   return <>{countryPaths}</>;

@@ -84,7 +84,6 @@ export default function ProvinceMap() {
                     ? "rgb(50,50,50)"
                     : "white"
                 }
-                // stroke={"rgb(50,50,50)"}
                 strokeWidth={
                   countryprovinces
                     .map((row) => {
@@ -95,37 +94,21 @@ export default function ProvinceMap() {
                     : "0.5"
                 }
                 key={+path[0]}
-                onClick={() => {
-                  if (
-                    countryprovinces
-                      .map((row) => {
-                        return row.flat().includes(index + 1);
-                      })
-                      .indexOf(true) == -1
-                  )
-                    console.log(terraincolors[index][1], index + 1);
-                }}
+                // onClick={() => {
+                //   if (
+                //     countryprovinces
+                //       .map((row) => {
+                //         return row.flat().includes(index + 1);
+                //       })
+                //       .indexOf(true) == -1
+                //   ) {
+                //   }
+                // }}
               ></path>
             );
             return b;
           })}
-          {/* {areapaths.map((path, index) => {
-            const areasplace = regionStateIds[rndnum[1]].indexOf(index);
-            // console.log(index, rndnum[0]);
-            if ((index !== 0 && areasplace + 1) || areasplace === 0) {
-                return (
-                    <path
-                    d={String(path[1])}
-                    fill={"none"}
-                    stroke={
-                        index === rndnum[0] ? "rgb(80, 0, 100)" : "rgb(230,230,230)"
-                        }
-                        strokeWidth={index === rndnum[0] ? "3" : "0.8"}
-                        key={index}
-                        ></path>
-                        );
-                        }
-                        })} */}
+
           {countryoutlines.map((country) => {
             return country[1].map((path, index) => {
               return (
