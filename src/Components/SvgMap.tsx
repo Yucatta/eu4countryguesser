@@ -1,6 +1,6 @@
 "use client";
 import { useDataContext } from "@/context/DataContext";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { Ref, useEffect, useMemo, useRef, useState } from "react";
 import Countries from "./Countries";
 import Uncolonized from "./uncolonized";
 import { useGameContext } from "@/context/GameContext";
@@ -9,6 +9,7 @@ import {
   TransformWrapper,
   TransformComponent,
   useControls,
+  ReactZoomPanPinchContentRef,
 } from "react-zoom-pan-pinch";
 export default function SvgMap() {
   const {
@@ -22,14 +23,14 @@ export default function SvgMap() {
   } = useDataContext();
   const { currentregion, isitmobile, setanswercorrectness, setcorrectanswer } =
     useGameContext();
-  const svgRef = useRef<SVGSVGElement | null>(null);
+  const svgRef = useRef<ReactZoomPanPinchContentRef | null>(null);
   const correctanswerref = useRef<number>(-1);
   const [clickedcountry, setclickedcountry] = useState([-1, -1, -1, -1, -1]);
   const answercorrectness = useRef<number[]>(Array(665).fill(0));
   const [viewBox, setviewbox] = useState([0, 0, 5632, 2048]);
   const [countrynamevisiblity, setcountrynamevisiblity] = useState(false);
   const [circlevisibilty, setcirclevisibilty] = useState(false);
-
+  // const SvgRef = useRef(null);
   function GetCorrectAnswer(list: number[], badlist: number[]) {
     const filteredids = list
       .filter((countryid) => !badlist.includes(countryid))
@@ -54,53 +55,53 @@ export default function SvgMap() {
     if (terraincolors && regions && correctanswerref.current) {
       return (
         <>
-          {answercorrectness.current.map((i, index) => (
-            <Countries
-              countryindex={index}
-              key={index}
-              countryclick={(e, bbox) => {
-                setcountrynamevisiblity(true);
-                setTimeout(() => {
-                  setcountrynamevisiblity(false);
-                }, 600);
-
-                console.log(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2);
-                setclickedcountry([
-                  index,
-                  bbox.x + bbox.width / 2,
-                  bbox.y + bbox.height / 2,
-                  e.clientX,
-                  e.clientY,
-                ]);
-
-                answercorrectness.current[correctanswerref.current] -= 1;
-
-                if (correctanswerref.current === index) {
-                  const a = GetCorrectAnswer(
-                    thisregion[1],
-                    answercorrectness.current
-                      .map((guess, index) => (guess ? index : -1))
-                      .filter((id) => id + 1)
-                  );
-                  setcorrectanswer(a);
-                  correctanswerref.current = a;
-
+          {Array(665)
+            .fill(0)
+            .map((_, index) => (
+              <Countries
+                countryindex={index}
+                key={index}
+                countryclick={(e, bbox) => {
+                  setcountrynamevisiblity(true);
+                  setTimeout(() => {
+                    setcountrynamevisiblity(false);
+                  }, 600);
+                  // console.log(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2);
+                  console.log(svgRef.current?.instance.transformState);
+                  setclickedcountry([
+                    index,
+                    bbox.x + bbox.width / 2,
+                    bbox.y + bbox.height / 2,
+                    e.clientX,
+                    e.clientY,
+                  ]);
                   setcirclevisibilty(true);
                   setTimeout(() => {
                     setcirclevisibilty(false);
                   }, 100);
+                  answercorrectness.current[correctanswerref.current] -= 1;
 
-                  answercorrectness.current = answercorrectness.current.map(
-                    (correctness) => Math.abs(correctness)
-                  );
-                  setanswercorrectness(answercorrectness.current);
-                } else {
-                  setanswercorrectness(answercorrectness.current);
-                }
-              }}
-              isitin={thisregion[1].includes(index)}
-            ></Countries>
-          ))}
+                  if (correctanswerref.current === index) {
+                    const a = GetCorrectAnswer(
+                      thisregion[1],
+                      answercorrectness.current
+                        .map((guess, index) => (guess ? index : -1))
+                        .filter((id) => id + 1)
+                    );
+                    setcorrectanswer(a);
+                    correctanswerref.current = a;
+
+                    answercorrectness.current = answercorrectness.current.map(
+                      (correctness) => Math.abs(correctness)
+                    );
+                    setanswercorrectness(answercorrectness.current);
+                  } else {
+                    setanswercorrectness(answercorrectness.current);
+                  }
+                }}
+                isitin={thisregion[1].includes(index)}
+              ></Countries>
+            ))}
         </>
       );
     }
@@ -141,6 +142,8 @@ export default function SvgMap() {
           initialScale={1}
           initialPositionX={0}
           initialPositionY={0}
+          ref={svgRef}
+          maxScale={20}
         >
           {({ resetTransform }) => {
             useEffect(() => {
@@ -199,7 +202,6 @@ export default function SvgMap() {
                     xmlns="http://www.w3.org/2000/svg"
                     width="100%"
                     height="100%"
-                    ref={svgRef}
                   >
                     {Array.from({ length: 24 }, (_, i) => i + 665).map((i) => (
                       <Uncolonized
@@ -219,39 +221,51 @@ export default function SvgMap() {
 
                     {Image ? Image : ""}
                     <Provinces></Provinces>
-                    <svg viewBox="0 0 5632 2048">
-                      <foreignObject
-                        x={clickedcountry[1]}
-                        y={clickedcountry[2]}
-                        width="2000"
-                        height="100"
-                      >
-                        <div
-                          {...{
-                            xmlns: "http://www.w3.org/1999/xhtml",
-                          }}
-                          className="text-white bg-neutral-900"
-                          //@ts-ignore
+                    {clickedcountry[0] !== -1 ? (
+                      <>
+                        <foreignObject
+                          x={clickedcountry[1]}
+                          y={clickedcountry[2]}
+                          width="100"
+                          height="20"
+                          pointerEvents="none"
                         >
-                          {countries[0]}
-                        </div>
-                      </foreignObject>
-                    </svg>
-                    <circle
-                      className={
-                        circlevisibilty
-                          ? " opacity-50 pointer-events-none"
-                          : "transition-all duration-1500 opacity-0 pointer-events-none"
-                      }
-                      // transform={circlevisibilty ? "scale(1)" : "scale(0.5)"}
-                      // cx={clickedcountry[1]}
-                      // cy={clickedcountry[2]}
-                      z={10}
-                      cx={clickedcountry[1]}
-                      cy={clickedcountry[2]}
-                      r={circlevisibilty ? "20" : "70"}
-                      fill="rgb(240,240,240)"
-                    />
+                          <div
+                            {...{
+                              xmlns: "http://www.w3.org/1999/xhtml",
+                            }}
+                            className={
+                              circlevisibilty
+                                ? " opacity-50 text-white bg-neutral-900 pointer-events-none"
+                                : "transition-all text-white bg-neutral-900 duration-1500 opacity-0 pointer-events-none"
+                            }
+                          >
+                            {countries[clickedcountry[0]][2]}
+                          </div>
+                        </foreignObject>
+                        <circle
+                          className={
+                            circlevisibilty
+                              ? " opacity-50 pointer-events-none"
+                              : "transition-all duration-1500 opacity-0 pointer-events-none"
+                          }
+                          // transform={circlevisibilty ? "scale(1)" : "scale(0.5)"}
+                          // cx={clickedcountry[1]}
+                          // cy={clickedcountry[2]}
+                          z={10}
+                          cx={clickedcountry[1]}
+                          cy={clickedcountry[2]}
+                          r={
+                            circlevisibilty
+                              ? svgRef.current?.instance.transformState.scale
+                              : "70"
+                          }
+                          fill="rgb(240,240,240)"
+                        />
+                      </>
+                    ) : (
+                      ""
+                    )}
                   </svg>
                 </TransformComponent>
               </>
