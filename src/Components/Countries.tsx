@@ -15,8 +15,6 @@ const Countries = ({ countryindex, countryclick, isitin }: Props) => {
   const [colorpulse, setcolorpulse] = useState(false);
   const {
     currentcountry,
-    clickedcountry,
-    setclickedcountry,
     answercorrectness,
     setcurrentcountry,
     currentregion,
@@ -69,9 +67,7 @@ const Countries = ({ countryindex, countryclick, isitin }: Props) => {
           }
           onClick={(e) => {
             if (isitin && pathref.current.length) {
-              countryclick(e, pathref.current[index2]!.getBoundingClientRect());
-
-              setclickedcountry(countryindex);
+              countryclick(e, pathref.current[index2]!.getBBox());
             }
           }}
           key={index2}
@@ -81,11 +77,11 @@ const Countries = ({ countryindex, countryclick, isitin }: Props) => {
   }, [
     currentcountry.includes(countryindex) ? currentcountry : null,
     countryoutlines,
-    clickedcountry === countryindex ? answercorrectness : null,
+    // clickedcountry === countryindex ? answercorrectness : null,
+    answercorrectness[countryindex],
     countries,
     currentregion,
     setcurrentcountry,
-    setclickedcountry,
     isitin,
     colorpulse,
   ]);

@@ -10,8 +10,6 @@ type GameContextType = {
   setcorrectanswer: (e: number) => void;
   answercorrectness: number[];
   setanswercorrectness: (e: number[]) => void;
-  clickedcountry: number;
-  setclickedcountry: (e: number) => void;
   isitmobile: boolean;
   setisitmobile: (e: boolean) => void;
 };
@@ -25,7 +23,6 @@ export const GameContextProvider = ({ children }: { children: ReactNode }) => {
   const [answercorrectness, setanswercorrectness] = useState(
     Array(665).fill(0)
   );
-  const [clickedcountry, setclickedcountry] = useState(-1);
   const [isitmobile, setisitmobile] = useState(false);
   return (
     <GameContext.Provider
@@ -38,8 +35,6 @@ export const GameContextProvider = ({ children }: { children: ReactNode }) => {
         correctanswer: correctanswer,
         answercorrectness: answercorrectness,
         setanswercorrectness: setanswercorrectness,
-        clickedcountry: clickedcountry,
-        setclickedcountry: setclickedcountry,
         isitmobile: isitmobile,
         setisitmobile: setisitmobile,
       }}

@@ -9,17 +9,23 @@ regions = []
 with open("regions.json",mode="r") as f:
     regions = json.load(f)
 
-for i,row in enumerate(regions):
-    temp = []
-    for id in row[2]:
-        if id not in temp:
-            temp.append(id)
-    regions[i][2] = temp
-    # regions[i] = [bboxes[i],temp]
+for i,continent in enumerate(regions):
+    for j,region in enumerate(continent):
+        temp = []
+        # for id in row[2]:
+        # print(region)
+        cords = region[1].split(" ")
+        print(cords)
+        a = []
+        for cord  in cords:
+            a.append(int(cord))
+            # temp.append(id)
+        print(a)
+        regions[i][j] = [region[0],a,region[2]]
 
 # print(regions)
 
-with open("regions.json",mode="w") as f:
+with open("regions2.json",mode="w") as f:
     json.dump(regions,f,indent=2)
 # regions = []
 # with open("regions2.json",mode="r") as f:

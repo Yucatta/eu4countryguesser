@@ -11,7 +11,7 @@ interface AppData {
   paths: string[][];
   countryoutlines: Array<[number, string[]]>;
   terraincolors: Array<[number, string]>;
-  regions: [string, number[]][][];
+  regions: number[][][][];
   regionnames: string[][];
 }
 
@@ -48,7 +48,7 @@ function loadAllDataOnce(): AppData {
     const terraincolors: Array<[number, string]> = JSON.parse(
       fs.readFileSync(path.join(root, "provinceterraincolors.json"), "utf-8")
     );
-    const Regions: [string, string, number[]][][] = JSON.parse(
+    const Regions: [string, number[], number[]][][] = JSON.parse(
       fs.readFileSync(path.join(root, "regions.json"), "utf-8")
     );
     return {

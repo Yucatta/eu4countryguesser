@@ -9,7 +9,7 @@ type DataContextType = {
   countryoutlines: Array<[number, string[]]>;
   terraincolors: Array<[number, string]>;
   paths: string[][];
-  regions: [string, number[]][][];
+  regions: number[][][][];
   regionnames: string[][];
 };
 
