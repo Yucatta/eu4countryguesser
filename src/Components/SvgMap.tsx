@@ -1,6 +1,6 @@
 "use client";
 import { useDataContext } from "@/context/DataContext";
-import React, { Ref, useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Countries from "./Countries";
 import Uncolonized from "./uncolonized";
 import { useGameContext } from "@/context/GameContext";
@@ -8,9 +8,14 @@ import Provinces from "./Provinces";
 import {
   TransformWrapper,
   TransformComponent,
-  useControls,
   ReactZoomPanPinchContentRef,
 } from "react-zoom-pan-pinch";
+const getTextWidth = (text: string, font: string) => {
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  context!.font = font; // e.g., "16px Arial"
+  return context!.measureText(text).width;
+};
 export default function SvgMap() {
   const {
     paths,
@@ -27,7 +32,9 @@ export default function SvgMap() {
   const correctanswerref = useRef<number>(-1);
   const [clickedcountry, setclickedcountry] = useState([-1, -1, -1, -1, -1]);
   const answercorrectness = useRef<number[]>(Array(665).fill(0));
-  const [viewBox, setviewbox] = useState([0, 0, 5632, 2048]);
+  const [reversecircle, setreversecircle] = useState<[boolean, number, number]>(
+    [false, -1, -1]
+  );
   const [countrynamevisiblity, setcountrynamevisiblity] = useState(false);
   const [circlevisibilty, setcirclevisibilty] = useState(false);
   // const SvgRef = useRef(null);
@@ -49,7 +56,6 @@ export default function SvgMap() {
     setanswercorrectness(Array(665).fill(0));
     answercorrectness.current = Array(665).fill(0);
   }, [currentregion, regions]);
-
   const thisregion = regions[currentregion[0]][currentregion[1]];
   const Image = useMemo(() => {
     if (terraincolors && regions && correctanswerref.current) {
@@ -61,13 +67,33 @@ export default function SvgMap() {
               <Countries
                 countryindex={index}
                 key={index}
+                findit={(bbox) => {
+                  console.log("a circle shoud expand");
+                  setreversecircle([
+                    true,
+                    bbox.x + bbox.width / 2,
+                    bbox.y + bbox.height / 2,
+                  ]);
+                  requestAnimationFrame(() =>
+                    setreversecircle([
+                      false,
+                      bbox.x + bbox.width / 2,
+                      bbox.y + bbox.height / 2,
+                    ])
+                  );
+                  // setTimeout(() => {
+                  //   setreversecircle([
+                  //     false,
+                  //     bbox.x + bbox.width / 2,
+                  //     bbox.y + bbox.height / 2,
+                  //   ]);
+                  // }, 150);
+                }}
                 countryclick={(e, bbox) => {
                   setcountrynamevisiblity(true);
                   setTimeout(() => {
                     setcountrynamevisiblity(false);
                   }, 600);
-                  // console.log(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2);
-                  console.log(svgRef.current?.instance.transformState);
                   setclickedcountry([
                     index,
                     bbox.x + bbox.width / 2,
@@ -75,12 +101,8 @@ export default function SvgMap() {
                     e.clientX,
                     e.clientY,
                   ]);
-                  setcirclevisibilty(true);
-                  setTimeout(() => {
-                    setcirclevisibilty(false);
-                  }, 100);
-                  answercorrectness.current[correctanswerref.current] -= 1;
 
+                  answercorrectness.current[correctanswerref.current] -= 1;
                   if (correctanswerref.current === index) {
                     const a = GetCorrectAnswer(
                       thisregion[1],
@@ -90,14 +112,17 @@ export default function SvgMap() {
                     );
                     setcorrectanswer(a);
                     correctanswerref.current = a;
-
                     answercorrectness.current = answercorrectness.current.map(
                       (correctness) => Math.abs(correctness)
                     );
-                    setanswercorrectness(answercorrectness.current);
-                  } else {
-                    setanswercorrectness(answercorrectness.current);
+
+                    setcirclevisibilty(true);
+                    requestAnimationFrame(() => setcirclevisibilty(false));
+                    // setTimeout(() => {
+                    //   setcirclevisibilty(false);
+                    // }, 100);
                   }
+                  setanswercorrectness(answercorrectness.current);
                 }}
                 isitin={thisregion[1].includes(index)}
               ></Countries>
@@ -116,20 +141,6 @@ export default function SvgMap() {
     currentregion,
     correctanswerref.current,
   ]);
-
-  // useEffect(() => {
-  //   import("svg-pan-zoom").then((svgPanZoom) => {
-  //     if (svgRef.current) {
-  //       svgPanZoom.default(svgRef.current, {
-  //         zoomEnabled: true,
-  //         controlIconsEnabled: false,
-  //         fit: true,
-  //         center: true,
-  //       });
-  //     }
-  //   });
-  // }, []);
-
   return (
     <>
       <div
@@ -147,50 +158,16 @@ export default function SvgMap() {
         >
           {({ resetTransform }) => {
             useEffect(() => {
+              console.log("rest lol");
               resetTransform();
             }, [currentregion, regions]);
+            const scale =
+              clickedcountry[0] !== -1
+                ? thisregion[0][3] /
+                  svgRef.current!.instance.transformState.scale
+                : 0;
             return (
               <>
-                {/* {clickedcountry[1] > -1 ? (
-                  <>
-                    <div
-                      className={
-                        circlevisibilty
-                          ? "absolute z-10 bg-white w-50 h-50 rounded-full  text-center scale-20 pointer-events-none opacity-50"
-                          : "absolute z-10 bg-white w-50 h-50 px-2 py-1 rounded-md text-center scale-100 pointer-events-none opacity-0 transition-all duration-1500 "
-                      }
-                      style={{
-                        left: isitmobile
-                          ? `calc(${clickedcountry[1] - 100}px)`
-                          : `calc(${
-                              clickedcountry[1] - 100
-                            }px - (100vw - 985px)/2)`,
-                        top: clickedcountry[4] - 180,
-                      }}
-                    ></div>
-                    <div
-                      className={
-                        countrynamevisiblity
-                          ? "absolute z-20 bg-black w-auto px-2 py-1 rounded-md text-center h-auto pointer-events-none opacity-80 transition-opacity  text-xs "
-                          : "absolute z-20 bg-black w-auto px-2 py-1 rounded-md text-center h-auto pointer-events-none opacity-0 transition-opacity text-xs duration-2000 "
-                      }
-                      //
-                      style={{
-                        left: isitmobile
-                          ? `calc(${clickedcountry[3] - 15}px)`
-                          : `calc(${
-                              clickedcountry[3] - 15
-                            }px - (100vw - 985px)/2)`,
-                        top: clickedcountry[4] - 110,
-                      }}
-                      // onMouseDown={}
-                    >
-                      {countries[clickedcountry[0]][2]}
-                    </div>
-                  </>
-                ) : (
-                  ""
-                )} */}
                 <TransformComponent>
                   <svg
                     className=" h-auto  bg-[rgb(0,0,200)]"
@@ -224,29 +201,16 @@ export default function SvgMap() {
                     {clickedcountry[0] !== -1 ? (
                       <>
                         <foreignObject
-                          x={
-                            clickedcountry[1] -
-                            thisregion[0][3] /
-                              100 /
-                              svgRef.current!.instance.transformState.scale
-                          }
-                          y={
-                            clickedcountry[2] -
-                            thisregion[0][3] /
-                              25 /
-                              svgRef.current!.instance.transformState.scale
-                          }
+                          x={clickedcountry[1] - scale / 100}
+                          y={clickedcountry[2] - scale / 25}
                           width={
-                            (countries[clickedcountry[0]][2].length *
-                              thisregion[0][3]) /
-                            55 /
-                            svgRef.current!.instance.transformState.scale
+                            getTextWidth(
+                              countries[clickedcountry[0]][2],
+                              `${scale / 30}px Arial`
+                            ) +
+                            scale / 30
                           }
-                          height={
-                            thisregion[0][3] /
-                            20 /
-                            svgRef.current!.instance.transformState.scale
-                          }
+                          height={scale / 20}
                           pointerEvents="none"
                         >
                           <div
@@ -254,18 +218,12 @@ export default function SvgMap() {
                               xmlns: "http://www.w3.org/1999/xhtml",
                             }}
                             style={{
-                              fontSize:
-                                thisregion[0][3] /
-                                30 /
-                                svgRef.current!.instance.transformState.scale,
-                              borderRadius:
-                                thisregion[0][3] /
-                                60 /
-                                svgRef.current!.instance.transformState.scale,
+                              fontSize: scale / 30,
+                              borderRadius: scale / 60,
                               pointerEvents: "none",
                             }}
                             className={
-                              circlevisibilty
+                              countrynamevisiblity
                                 ? " opacity-70 p-0 flex z-20 justify-center items-center text-white bg-neutral-800"
                                 : "transition-all z-20 text-white flex justify-center items-center  bg-neutral-800 duration-2500 opacity-0 "
                             }
@@ -279,22 +237,31 @@ export default function SvgMap() {
                               ? " opacity-50 pointer-events-none"
                               : "transition-all duration-1500 opacity-0 pointer-events-none"
                           }
-                          // transform={circlevisibilty ? "scale(1)" : "scale(0.5)"}
-                          // cx={clickedcountry[1]}
-                          // cy={clickedcountry[2]}
                           z={10}
                           cx={clickedcountry[1]}
                           cy={clickedcountry[2]}
-                          r={
-                            circlevisibilty
-                              ? thisregion[0][3] /
-                                10 /
-                                svgRef.current!.instance.transformState.scale
-                              : thisregion[0][3] /
-                                3 /
-                                svgRef.current!.instance.transformState.scale
-                          }
+                          r={circlevisibilty ? scale / 10 : scale / 3}
                           fill="rgb(240,240,240)"
+                        />
+                        <circle
+                          className={
+                            reversecircle[0]
+                              ? " opacity-90 pointer-events-none"
+                              : // " opacity-90 pointer-events-none"
+
+                                "transition-all duration-3000 opacity-0 pointer-events-none"
+                          }
+                          z={10}
+                          cx={reversecircle[1]}
+                          cy={reversecircle[2]}
+                          r={
+                            reversecircle[0]
+                              ? thisregion[0][3] / 3
+                              : thisregion[0][3] / 15
+                          }
+                          fill="none"
+                          stroke="rgb(240,240,240)"
+                          strokeWidth={thisregion[0][3] / 80}
                         />
                       </>
                     ) : (

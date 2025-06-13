@@ -8,8 +8,9 @@ interface Props {
     mouse: React.MouseEvent<SVGPathElement, MouseEvent>,
     bbox: DOMRect
   ) => void;
+  findit: (bbox: DOMRect) => void;
 }
-const Countries = ({ countryindex, countryclick, isitin }: Props) => {
+const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
   const pathref = useRef<Array<SVGPathElement | null>>([]);
   const { countryoutlines, countries } = useDataContext();
   const [colorpulse, setcolorpulse] = useState(false);
@@ -24,9 +25,23 @@ const Countries = ({ countryindex, countryclick, isitin }: Props) => {
       const interval = setInterval(() => {
         setcolorpulse(!colorpulse);
       }, 500);
+
       return () => clearInterval(interval);
     }
   }, [answercorrectness[countryindex], colorpulse]);
+  useEffect(() => {
+    if (answercorrectness[countryindex] < -4) {
+      const longest = countryoutlines[countryindex][1].reduce(function (a, b) {
+        return a.length > b.length ? a : b;
+      });
+
+      findit(
+        pathref.current[
+          countryoutlines[countryindex][1].indexOf(longest)
+        ]!.getBBox()
+      );
+    }
+  }, [answercorrectness[countryindex]]);
   const countryPaths = useMemo(() => {
     const correctness = answercorrectness[countryindex];
     const rgbs = countries[countryindex][1]
