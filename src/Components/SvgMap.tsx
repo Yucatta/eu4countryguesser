@@ -224,23 +224,53 @@ export default function SvgMap() {
                     {clickedcountry[0] !== -1 ? (
                       <>
                         <foreignObject
-                          x={clickedcountry[1]}
-                          y={clickedcountry[2]}
-                          width="100"
-                          height="20"
+                          x={
+                            clickedcountry[1] -
+                            thisregion[0][3] /
+                              100 /
+                              svgRef.current!.instance.transformState.scale
+                          }
+                          y={
+                            clickedcountry[2] -
+                            thisregion[0][3] /
+                              25 /
+                              svgRef.current!.instance.transformState.scale
+                          }
+                          width={
+                            (countries[clickedcountry[0]][2].length *
+                              thisregion[0][3]) /
+                            55 /
+                            svgRef.current!.instance.transformState.scale
+                          }
+                          height={
+                            thisregion[0][3] /
+                            20 /
+                            svgRef.current!.instance.transformState.scale
+                          }
                           pointerEvents="none"
                         >
                           <div
                             {...{
                               xmlns: "http://www.w3.org/1999/xhtml",
                             }}
+                            style={{
+                              fontSize:
+                                thisregion[0][3] /
+                                30 /
+                                svgRef.current!.instance.transformState.scale,
+                              borderRadius:
+                                thisregion[0][3] /
+                                60 /
+                                svgRef.current!.instance.transformState.scale,
+                              pointerEvents: "none",
+                            }}
                             className={
                               circlevisibilty
-                                ? " opacity-50 text-white bg-neutral-900 pointer-events-none"
-                                : "transition-all text-white bg-neutral-900 duration-1500 opacity-0 pointer-events-none"
+                                ? " opacity-70 p-0 flex z-20 justify-center items-center text-white bg-neutral-800"
+                                : "transition-all z-20 text-white flex justify-center items-center  bg-neutral-800 duration-2500 opacity-0 "
                             }
                           >
-                            {countries[clickedcountry[0]][2]}
+                            <div>{countries[clickedcountry[0]][2]}</div>
                           </div>
                         </foreignObject>
                         <circle
@@ -257,8 +287,12 @@ export default function SvgMap() {
                           cy={clickedcountry[2]}
                           r={
                             circlevisibilty
-                              ? svgRef.current?.instance.transformState.scale
-                              : "70"
+                              ? thisregion[0][3] /
+                                10 /
+                                svgRef.current!.instance.transformState.scale
+                              : thisregion[0][3] /
+                                3 /
+                                svgRef.current!.instance.transformState.scale
                           }
                           fill="rgb(240,240,240)"
                         />
