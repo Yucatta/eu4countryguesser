@@ -9,6 +9,7 @@ import {
   TransformWrapper,
   TransformComponent,
   ReactZoomPanPinchContentRef,
+  useControls,
 } from "react-zoom-pan-pinch";
 const getTextWidth = (text: string, font: string) => {
   const canvas = document.createElement("canvas");
@@ -55,6 +56,7 @@ export default function SvgMap() {
     setcorrectanswer(correctanswerref.current);
     setanswercorrectness(Array(665).fill(0));
     answercorrectness.current = Array(665).fill(0);
+    svgRef.current?.resetTransform();
   }, [currentregion, regions]);
   const thisregion = regions[currentregion[0]][currentregion[1]];
   const Image = useMemo(() => {
@@ -156,11 +158,7 @@ export default function SvgMap() {
           ref={svgRef}
           maxScale={20}
         >
-          {({ resetTransform }) => {
-            useEffect(() => {
-              console.log("rest lol");
-              resetTransform();
-            }, [currentregion, regions]);
+          {() => {
             const scale =
               clickedcountry[0] !== -1
                 ? thisregion[0][3] /
