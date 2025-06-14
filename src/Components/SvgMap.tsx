@@ -62,7 +62,6 @@ export default function SvgMap() {
   useEffect(() => {
     if (reversecircle[0]) {
     }
-    // console.log("reversecircle changed", reversecircle[0]);
   }, [reversecircle]);
   const Image = useMemo(() => {
     if (terraincolors && regions && correctanswerref.current) {
@@ -86,20 +85,20 @@ export default function SvgMap() {
                     bbox.x + bbox.width / 2,
                     bbox.y + bbox.height / 2,
                   ]);
-                  // requestAnimationFrame(() =>
-                  //   setreversecircle([
-                  //     false,
-                  //     bbox.x + bbox.width / 2,
-                  //     bbox.y + bbox.height / 2,
-                  //   ])
-                  // );
-                  setTimeout(() => {
+                  requestAnimationFrame(() =>
                     setreversecircle([
                       false,
                       bbox.x + bbox.width / 2,
                       bbox.y + bbox.height / 2,
-                    ]);
-                  }, 100);
+                    ])
+                  );
+                  // setTimeout(() => {
+                  //   setreversecircle([
+                  //     false,
+                  //     bbox.x + bbox.width / 2,
+                  //     bbox.y + bbox.height / 2,
+                  //   ]);
+                  // }, 100);
                 }}
                 countryclick={(e, bbox) => {
                   setcountrynamevisiblity(true);
