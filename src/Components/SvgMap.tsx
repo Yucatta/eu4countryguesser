@@ -10,10 +10,11 @@ import {
   TransformComponent,
   ReactZoomPanPinchContentRef,
 } from "react-zoom-pan-pinch";
+import { reverse } from "dns";
 const getTextWidth = (text: string, font: string) => {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
-  context!.font = font; // e.g., "16px Arial"
+  context!.font = font;
   return context!.measureText(text).width;
 };
 export default function SvgMap() {
@@ -58,6 +59,11 @@ export default function SvgMap() {
     svgRef.current?.resetTransform();
   }, [currentregion, regions]);
   const thisregion = regions[currentregion[0]][currentregion[1]];
+  useEffect(() => {
+    if (reversecircle[0]) {
+    }
+    // console.log("reversecircle changed", reversecircle[0]);
+  }, [reversecircle]);
   const Image = useMemo(() => {
     if (terraincolors && regions && correctanswerref.current) {
       return (
@@ -69,26 +75,31 @@ export default function SvgMap() {
                 countryindex={index}
                 key={index}
                 findit={(bbox) => {
-                  console.log("a circle shoud expand");
+                  // console.log("a circle shoud expand");
+                  // console.log([
+                  //   true,
+                  //   bbox.x + bbox.width / 2,
+                  //   bbox.y + bbox.height / 2,
+                  // ]);
                   setreversecircle([
                     true,
                     bbox.x + bbox.width / 2,
                     bbox.y + bbox.height / 2,
                   ]);
-                  requestAnimationFrame(() =>
-                    setreversecircle([
-                      false,
-                      bbox.x + bbox.width / 2,
-                      bbox.y + bbox.height / 2,
-                    ])
-                  );
-                  // setTimeout(() => {
+                  // requestAnimationFrame(() =>
                   //   setreversecircle([
                   //     false,
                   //     bbox.x + bbox.width / 2,
                   //     bbox.y + bbox.height / 2,
-                  //   ]);
-                  // }, 150);
+                  //   ])
+                  // );
+                  setTimeout(() => {
+                    setreversecircle([
+                      false,
+                      bbox.x + bbox.width / 2,
+                      bbox.y + bbox.height / 2,
+                    ]);
+                  }, 100);
                 }}
                 countryclick={(e, bbox) => {
                   setcountrynamevisiblity(true);
