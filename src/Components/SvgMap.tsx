@@ -161,10 +161,11 @@ export default function SvgMap() {
         style={{
           width: isitmobile ? "100vw" : "977px",
           height:
-            typeof window !== undefined &&
-            (window.innerWidth * thisregion[0][3]) / thisregion[0][2] <
-              (window.innerHeight * 3) / 5
-              ? (window.innerWidth * thisregion[0][3]) / thisregion[0][2]
+            typeof window !== undefined
+              ? (window.innerWidth * thisregion[0][3]) / thisregion[0][2] <
+                (window.innerHeight * 3) / 5
+                ? (window.innerWidth * thisregion[0][3]) / thisregion[0][2]
+                : "60vh"
               : "60vh",
         }}
         className=" p-0 mt-20 flex object-contain object-center  bg-[rgb(50,50,50)] "
@@ -190,12 +191,13 @@ export default function SvgMap() {
                     style={{
                       width: isitmobile ? "100vw" : "977px",
                       height:
-                        typeof window !== undefined &&
-                        (window.innerWidth * thisregion[0][3]) /
-                          thisregion[0][2] <
-                          (window.innerHeight * 3) / 5
+                        typeof window !== undefined
                           ? (window.innerWidth * thisregion[0][3]) /
-                            thisregion[0][2]
+                              thisregion[0][2] <
+                            (window.innerHeight * 3) / 5
+                            ? (window.innerWidth * thisregion[0][3]) /
+                              thisregion[0][2]
+                            : "60vh"
                           : "60vh",
                     }}
                     viewBox={`${thisregion[0][0]} ${thisregion[0][1]} ${thisregion[0][2]} ${thisregion[0][3]}`}
