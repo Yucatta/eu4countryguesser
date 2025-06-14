@@ -9,7 +9,7 @@ const CurrentCountry = () => {
 
   return (
     <>
-      <div className="bg-neutral-700 flex flex-row items-center justify-between w-full h-20">
+      <div className="bg-neutral-900 flex flex-row items-center justify-between w-full h-20">
         {correctanswer > -1 ? (
           <>
             <img

@@ -9,7 +9,6 @@ import {
   TransformWrapper,
   TransformComponent,
   ReactZoomPanPinchContentRef,
-  useControls,
 } from "react-zoom-pan-pinch";
 const getTextWidth = (text: string, font: string) => {
   const canvas = document.createElement("canvas");

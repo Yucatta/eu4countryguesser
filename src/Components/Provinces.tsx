@@ -43,7 +43,7 @@ const Provinces = () => {
               }
               key={+path[0]}
               onClick={() => {
-                console.log(`"${terraincolors[index][1]}"`, index + 1);
+                // console.log(`"${terraincolors[index][1]}"`, index + 1);
               }}
               className="pointer-events-none"
             ></path>
