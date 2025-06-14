@@ -6,13 +6,14 @@ interface Props {
   isitin: boolean;
   countryclick: (
     mouse: React.MouseEvent<SVGPathElement, MouseEvent>,
-    bbox: DOMRect
+    bbox: DOMRect,
+    index2: number
   ) => void;
   findit: (bbox: DOMRect) => void;
 }
 const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
   const pathref = useRef<Array<SVGPathElement | null>>([]);
-  const { countryoutlines, countries } = useDataContext();
+  const { countryoutlines, countries, countryplace } = useDataContext();
   const [colorpulse, setcolorpulse] = useState(false);
   const {
     currentcountry,
@@ -20,6 +21,13 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
     setcurrentcountry,
     currentregion,
   } = useGameContext();
+  const countryplacea =
+    countryplace.length > currentregion[0] &&
+    countryplace[currentregion[0]].length > currentregion[1]
+      ? countryplace[currentregion[0]][currentregion[1]].find(
+          (country) => country[0] === countryindex
+        )
+      : undefined;
   useEffect(() => {
     if (answercorrectness[countryindex] < -4) {
       const interval = setInterval(() => {
@@ -28,18 +36,25 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
 
       return () => clearInterval(interval);
     }
-  }, [answercorrectness[countryindex], colorpulse]);
+  }, [answercorrectness[countryindex]]);
   useEffect(() => {
     if (answercorrectness[countryindex] < -4) {
-      const longest = countryoutlines[countryindex][1].reduce(function (a, b) {
-        return a.length > b.length ? a : b;
-      });
+      if (countryplacea) {
+        findit(pathref.current[countryplacea[1]]!.getBBox());
+      } else {
+        const longest = countryoutlines[countryindex][1].reduce(function (
+          a,
+          b
+        ) {
+          return a.length > b.length ? a : b;
+        });
 
-      findit(
-        pathref.current[
-          countryoutlines[countryindex][1].indexOf(longest)
-        ]!.getBBox()
-      );
+        findit(
+          pathref.current[
+            countryoutlines[countryindex][1].indexOf(longest)
+          ]!.getBBox()
+        );
+      }
     }
   }, [answercorrectness[countryindex]]);
   const countryPaths = useMemo(() => {
@@ -82,7 +97,7 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
           }
           onClick={(e) => {
             if (isitin && pathref.current.length) {
-              countryclick(e, pathref.current[index2]!.getBBox());
+              countryclick(e, pathref.current[index2]!.getBBox(), index2);
             }
           }}
           key={index2}

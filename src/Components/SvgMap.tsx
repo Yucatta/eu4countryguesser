@@ -10,7 +10,6 @@ import {
   TransformComponent,
   ReactZoomPanPinchContentRef,
 } from "react-zoom-pan-pinch";
-import { reverse } from "dns";
 const getTextWidth = (text: string, font: string) => {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
@@ -38,7 +37,6 @@ export default function SvgMap() {
   );
   const [countrynamevisiblity, setcountrynamevisiblity] = useState(false);
   const [circlevisibilty, setcirclevisibilty] = useState(false);
-  // const SvgRef = useRef(null);
   function GetCorrectAnswer(list: number[], badlist: number[]) {
     const filteredids = list
       .filter((countryid) => !badlist.includes(countryid))
@@ -57,6 +55,7 @@ export default function SvgMap() {
     setanswercorrectness(Array(665).fill(0));
     answercorrectness.current = Array(665).fill(0);
     svgRef.current?.resetTransform();
+    console.log(currentregion);
   }, [currentregion, regions]);
   const thisregion = regions[currentregion[0]][currentregion[1]];
   useEffect(() => {
@@ -100,7 +99,7 @@ export default function SvgMap() {
                   //   ]);
                   // }, 100);
                 }}
-                countryclick={(e, bbox) => {
+                countryclick={(e, bbox, index2) => {
                   setcountrynamevisiblity(true);
                   setTimeout(() => {
                     setcountrynamevisiblity(false);
@@ -112,7 +111,14 @@ export default function SvgMap() {
                     e.clientX,
                     e.clientY,
                   ]);
-
+                  console.log(
+                    currentregion,
+                    "countryindex",
+                    index,
+                    "place in country",
+                    index2,
+                    [index, index2]
+                  );
                   answercorrectness.current[correctanswerref.current] -= 1;
                   if (correctanswerref.current === index) {
                     const a = GetCorrectAnswer(
@@ -129,9 +135,6 @@ export default function SvgMap() {
 
                     setcirclevisibilty(true);
                     requestAnimationFrame(() => setcirclevisibilty(false));
-                    // setTimeout(() => {
-                    //   setcirclevisibilty(false);
-                    // }, 100);
                   }
                   setanswercorrectness(answercorrectness.current);
                 }}
@@ -157,8 +160,14 @@ export default function SvgMap() {
       <div
         style={{
           width: isitmobile ? "100vw" : "977px",
+          height:
+            typeof window !== undefined &&
+            (window.innerWidth * thisregion[0][3]) / thisregion[0][2] <
+              (window.innerHeight * 3) / 5
+              ? (window.innerWidth * thisregion[0][3]) / thisregion[0][2]
+              : "60vh",
         }}
-        className=" h-[60vh] p-0 mt-20 flex object-contain object-center absolute bg-[rgb(50,50,50)] "
+        className=" p-0 mt-20 flex object-contain object-center  bg-[rgb(50,50,50)] "
       >
         <TransformWrapper
           initialScale={1}
@@ -180,7 +189,14 @@ export default function SvgMap() {
                     className=" h-auto  bg-[rgb(0,0,200)]"
                     style={{
                       width: isitmobile ? "100vw" : "977px",
-                      height: "60vh",
+                      height:
+                        typeof window !== undefined &&
+                        (window.innerWidth * thisregion[0][3]) /
+                          thisregion[0][2] <
+                          (window.innerHeight * 3) / 5
+                          ? (window.innerWidth * thisregion[0][3]) /
+                            thisregion[0][2]
+                          : "60vh",
                     }}
                     viewBox={`${thisregion[0][0]} ${thisregion[0][1]} ${thisregion[0][2]} ${thisregion[0][3]}`}
                     xmlns="http://www.w3.org/2000/svg"
@@ -254,9 +270,7 @@ export default function SvgMap() {
                           className={
                             reversecircle[0]
                               ? " opacity-90 pointer-events-none"
-                              : // " opacity-90 pointer-events-none"
-
-                                "transition-all duration-3000 opacity-0 pointer-events-none"
+                              : "transition-all duration-3000 opacity-0 pointer-events-none"
                           }
                           z={10}
                           cx={reversecircle[1]}

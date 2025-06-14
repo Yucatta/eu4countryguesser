@@ -6,26 +6,25 @@ import json,csv
 #     for row in reader:
 #         bboxes.append([int(row[1]),int(row[2]),int(row[3]),int(row[4])])
 regions = []
-with open("regions.json",mode="r") as f:
+with open("regions3.json",mode="r") as f:
     regions = json.load(f)
 
 for i,continent in enumerate(regions):
     for j,region in enumerate(continent):
-        temp = []
-        # for id in row[2]:
-        # print(region)
-        cords = region[1].split(" ")
-        print(cords)
         a = []
-        for cord  in cords:
-            a.append(int(cord))
+        # for k,id  in enumerate(region[1]):
+        #     if(len(id)<2):
+        #         regions[i][j][1][k] = []
+            # a.append([id])
             # temp.append(id)
-        print(a)
-        regions[i][j] = [region[0],a,region[2]]
+        # regions[i][j] = [region[0],a]
+        if(len(region)):
+            regions[i][j] = regions[i][j][0]
+            
 
 # print(regions)
 
-with open("regions2.json",mode="w") as f:
+with open("regions3.json",mode="w") as f:
     json.dump(regions,f,indent=2)
 # regions = []
 # with open("regions2.json",mode="r") as f:

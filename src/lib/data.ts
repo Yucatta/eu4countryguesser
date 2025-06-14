@@ -13,6 +13,7 @@ interface AppData {
   terraincolors: Array<[number, string]>;
   regions: number[][][][];
   regionnames: string[][];
+  countryplaces: number[][][][];
 }
 
 function loadAllDataOnce(): AppData {
@@ -51,6 +52,9 @@ function loadAllDataOnce(): AppData {
     const Regions: [string, number[], number[]][][] = JSON.parse(
       fs.readFileSync(path.join(root, "regions.json"), "utf-8")
     );
+    const countryplace = JSON.parse(
+      fs.readFileSync(path.join(root, "countryplace.json"), "utf-8")
+    );
     return {
       emptylands: tempids4,
       areapaths: Object.entries(areapaths),
@@ -68,6 +72,7 @@ function loadAllDataOnce(): AppData {
       regionnames: Regions.map((continent) =>
         continent.map((region) => region[0])
       ),
+      countryplaces: countryplace,
     };
   } catch (error) {
     console.error("Error loading application data:", error);

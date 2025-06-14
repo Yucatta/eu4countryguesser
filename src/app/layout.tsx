@@ -43,6 +43,7 @@ export default async function RootLayout({
               countryoutlines: fetcheddata.countryoutlines,
               terraincolors: fetcheddata.terraincolors,
               regionnames: fetcheddata.regionnames,
+              countryplace: fetcheddata.countryplaces,
             }}
           >
             {children}

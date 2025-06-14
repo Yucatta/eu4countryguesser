@@ -39,7 +39,7 @@ const RegionSelect = () => {
   return (
     <div
       // style={{ marginTop: isitmobile ? "57vh" : "" }}
-      className="flex flex-wrap w-11/12 h-screen items-center  mt-[calc(57vh)] justify-evenly"
+      className="flex flex-wrap w-11/12 h-screen items-center   justify-evenly"
     >
       {regionnames.map((continent, index) => {
         return (
