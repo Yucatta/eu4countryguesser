@@ -36,7 +36,7 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
 
       return () => clearInterval(interval);
     }
-  }, [answercorrectness[countryindex]]);
+  }, [answercorrectness[countryindex], colorpulse]);
   useEffect(() => {
     if (answercorrectness[countryindex] < -4) {
       if (countryplacea) {

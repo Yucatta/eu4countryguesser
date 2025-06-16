@@ -55,7 +55,6 @@ export default function SvgMap() {
     setanswercorrectness(Array(665).fill(0));
     answercorrectness.current = Array(665).fill(0);
     svgRef.current?.resetTransform();
-    console.log(currentregion);
   }, [currentregion, regions]);
   const thisregion = regions[currentregion[0]][currentregion[1]];
   useEffect(() => {
@@ -160,14 +159,8 @@ export default function SvgMap() {
       <div
         style={{
           width: isitmobile ? "100vw" : "977px",
-          height:
-            typeof window !== "undefined" &&
-            (window.innerWidth * thisregion[0][3]) / thisregion[0][2] <
-              (window.innerHeight * 3) / 5
-              ? (window.innerWidth * thisregion[0][3]) / thisregion[0][2]
-              : "60vh",
         }}
-        className=" p-0 mt-20 flex object-contain object-center  bg-[rgb(50,50,50)] "
+        className=" p-0 mt-20 h-auto max-h-[67vh] flex object-contain object-center  bg-[rgb(50,50,50)] "
       >
         <TransformWrapper
           initialScale={1}
@@ -186,17 +179,9 @@ export default function SvgMap() {
               <>
                 <TransformComponent>
                   <svg
-                    className=" h-auto  bg-[rgb(0,0,200)]"
+                    className="  h-auto max-h-[70vh] bg-[rgb(0,0,200)]"
                     style={{
                       width: isitmobile ? "100vw" : "977px",
-                      height:
-                        typeof window !== "undefined" &&
-                        (window.innerWidth * thisregion[0][3]) /
-                          thisregion[0][2] <
-                          (window.innerHeight * 3) / 5
-                          ? (window.innerWidth * thisregion[0][3]) /
-                            thisregion[0][2]
-                          : "60vh",
                     }}
                     viewBox={`${thisregion[0][0]} ${thisregion[0][1]} ${thisregion[0][2]} ${thisregion[0][3]}`}
                     xmlns="http://www.w3.org/2000/svg"
@@ -295,6 +280,7 @@ export default function SvgMap() {
           }}
         </TransformWrapper>
       </div>
+      {/*   */}
     </>
   );
 }
