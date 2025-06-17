@@ -1,11 +1,33 @@
 import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
-import React from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 
 const CurrentCountry = () => {
   const { countries, regions } = useDataContext();
   const { correctanswer, isitmobile, answercorrectness, currentregion } =
     useGameContext();
+  const timeinterval = useRef<NodeJS.Timeout | null>(null);
+  const [seconds, setseocnds] = useState(0);
+  const regionlength = regions[currentregion[0]][currentregion[1]][1].filter(
+    (id) => id < 665
+  ).length;
+  const answeredlength = answercorrectness.filter((a) => a > 0).length;
+  useEffect(() => {
+    let sec = 0;
+    if (timeinterval.current) {
+      clearInterval(timeinterval.current);
+      setseocnds(sec);
+    }
+    timeinterval.current = setInterval(() => {
+      sec++;
+      setseocnds(sec);
+    }, 1000);
+  }, [currentregion]);
+  useEffect(() => {
+    if (regionlength === answeredlength) {
+      clearInterval(timeinterval.current!);
+    }
+  }, [answercorrectness]);
 
   return (
     <>
@@ -30,18 +52,17 @@ const CurrentCountry = () => {
           ""
         )}
         <div className=" flex flex-row absolute right-5 opacity-100 ">
+          <div className="px-2 border-l-3 border-[#d0d0d0b6]">
+            {Math.floor(seconds / 60)}:
+            {`${seconds % 60 < 10 ? 0 : ""}${seconds % 60}`}
+          </div>
           <div className="px-2 border-x-3 border-[#d0d0d0b6]">
-            {answercorrectness.filter((a) => a > 0).length}/
-            {
-              regions[currentregion[0]][currentregion[1]][1].filter(
-                (id) => id < 665
-              ).length
-            }
+            {answeredlength}/{regionlength}
           </div>
           <div className="px-2 border-r-3 border-[#d0d0d0b6]">
             {answercorrectness.reduce((a, b) => a + Math.abs(b), 0)
               ? Math.floor(
-                  (answercorrectness.filter((a) => a > 0).length /
+                  (answeredlength /
                     answercorrectness.reduce((a, b) => a + Math.abs(b), 0)) *
                     100
                 )
