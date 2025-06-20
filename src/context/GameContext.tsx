@@ -18,7 +18,7 @@ const GameContext = createContext<GameContextType | null>(null);
 
 export const GameContextProvider = ({ children }: { children: ReactNode }) => {
   const [currentcountry, setcurrentcountry] = useState([-1, -1]);
-  const [currentregion, setcurrentregion] = useState([4, 6]);
+  const [currentregion, setcurrentregion] = useState([4, 0]);
   const [correctanswer, setcorrectanswer] = useState<number>(-1);
   const [answercorrectness, setanswercorrectness] = useState(
     Array(665).fill(0)

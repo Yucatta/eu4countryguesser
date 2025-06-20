@@ -15,12 +15,17 @@ const RegionSelect = () => {
     const params = new URLSearchParams(searchParams.toString());
     const c = searchParams.get("C") ?? "";
     const r = searchParams.get("R") ?? "";
-    router.replace(`?${params.toString()}`);
-    params.set("C", "World");
-    params.set("R", "Europe");
-
-    const continentindex = Continents.indexOf(c);
-    setcurrentregion([continentindex, regionnames[continentindex].indexOf(r)]);
+    if (c && r) {
+      const continentindex = Continents.indexOf(c);
+      setcurrentregion([
+        continentindex,
+        regionnames[continentindex].indexOf(r),
+      ]);
+    } else {
+      router.replace(`?${params.toString()}`);
+      params.set("C", "World");
+      params.set("R", "Europe");
+    }
   }, []);
   return (
     <div

@@ -15,13 +15,6 @@ const Uncolonized = ({ countryindex, isitin }: Props) => {
       .replace("rgb(", "")
       .replace(")", "")
       .split(" ");
-    // if (696 === countryindex) {
-    //   console.log(
-    //     countryindex,
-    //     countries[countryindex],
-    //     countryoutlines[countryindex][1][0]
-    //   );
-    // }
     return countryoutlines[countryindex][1].map((path, index2) => {
       return (
         <path

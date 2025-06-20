@@ -157,10 +157,8 @@ export default function SvgMap() {
   return (
     <>
       <div
-        style={{
-          width: isitmobile ? "100vw" : "977px",
-        }}
-        className=" p-0 mt-20 h-auto max-h-[67vh] flex object-contain object-center  bg-[rgb(50,50,50)] "
+        style={{ width: "clamp(0px, 100vw, 977px)" }}
+        className=" p-0 mt-20 h-auto  max-h-[70vh] min-h-[50vh] flex object-contain object-center  bg-[rgb(50,50,50)] "
       >
         <TransformWrapper
           initialScale={1}
@@ -179,10 +177,8 @@ export default function SvgMap() {
               <>
                 <TransformComponent>
                   <svg
-                    className="  h-auto max-h-[70vh] bg-[rgb(0,0,200)]"
-                    style={{
-                      width: isitmobile ? "100vw" : "977px",
-                    }}
+                    className="  h-auto max-h-[70vh] min-h-[50vh] bg-[rgb(0,0,200)]"
+                    style={{ width: "clamp(0px, 100vw, 977px)" }}
                     viewBox={`${thisregion[0][0]} ${thisregion[0][1]} ${thisregion[0][2]} ${thisregion[0][3]}`}
                     xmlns="http://www.w3.org/2000/svg"
                     width="100%"
