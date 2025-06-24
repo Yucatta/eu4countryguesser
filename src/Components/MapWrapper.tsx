@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 
 const SvgMap = dynamic(() => import("@/Components/SvgMap"), {
   ssr: false,
@@ -13,8 +13,8 @@ const SvgMap = dynamic(() => import("@/Components/SvgMap"), {
 });
 
 export default function SvgMapWrapper() {
-  const params = useSearchParams();
+  //   const params = useSearchParams();
 
-  const key = params.toString();
+  // //   const key = params.toString();
   return <SvgMap />;
 }

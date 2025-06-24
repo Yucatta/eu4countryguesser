@@ -2,7 +2,7 @@
 import { useParams } from "next/navigation";
 import React from "react";
 
-const page = () => {
+const Page = () => {
   const params = useParams();
   const continent = params.continent;
   const region = params.region;
@@ -10,4 +10,4 @@ const page = () => {
   return <div>page</div>;
 };
 
-export default page;
+export default Page;
