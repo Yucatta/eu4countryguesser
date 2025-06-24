@@ -42,10 +42,25 @@ const CurrentCountry = () => {
       >
         {correctanswer > -1 ? (
           <>
-            <img
-              className="w-15 absolute right-100 left-0 top-0 h-15"
-              src={`/flags/${countries[correctanswer][0]}.png`}
-            ></img>
+            <div className="w-30 h-30 relative">
+              <img
+                src="/shield_fancy_overlay.png"
+                className="absolute top-0 w-full h-full left-0 z-50"
+              ></img>
+              <img
+                className="w-[75px] h-[89px] scale-105 left-[23px] top-[17.5px] overflow-hidden relative"
+                style={{
+                  WebkitMaskImage: "url('/inverted_shield.png')",
+                  maskImage: "url('/inverted_shield.png')",
+                  WebkitMaskRepeat: "no-repeat",
+                  maskRepeat: "no-repeat",
+                  WebkitMaskSize: "cover",
+                  maskSize: "cover",
+                  overflow: "hidden",
+                }}
+                src={`/flags/${countries[correctanswer][0]}.png`}
+              ></img>
+            </div>
             {/* <div className="w-40 h-30">see this as ottoman flag</div> */}
             <div className="text-bold ml-16 text-2xl">
               {countries[correctanswer][2]}
