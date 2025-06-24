@@ -55,6 +55,7 @@ function loadAllDataOnce(): AppData {
     const countryplace = JSON.parse(
       fs.readFileSync(path.join(root, "countryplace.json"), "utf-8")
     );
+    console.log("you read everything ? ");
     return {
       emptylands: tempids4,
       areapaths: Object.entries(areapaths),

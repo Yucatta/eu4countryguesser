@@ -1,23 +1,10 @@
-"use client";
 import CurrentCountry from "@/Components/CurrentCountry";
+import HomeButton from "@/Components/HomeButton";
+// import SvgMapWrapper from "@/Components/MapWrapper";
 import RegionSelect from "@/Components/RegionSelect";
 import SvgMap from "@/Components/SvgMap";
-import { useGameContext } from "@/context/GameContext";
-import { useEffect } from "react";
+
 export default function Home() {
-  const { setisitmobile } = useGameContext();
-  useEffect(() => {
-    function checkmible() {
-      if (typeof window !== "undefined" && window.innerWidth < 977) {
-        setisitmobile(true);
-      } else {
-        setisitmobile(false);
-      }
-    }
-    checkmible();
-    addEventListener("resize", checkmible);
-    return () => removeEventListener("resize", checkmible);
-  }, []);
   return (
     <>
       <div className=" h-full  flex justify-center items-start">
@@ -27,8 +14,10 @@ export default function Home() {
             " h-max bg-[rgb(29,29,29)] flex flex-col items-center pb-20  "
           }
         >
+          <HomeButton></HomeButton>
           <CurrentCountry></CurrentCountry>
           <SvgMap></SvgMap>
+          {/* <SvgMapWrapper></SvgMapWrapper> */}
           <RegionSelect></RegionSelect>
         </div>
       </div>

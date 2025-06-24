@@ -1,18 +1,34 @@
 "use client";
 import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 const Continents = ["Europe", "Asia", "Africa", "New World", "World"];
-const RegionSelect = () => {
+interface Props {
+  regionselect?: (e: boolean) => void;
+}
+const RegionSelect = ({ regionselect }: Props) => {
   const { regionnames } = useDataContext();
   const { setcurrentregion, currentregion } = useGameContext();
+  const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const handleClick = (index: number, index2: number) => {
+    console.log(router, pathname);
+    try {
+      const params = new URLSearchParams({
+        C: Continents[index],
+        R: regionnames[index][index2],
+      }).toString();
+
+      router.push(`/?${params}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
     const c = searchParams.get("C") ?? "";
     const r = searchParams.get("R") ?? "";
     if (c && r) {
@@ -21,16 +37,12 @@ const RegionSelect = () => {
         continentindex,
         regionnames[continentindex].indexOf(r),
       ]);
-    } else {
-      router.replace(`?${params.toString()}`);
-      params.set("C", "World");
-      params.set("R", "Europe");
     }
   }, []);
   return (
     <div
       // style={{ marginTop: isitmobile ? "57vh" : "" }}
-      className="flex flex-wrap w-11/12 h-screen items-center mt-10   justify-evenly"
+      className="flex flex-wrap w-11/12 h-full items-center mt-10   justify-evenly"
     >
       {regionnames.map((continent, index) => {
         return (
@@ -51,7 +63,7 @@ const RegionSelect = () => {
                     ? "scale-110"
                     : "mt-10 scale-160"
                 }
-                src={`/Continents/${index}.svg`}
+                src={`/continents/${index}.svg`}
               ></img>
             </div>
             <div className="text-4xl mt-1 mb-2 font-bold">
@@ -70,10 +82,11 @@ const RegionSelect = () => {
                     }
                     onClick={() => {
                       setcurrentregion([index, index2]);
-
-                      router.replace(
-                        `?C=${Continents[index]}&R=${regionnames[index][index2]}`
-                      );
+                      console.log(pathname);
+                      if (regionselect) {
+                        regionselect(true);
+                      }
+                      handleClick(index, index2);
                     }}
                   >
                     {region}

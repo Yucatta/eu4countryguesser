@@ -1,3 +1,4 @@
+"use client";
 import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
 import React, { useEffect, useRef, useState } from "react";

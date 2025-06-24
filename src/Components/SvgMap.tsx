@@ -26,7 +26,7 @@ export default function SvgMap() {
     regions,
     terraincolors,
   } = useDataContext();
-  const { currentregion, isitmobile, setanswercorrectness, setcorrectanswer } =
+  const { currentregion, setanswercorrectness, setcorrectanswer } =
     useGameContext();
   const svgRef = useRef<ReactZoomPanPinchContentRef | null>(null);
   const correctanswerref = useRef<number>(-1);
@@ -72,17 +72,12 @@ export default function SvgMap() {
                 countryindex={index}
                 key={index}
                 findit={(bbox) => {
-                  // console.log("a circle shoud expand");
-                  // console.log([
-                  //   true,
-                  //   bbox.x + bbox.width / 2,
-                  //   bbox.y + bbox.height / 2,
-                  // ]);
                   setreversecircle([
                     true,
                     bbox.x + bbox.width / 2,
                     bbox.y + bbox.height / 2,
                   ]);
+
                   requestAnimationFrame(() =>
                     setreversecircle([
                       false,
@@ -90,13 +85,6 @@ export default function SvgMap() {
                       bbox.y + bbox.height / 2,
                     ])
                   );
-                  // setTimeout(() => {
-                  //   setreversecircle([
-                  //     false,
-                  //     bbox.x + bbox.width / 2,
-                  //     bbox.y + bbox.height / 2,
-                  //   ]);
-                  // }, 100);
                 }}
                 countryclick={(e, bbox, index2) => {
                   setcountrynamevisiblity(true);
@@ -154,6 +142,7 @@ export default function SvgMap() {
     currentregion,
     correctanswerref.current,
   ]);
+  // console.log("");
   return (
     <>
       <div
@@ -208,11 +197,13 @@ export default function SvgMap() {
                           x={clickedcountry[1] - scale / 100}
                           y={clickedcountry[2] - scale / 25}
                           width={
-                            getTextWidth(
-                              countries[clickedcountry[0]][2],
-                              `${scale / 30}px Arial`
-                            ) +
-                            scale / 30
+                            typeof window !== "undefined"
+                              ? getTextWidth(
+                                  countries[clickedcountry[0]][2],
+                                  `${scale / 30}px Arial`
+                                ) +
+                                scale / 30
+                              : ""
                           }
                           height={scale / 20}
                           pointerEvents="none"
