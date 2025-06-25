@@ -1,8 +1,7 @@
 "use client";
 import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
 const Continents = ["Europe", "Asia", "Africa", "New World", "World"];
 interface Props {
   regionselect?: (e: boolean) => void;
@@ -10,35 +9,7 @@ interface Props {
 const RegionSelect = ({ regionselect }: Props) => {
   const { regionnames } = useDataContext();
   const { setcurrentregion, currentregion } = useGameContext();
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const handleClick = (index: number, index2: number) => {
-    console.log(router, pathname);
-    try {
-      const params = new URLSearchParams({
-        C: Continents[index],
-        R: regionnames[index][index2],
-      }).toString();
-
-      router.push(`/?${params}`);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    const c = searchParams.get("C") ?? "";
-    const r = searchParams.get("R") ?? "";
-    if (c && r) {
-      const continentindex = Continents.indexOf(c);
-      setcurrentregion([
-        continentindex,
-        regionnames[continentindex].indexOf(r),
-      ]);
-    }
-  }, []);
   return (
     <div
       // style={{ marginTop: isitmobile ? "57vh" : "" }}
@@ -99,7 +70,6 @@ const RegionSelect = ({ regionselect }: Props) => {
                       if (regionselect) {
                         regionselect(true);
                       }
-                      handleClick(index, index2);
                     }}
                   >
                     {region}

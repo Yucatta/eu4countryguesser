@@ -2,7 +2,6 @@ import CurrentCountry from "@/Components/CurrentCountry";
 import HomeButton from "@/Components/HomeButton";
 import RegionSelect from "@/Components/RegionSelect";
 import SvgMap from "@/Components/SvgMap";
-import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -17,9 +16,7 @@ export default function Home() {
           <HomeButton></HomeButton>
           <CurrentCountry></CurrentCountry>
           <SvgMap></SvgMap>
-          <Suspense>
-            <RegionSelect></RegionSelect>
-          </Suspense>
+          <RegionSelect></RegionSelect>
         </div>
       </div>
     </>
