@@ -39,7 +39,7 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
   }, [answercorrectness[countryindex], colorpulse]);
   useEffect(() => {
     if (answercorrectness[countryindex] < -4) {
-      if (countryplacea) {
+      if (countryplacea && findit) {
         findit(pathref.current[countryplacea[1]]!.getBBox());
       } else {
         const longest = countryoutlines[countryindex][1].reduce(function (
@@ -48,12 +48,13 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
         ) {
           return a.length > b.length ? a : b;
         });
-
-        findit(
-          pathref.current[
-            countryoutlines[countryindex][1].indexOf(longest)
-          ]!.getBBox()
-        );
+        if (findit) {
+          findit(
+            pathref.current[
+              countryoutlines[countryindex][1].indexOf(longest)
+            ]!.getBBox()
+          );
+        }
       }
     }
   }, [answercorrectness[countryindex]]);

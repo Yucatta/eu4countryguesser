@@ -62,7 +62,6 @@ export default function Page() {
               <Countries
                 countryindex={index}
                 key={index}
-                findit={() => {}}
                 countryclick={() => {
                   answercorrectness.current[index] -= 1;
                   answercorrectness.current = answercorrectness.current.map(
