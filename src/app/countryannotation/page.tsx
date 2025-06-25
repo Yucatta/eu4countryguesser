@@ -1,6 +1,6 @@
 "use client";
 import { useDataContext } from "@/context/DataContext";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import Countries from "@/Components/Countries";
 import Uncolonized from "@/Components/uncolonized";
 import { useGameContext } from "@/context/GameContext";
@@ -62,8 +62,8 @@ export default function Page() {
               <Countries
                 countryindex={index}
                 key={index}
-                findit={(bbox) => {}}
-                countryclick={(e, bbox, index2) => {
+                findit={() => {}}
+                countryclick={() => {
                   answercorrectness.current[index] -= 1;
                   answercorrectness.current = answercorrectness.current.map(
                     (correctness) => Math.abs(correctness)

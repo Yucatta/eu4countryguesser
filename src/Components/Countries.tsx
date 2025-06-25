@@ -9,7 +9,7 @@ interface Props {
     bbox: DOMRect,
     index2: number
   ) => void;
-  findit: (bbox: DOMRect) => void;
+  findit?: (bbox: DOMRect) => void;
 }
 const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
   const pathref = useRef<Array<SVGPathElement | null>>([]);

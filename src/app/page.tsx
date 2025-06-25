@@ -1,7 +1,5 @@
-import CompletionStats from "@/Components/CompletionStats";
 import CurrentCountry from "@/Components/CurrentCountry";
 import HomeButton from "@/Components/HomeButton";
-// import SvgMapWrapper from "@/Components/MapWrapper";
 import RegionSelect from "@/Components/RegionSelect";
 import SvgMap from "@/Components/SvgMap";
 

@@ -1,7 +1,6 @@
 "use client";
 import { useDataContext } from "@/context/DataContext";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import Countries from "./Countries";
+import React, { useEffect, useRef, useState } from "react";
 import Uncolonized from "./uncolonized";
 import { useGameContext } from "@/context/GameContext";
 import Provinces from "./Provinces";
@@ -10,7 +9,6 @@ import {
   TransformComponent,
   ReactZoomPanPinchContentRef,
 } from "react-zoom-pan-pinch";
-import CurrentCountry from "./CurrentCountry";
 import AllCountries from "./AllCountries";
 const getTextWidth = (text: string, font: string) => {
   const canvas = document.createElement("canvas");
@@ -19,22 +17,8 @@ const getTextWidth = (text: string, font: string) => {
   return context!.measureText(text).width;
 };
 export default function SvgMap() {
-  const {
-    paths,
-    countryoutlines,
-    countries,
-    countryprovinces,
-    emptylands,
-    regions,
-    terraincolors,
-  } = useDataContext();
-  const {
-    currentregion,
-    currentcountry,
-    setcurrentcountry,
-    setanswercorrectness,
-    setcorrectanswer,
-  } = useGameContext();
+  const { countries, regions } = useDataContext();
+  const { currentregion, currentcountry, setcurrentcountry } = useGameContext();
   const svgRef = useRef<ReactZoomPanPinchContentRef | null>(null);
   const [clickedcountry, setclickedcountry] = useState([-1, -1, -1, -1, -1]);
   const [reversecircle, setreversecircle] = useState<[boolean, number, number]>(
@@ -42,14 +26,6 @@ export default function SvgMap() {
   );
   const [countrynamevisiblity, setcountrynamevisiblity] = useState(false);
   const [circlevisibilty, setcirclevisibilty] = useState(false);
-  function GetCorrectAnswer(list: number[], badlist: number[]) {
-    const filteredids = list
-      .filter((countryid) => !badlist.includes(countryid))
-      .filter((countryid) => countryid < 665);
-
-    const a = filteredids[Math.floor(Math.random() * filteredids.length)];
-    return a ? a : -1;
-  }
   useEffect(() => {
     if (window.innerWidth / window.innerHeight < 1) {
       const losehighlight = setTimeout(() => {
