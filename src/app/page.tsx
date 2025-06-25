@@ -19,7 +19,6 @@ export default function Home() {
           <CurrentCountry></CurrentCountry>
           <SvgMap></SvgMap>
           <RegionSelect></RegionSelect>
-          {/* {<CompletionStats></CompletionStats>} */}
         </div>
       </div>
     </>

@@ -2,16 +2,10 @@
 import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
 import React, { useEffect, useRef, useState } from "react";
-const getTextWidth = (text: string, font: string) => {
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
-  context!.font = font;
-  return context!.measureText(text).width;
-};
+import CompletionStats from "./CompletionStats";
 const CurrentCountry = () => {
   const { countries, regions } = useDataContext();
-  const { correctanswer, isitmobile, answercorrectness, currentregion } =
-    useGameContext();
+  const { correctanswer, answercorrectness, currentregion } = useGameContext();
   const timeinterval = useRef<NodeJS.Timeout | null>(null);
   const [seconds, setseocnds] = useState(0);
   const regionlength = regions[currentregion[0]][currentregion[1]][1].filter(
@@ -34,6 +28,13 @@ const CurrentCountry = () => {
       clearInterval(timeinterval.current!);
     }
   }, [answercorrectness]);
+  const correctness = answercorrectness.reduce((a, b) => a + Math.abs(b), 0)
+    ? Math.floor(
+        (answeredlength /
+          answercorrectness.reduce((a, b) => a + Math.abs(b), 0)) *
+          100
+      )
+    : 0;
 
   return (
     <>
@@ -80,17 +81,14 @@ const CurrentCountry = () => {
             style={{ width: "clamp(40px,80px,13.3vw)" }}
             className=" border-r-3 text-center border-[#d0d0d0b6]"
           >
-            {answercorrectness.reduce((a, b) => a + Math.abs(b), 0)
-              ? Math.floor(
-                  (answeredlength /
-                    answercorrectness.reduce((a, b) => a + Math.abs(b), 0)) *
-                    100
-                )
-              : 0}
-            %
+            {correctness}%
           </div>
         </div>
       </div>
+      <CompletionStats
+        seconds={seconds}
+        correctness={correctness}
+      ></CompletionStats>
     </>
   );
 };
