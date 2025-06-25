@@ -1,0 +1,127 @@
+import { useDataContext } from "@/context/DataContext";
+import { useGameContext } from "@/context/GameContext";
+import React, { useEffect, useMemo, useRef } from "react";
+import Countries from "./Countries";
+interface Props {
+  setreversecircle: (
+    value: React.SetStateAction<[boolean, number, number]>
+  ) => void;
+  setcountrynamevisiblity: (value: React.SetStateAction<boolean>) => void;
+  setclickedcountry: (value: React.SetStateAction<number[]>) => void;
+  setcirclevisibilty: (value: React.SetStateAction<boolean>) => void;
+}
+const AllCountries = ({
+  setreversecircle,
+  setcountrynamevisiblity,
+  setclickedcountry,
+  setcirclevisibilty,
+}: Props) => {
+  const {
+    paths,
+    countryoutlines,
+    countries,
+    countryprovinces,
+    emptylands,
+    regions,
+    terraincolors,
+  } = useDataContext();
+  const { currentregion, setanswercorrectness, setcorrectanswer } =
+    useGameContext();
+  const correctanswerref = useRef<number>(-1);
+  const answercorrectness = useRef<number[]>(Array(665).fill(0));
+  const thisregion = regions[currentregion[0]][currentregion[1]];
+  useEffect(() => {
+    correctanswerref.current = GetCorrectAnswer(
+      regions[currentregion[0]][currentregion[1]][1],
+      []
+    );
+    setcorrectanswer(correctanswerref.current);
+    setanswercorrectness(Array(665).fill(0));
+    answercorrectness.current = Array(665).fill(0);
+  }, [currentregion, regions]);
+
+  function GetCorrectAnswer(list: number[], badlist: number[]) {
+    const filteredids = list
+      .filter((countryid) => !badlist.includes(countryid))
+      .filter((countryid) => countryid < 665);
+
+    const a = filteredids[Math.floor(Math.random() * filteredids.length)];
+    return a ? a : -1;
+  }
+  const Image = useMemo(() => {
+    if (terraincolors && regions && correctanswerref.current) {
+      return (
+        <>
+          {Array(665)
+            .fill(0)
+            .map((_, index) => (
+              <Countries
+                countryindex={index}
+                key={index}
+                findit={(bbox) => {
+                  setreversecircle([
+                    true,
+                    bbox.x + bbox.width / 2,
+                    bbox.y + bbox.height / 2,
+                  ]);
+                  setTimeout(() => {
+                    requestAnimationFrame(() =>
+                      setreversecircle([
+                        false,
+                        bbox.x + bbox.width / 2,
+                        bbox.y + bbox.height / 2,
+                      ])
+                    );
+                  }, 16);
+                }}
+                countryclick={(e, bbox) => {
+                  setcountrynamevisiblity(true);
+                  setTimeout(() => {
+                    setcountrynamevisiblity(false);
+                  }, 600);
+                  setclickedcountry([
+                    index,
+                    bbox.x + bbox.width / 2,
+                    bbox.y + bbox.height / 2,
+                    e.clientX,
+                    e.clientY,
+                  ]);
+                  answercorrectness.current[correctanswerref.current] -= 1;
+                  if (correctanswerref.current === index) {
+                    const a = GetCorrectAnswer(
+                      thisregion[1],
+                      answercorrectness.current
+                        .map((guess, index) => (guess ? index : -1))
+                        .filter((id) => id + 1)
+                    );
+                    setcorrectanswer(a);
+                    correctanswerref.current = a;
+                    answercorrectness.current = answercorrectness.current.map(
+                      (correctness) => Math.abs(correctness)
+                    );
+
+                    setcirclevisibilty(true);
+                    requestAnimationFrame(() => setcirclevisibilty(false));
+                  }
+                  setanswercorrectness(answercorrectness.current);
+                }}
+                isitin={thisregion[1].includes(index)}
+              ></Countries>
+            ))}
+        </>
+      );
+    }
+  }, [
+    paths,
+    emptylands,
+    countries,
+    terraincolors,
+    countryprovinces,
+    countryoutlines,
+    regions,
+    currentregion,
+  ]);
+  return <>{Image ? Image : ""}</>;
+};
+
+export default AllCountries;

@@ -4,7 +4,7 @@ import { Jost } from "next/font/google";
 import { DataProvider } from "@/context/DataContext";
 import { loadAppData } from "@/lib/data";
 import { GameContextProvider } from "@/context/GameContext";
-
+import { Analytics } from "@vercel/analytics/next";
 const jost = Jost({
   variable: "--font-jost",
   subsets: ["latin"],
@@ -24,6 +24,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={jost.variable}>
+        <Analytics />
         <GameContextProvider>
           <DataProvider
             value={{

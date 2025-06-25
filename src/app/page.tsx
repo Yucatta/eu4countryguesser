@@ -1,3 +1,4 @@
+import CompletionStats from "@/Components/CompletionStats";
 import CurrentCountry from "@/Components/CurrentCountry";
 import HomeButton from "@/Components/HomeButton";
 // import SvgMapWrapper from "@/Components/MapWrapper";
@@ -9,7 +10,7 @@ export default function Home() {
     <>
       <div className=" h-full  flex justify-center items-start">
         <div
-          style={{ width: "clamp(0px, 100vw, 977px)" }}
+          style={{ width: "clamp(0px, 99vw, 977px)" }}
           className={
             " h-max bg-[rgb(29,29,29)] flex flex-col items-center pb-20  "
           }
@@ -17,8 +18,8 @@ export default function Home() {
           <HomeButton></HomeButton>
           <CurrentCountry></CurrentCountry>
           <SvgMap></SvgMap>
-          {/* <SvgMapWrapper></SvgMapWrapper> */}
           <RegionSelect></RegionSelect>
+          {/* {<CompletionStats></CompletionStats>} */}
         </div>
       </div>
     </>

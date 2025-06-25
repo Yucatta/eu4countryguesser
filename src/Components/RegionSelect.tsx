@@ -66,7 +66,21 @@ const RegionSelect = ({ regionselect }: Props) => {
                 src={`/continents/${index}.svg`}
               ></img>
             </div>
-            <div className="text-4xl mt-1 mb-2 font-bold">
+            <div
+              // className={
+              //   currentregion[0] === index
+              //     ? "text-blue-500 text-4xl mt-1 mb-2 font-bold cursor-pointer"
+              //     : "hover:text-blue-400 text-4xl mt-1 mb-2 font-bold cursor-pointer"
+              // }
+              // onClick={() => {
+              //   setcurrentregion([4, index]);
+              //   if (regionselect) {
+              //     regionselect(true);
+              //   }
+              //   handleClick(4, index);
+              // }}
+              className="text-4xl mt-1 mb-2 font-bold"
+            >
               {" "}
               {Continents[index]}
             </div>
@@ -82,7 +96,6 @@ const RegionSelect = ({ regionselect }: Props) => {
                     }
                     onClick={() => {
                       setcurrentregion([index, index2]);
-                      console.log(pathname);
                       if (regionselect) {
                         regionselect(true);
                       }

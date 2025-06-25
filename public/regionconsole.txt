@@ -1,19 +1,28 @@
 
-Countries.tsx:50 240
-Countries.tsx:50 513
-Countries.tsx:50 217
-Countries.tsx:50 216
-Countries.tsx:50 514
-Countries.tsx:50 239
-uncolonized.tsx:41 682 'Himalayas'
-Countries.tsx:50 241
-Countries.tsx:50 474
-Countries.tsx:50 237
-Countries.tsx:50 219
-Countries.tsx:50 577
-Countries.tsx:50 517
-Countries.tsx:50 578
-Countries.tsx:50 215
-Countries.tsx:50 516
-Countries.tsx:50 584
-uncolonized.tsx:41 687 'Tibet'
+5page.tsx:83 132
+page.tsx:83 538
+page.tsx:83 550
+page.tsx:83 596
+page.tsx:83 537
+page.tsx:83 597
+page.tsx:83 600
+page.tsx:83 536
+page.tsx:83 534
+page.tsx:83 398
+page.tsx:83 164
+page.tsx:83 598
+page.tsx:83 163
+page.tsx:83 399
+page.tsx:83 530
+page.tsx:83 606
+page.tsx:83 531
+page.tsx:83 400
+page.tsx:83 105
+page.tsx:83 532
+page.tsx:83 165
+page.tsx:83 43
+page.tsx:83 533
+page.tsx:83 118
+page.tsx:83 546
+page.tsx:83 535
+page.tsx:83 603

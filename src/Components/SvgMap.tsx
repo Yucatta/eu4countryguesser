@@ -10,6 +10,8 @@ import {
   TransformComponent,
   ReactZoomPanPinchContentRef,
 } from "react-zoom-pan-pinch";
+import CurrentCountry from "./CurrentCountry";
+import AllCountries from "./AllCountries";
 const getTextWidth = (text: string, font: string) => {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
@@ -26,12 +28,15 @@ export default function SvgMap() {
     regions,
     terraincolors,
   } = useDataContext();
-  const { currentregion, setanswercorrectness, setcorrectanswer } =
-    useGameContext();
+  const {
+    currentregion,
+    currentcountry,
+    setcurrentcountry,
+    setanswercorrectness,
+    setcorrectanswer,
+  } = useGameContext();
   const svgRef = useRef<ReactZoomPanPinchContentRef | null>(null);
-  const correctanswerref = useRef<number>(-1);
   const [clickedcountry, setclickedcountry] = useState([-1, -1, -1, -1, -1]);
-  const answercorrectness = useRef<number[]>(Array(665).fill(0));
   const [reversecircle, setreversecircle] = useState<[boolean, number, number]>(
     [false, -1, -1]
   );
@@ -45,109 +50,24 @@ export default function SvgMap() {
     const a = filteredids[Math.floor(Math.random() * filteredids.length)];
     return a ? a : -1;
   }
-
   useEffect(() => {
-    correctanswerref.current = GetCorrectAnswer(
-      regions[currentregion[0]][currentregion[1]][1],
-      []
-    );
-    setcorrectanswer(correctanswerref.current);
-    setanswercorrectness(Array(665).fill(0));
-    answercorrectness.current = Array(665).fill(0);
+    if (window.innerWidth / window.innerHeight < 1) {
+      const losehighlight = setTimeout(() => {
+        setcurrentcountry([currentcountry[1], -1]);
+      }, 1000);
+      return () => clearTimeout(losehighlight);
+    }
+  }, [currentcountry]);
+  useEffect(() => {
     svgRef.current?.resetTransform();
-  }, [currentregion, regions]);
+  }, [currentregion]);
   const thisregion = regions[currentregion[0]][currentregion[1]];
-  useEffect(() => {
-    if (reversecircle[0]) {
-    }
-  }, [reversecircle]);
-  const Image = useMemo(() => {
-    if (terraincolors && regions && correctanswerref.current) {
-      return (
-        <>
-          {Array(665)
-            .fill(0)
-            .map((_, index) => (
-              <Countries
-                countryindex={index}
-                key={index}
-                findit={(bbox) => {
-                  setreversecircle([
-                    true,
-                    bbox.x + bbox.width / 2,
-                    bbox.y + bbox.height / 2,
-                  ]);
 
-                  requestAnimationFrame(() =>
-                    setreversecircle([
-                      false,
-                      bbox.x + bbox.width / 2,
-                      bbox.y + bbox.height / 2,
-                    ])
-                  );
-                }}
-                countryclick={(e, bbox, index2) => {
-                  setcountrynamevisiblity(true);
-                  setTimeout(() => {
-                    setcountrynamevisiblity(false);
-                  }, 600);
-                  setclickedcountry([
-                    index,
-                    bbox.x + bbox.width / 2,
-                    bbox.y + bbox.height / 2,
-                    e.clientX,
-                    e.clientY,
-                  ]);
-                  console.log(
-                    currentregion,
-                    "countryindex",
-                    index,
-                    "place in country",
-                    index2,
-                    [index, index2]
-                  );
-                  answercorrectness.current[correctanswerref.current] -= 1;
-                  if (correctanswerref.current === index) {
-                    const a = GetCorrectAnswer(
-                      thisregion[1],
-                      answercorrectness.current
-                        .map((guess, index) => (guess ? index : -1))
-                        .filter((id) => id + 1)
-                    );
-                    setcorrectanswer(a);
-                    correctanswerref.current = a;
-                    answercorrectness.current = answercorrectness.current.map(
-                      (correctness) => Math.abs(correctness)
-                    );
-
-                    setcirclevisibilty(true);
-                    requestAnimationFrame(() => setcirclevisibilty(false));
-                  }
-                  setanswercorrectness(answercorrectness.current);
-                }}
-                isitin={thisregion[1].includes(index)}
-              ></Countries>
-            ))}
-        </>
-      );
-    }
-  }, [
-    paths,
-    emptylands,
-    countries,
-    terraincolors,
-    countryprovinces,
-    countryoutlines,
-    regions,
-    currentregion,
-    correctanswerref.current,
-  ]);
-  // console.log("");
   return (
     <>
       <div
-        style={{ width: "clamp(0px, 100vw, 977px)" }}
-        className=" p-0 mt-20 h-auto  max-h-[70vh] min-h-[50vh] flex object-contain object-center  bg-[rgb(50,50,50)] "
+        style={{ width: "clamp(0px, 99vw, 977px)" }}
+        className=" p-0 mt-10 h-auto  max-h-[70vh] min-h-[50vh] flex object-contain object-center  bg-[rgb(50,50,50)] "
       >
         <TransformWrapper
           initialScale={1}
@@ -167,7 +87,7 @@ export default function SvgMap() {
                 <TransformComponent>
                   <svg
                     className="  h-auto max-h-[70vh] min-h-[50vh] bg-[rgb(0,0,200)]"
-                    style={{ width: "clamp(0px, 100vw, 977px)" }}
+                    style={{ width: "clamp(0px, 99vw, 977px)" }}
                     viewBox={`${thisregion[0][0]} ${thisregion[0][1]} ${thisregion[0][2]} ${thisregion[0][3]}`}
                     xmlns="http://www.w3.org/2000/svg"
                     width="100%"
@@ -189,7 +109,12 @@ export default function SvgMap() {
                       ></Uncolonized>
                     ))}
 
-                    {Image ? Image : ""}
+                    <AllCountries
+                      setcirclevisibilty={setcirclevisibilty}
+                      setclickedcountry={setclickedcountry}
+                      setcountrynamevisiblity={setcountrynamevisiblity}
+                      setreversecircle={setreversecircle}
+                    ></AllCountries>
                     <Provinces></Provinces>
                     {clickedcountry[0] !== -1 ? (
                       <>
@@ -267,7 +192,6 @@ export default function SvgMap() {
           }}
         </TransformWrapper>
       </div>
-      {/*   */}
     </>
   );
 }

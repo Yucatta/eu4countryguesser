@@ -58,6 +58,7 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
     }
   }, [answercorrectness[countryindex]]);
   const countryPaths = useMemo(() => {
+    let isitoktosend = false;
     const correctness = answercorrectness[countryindex];
     const rgbs = countries[countryindex][1]
       .replace(",", " ")
@@ -95,8 +96,19 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
           onMouseEnter={() =>
             setcurrentcountry([currentcountry[1], countryindex])
           }
-          onClick={(e) => {
-            if (isitin && pathref.current.length) {
+          onPointerDown={() => {
+            isitoktosend = true;
+            setTimeout(() => {
+              isitoktosend = false;
+            }, 300);
+          }}
+          onPointerUp={(e) => {
+            if (
+              isitin &&
+              pathref.current.length &&
+              isitoktosend &&
+              answercorrectness[countryindex] < 1
+            ) {
               countryclick(e, pathref.current[index2]!.getBBox(), index2);
             }
           }}
@@ -107,7 +119,6 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
   }, [
     currentcountry.includes(countryindex) ? currentcountry : null,
     countryoutlines,
-    // clickedcountry === countryindex ? answercorrectness : null,
     answercorrectness[countryindex],
     countries,
     currentregion,
