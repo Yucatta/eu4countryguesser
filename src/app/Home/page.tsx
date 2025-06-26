@@ -1,10 +1,12 @@
 "use client";
 import RegionSelect from "@/Components/RegionSelect";
 import { useGameContext } from "@/context/GameContext";
+import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 export default function Home() {
   const { setisitmobile, setcurrentregion } = useGameContext();
   const [isitinsuspense, setsuspense] = useState(false);
+  const router = useRouter();
   useEffect(() => {
     setcurrentregion([-1, -1]);
     function checkmible() {
@@ -31,22 +33,26 @@ export default function Home() {
           {isitinsuspense ? (
             <div
               style={{ width: "clamp(0px, 100vw, 977px)" }}
-              className="p-0 mt-20 h-auto max-h-[70vh] min-h-[50vh] flex justify-center items-center bg-[rgb(50,50,50)]"
+              className="p-0 mt-20 h-auto max-h-[70vh] min-h-[50vh] flex justify-center items-center bg-[rgb(67,67,67)]"
             >
               <img
-                src="Gray_circles_rotate.gif"
+                src="LoadingGif.gif"
                 style={{
-                  width: "clamp(0px, 30vw, 300px)",
-                  height: "clamp(0px, 30vw, 300px)",
+                  width: 65,
+                  height: 65,
                 }}
-                className=""
               ></img>
             </div>
           ) : (
             ""
           )}
           <Suspense>
-            <RegionSelect regionselect={(e) => setsuspense(e)}></RegionSelect>
+            <RegionSelect
+              regionselect={(e) => {
+                setsuspense(e);
+                router.push("/");
+              }}
+            ></RegionSelect>
           </Suspense>
         </div>
       </div>

@@ -76,12 +76,12 @@ const CompletionStats = ({ correctness, seconds }: Props) => {
         </div>
       </div>
 
-      {/* <button
+      <button
         className="w-10 fixed top-0 left-0 h-10 bg-pink-500"
         onClick={() => setisitpassed(true)}
       >
         aaaaa
-      </button> */}
+      </button>
     </div>
   );
 };

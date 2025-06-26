@@ -49,7 +49,7 @@ const CurrentCountry = () => {
         {correctanswer > -1 ? (
           <>
             <img
-              className="w-[75px] h-[89px] scale-105 left-[3px] opacity-90 top-[7px] mt-10 overflow-hidden relative"
+              className="w-[75px] h-[89px] scale-100 left-[3px] opacity-90 top-[7px] mt-10 overflow-hidden relative"
               style={{
                 WebkitMaskImage: "url('/inverted_shield.png')",
                 maskImage: "url('/inverted_shield.png')",

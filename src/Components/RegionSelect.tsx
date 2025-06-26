@@ -67,6 +67,7 @@ const RegionSelect = ({ regionselect }: Props) => {
                     }
                     onClick={() => {
                       setcurrentregion([index, index2]);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
                       if (regionselect) {
                         regionselect(true);
                       }
