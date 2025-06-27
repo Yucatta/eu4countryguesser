@@ -1,14 +1,17 @@
 "use client";
 import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
-import React, { useEffect, useState } from "react";
+import { useMapContext } from "@/context/MapContext";
+import React, { useEffect, useRef, useState } from "react";
 interface Props {
   seconds: number;
   correctness: number;
 }
 const CompletionStats = ({ correctness, seconds }: Props) => {
-  const { currentregion, answercorrectness } = useGameContext();
+  const { currentregion } = useGameContext();
   const { regions } = useDataContext();
+  const { answercorrectness } = useMapContext();
+  const scores = useRef<number[][][] | null>(null);
   const regionlength = regions[currentregion[0]][currentregion[1]][1].filter(
     (id) => id < 665
   ).length;
@@ -22,11 +25,51 @@ const CompletionStats = ({ correctness, seconds }: Props) => {
       document.body.style.overflow = "";
     }
   }, [isitpassed, isitequal]);
+  function calculatescore(dets: number[]) {
+    return (1000 * (dets[0] / 100) ** 10) / (5 + dets[1]);
+  }
+  async function UpdateScores() {
+    if (
+      scores.current &&
+      (!scores.current[currentregion[0]][currentregion[1]][1] ||
+        calculatescore(scores.current[currentregion[0]][currentregion[1]]) >
+          calculatescore([correctness, seconds]))
+    ) {
+      scores.current[currentregion[0]][currentregion[1]] = [
+        correctness,
+        seconds,
+      ];
+      const res = await fetch("/api/UpdateBestScores", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(scores.current),
+      });
+      console.log("update end ");
+      const data = await res.json();
+      console.log(data);
+    }
+  }
   useEffect(() => {
     if (isitequal) {
       setisitpassed(true);
+      console.log("update start ? ");
+      UpdateScores();
     }
   }, [isitequal]);
+  useEffect(() => {
+    async function besttimes() {
+      const res = await fetch("/api/FetchBestScores", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await res.json();
+      scores.current = data.BestTimes;
+      console.log(data.BestTimes);
+    }
+    besttimes();
+  }, []);
+
   return (
     <div className="fixed z-70">
       <div>
@@ -78,7 +121,11 @@ const CompletionStats = ({ correctness, seconds }: Props) => {
 
       <button
         className="w-10 fixed top-0 left-0 h-10 bg-pink-500"
-        onClick={() => setisitpassed(true)}
+        onClick={() => {
+          setisitpassed(true);
+          console.log("button strat");
+          UpdateScores();
+        }}
       >
         aaaaa
       </button>

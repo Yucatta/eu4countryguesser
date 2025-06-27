@@ -18,7 +18,7 @@ const getTextWidth = (text: string, font: string) => {
 };
 export default function SvgMap() {
   const { countries, regions } = useDataContext();
-  const { currentregion, currentcountry, setcurrentcountry } = useGameContext();
+  const { currentregion } = useGameContext();
   const svgRef = useRef<ReactZoomPanPinchContentRef | null>(null);
   const [clickedcountry, setclickedcountry] = useState([-1, -1, -1, -1, -1]);
   const [reversecircle, setreversecircle] = useState<[boolean, number, number]>(
@@ -27,18 +27,9 @@ export default function SvgMap() {
   const [countrynamevisiblity, setcountrynamevisiblity] = useState(false);
   const [circlevisibilty, setcirclevisibilty] = useState(false);
   useEffect(() => {
-    if (window.innerWidth / window.innerHeight < 1) {
-      const losehighlight = setTimeout(() => {
-        setcurrentcountry([currentcountry[1], -1]);
-      }, 1000);
-      return () => clearTimeout(losehighlight);
-    }
-  }, [currentcountry]);
-  useEffect(() => {
     svgRef.current?.resetTransform();
   }, [currentregion]);
   const thisregion = regions[currentregion[0]][currentregion[1]];
-
   return (
     <>
       <div

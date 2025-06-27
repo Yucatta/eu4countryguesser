@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Jost } from "next/font/google";
 import { DataProvider } from "@/context/DataContext";
 import { loadAppData } from "@/lib/data";
-import { GameContextProvider } from "@/context/GameContext";
 import { Analytics } from "@vercel/analytics/next";
 const jost = Jost({
   variable: "--font-jost",
@@ -25,24 +24,22 @@ export default async function RootLayout({
     <html lang="en">
       <body className={jost.variable}>
         <Analytics />
-        <GameContextProvider>
-          <DataProvider
-            value={{
-              regions: fetcheddata.regions,
-              countries: fetcheddata.countries,
-              countryprovinces: fetcheddata.countryprovinces,
-              paths: fetcheddata.paths,
-              emptylands: fetcheddata.emptylands,
-              areapaths: fetcheddata.areapaths,
-              countryoutlines: fetcheddata.countryoutlines,
-              terraincolors: fetcheddata.terraincolors,
-              regionnames: fetcheddata.regionnames,
-              countryplace: fetcheddata.countryplaces,
-            }}
-          >
-            {children}
-          </DataProvider>
-        </GameContextProvider>
+        <DataProvider
+          value={{
+            regions: fetcheddata.regions,
+            countries: fetcheddata.countries,
+            countryprovinces: fetcheddata.countryprovinces,
+            paths: fetcheddata.paths,
+            emptylands: fetcheddata.emptylands,
+            areapaths: fetcheddata.areapaths,
+            countryoutlines: fetcheddata.countryoutlines,
+            terraincolors: fetcheddata.terraincolors,
+            regionnames: fetcheddata.regionnames,
+            countryplace: fetcheddata.countryplaces,
+          }}
+        >
+          {children}
+        </DataProvider>
       </body>
     </html>
   );

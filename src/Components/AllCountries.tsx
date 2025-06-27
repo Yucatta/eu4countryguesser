@@ -2,6 +2,7 @@ import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
 import React, { useEffect, useMemo, useRef } from "react";
 import Countries from "./Countries";
+import { useMapContext } from "@/context/MapContext";
 interface Props {
   setreversecircle: (
     value: React.SetStateAction<[boolean, number, number]>
@@ -25,8 +26,8 @@ const AllCountries = ({
     regions,
     terraincolors,
   } = useDataContext();
-  const { currentregion, setanswercorrectness, setcorrectanswer } =
-    useGameContext();
+  const { currentregion } = useGameContext();
+  const { setcorrectanswer, setanswercorrectness } = useMapContext();
   const correctanswerref = useRef<number>(-1);
   const answercorrectness = useRef<number[]>(Array(665).fill(0));
   const thisregion = regions[currentregion[0]][currentregion[1]];

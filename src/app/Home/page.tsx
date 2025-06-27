@@ -4,21 +4,11 @@ import { useGameContext } from "@/context/GameContext";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 export default function Home() {
-  const { setisitmobile, setcurrentregion } = useGameContext();
+  const { setcurrentregion } = useGameContext();
   const [isitinsuspense, setsuspense] = useState(false);
   const router = useRouter();
   useEffect(() => {
     setcurrentregion([-1, -1]);
-    function checkmible() {
-      if (typeof window !== "undefined" && window.innerWidth < 977) {
-        setisitmobile(true);
-      } else {
-        setisitmobile(false);
-      }
-    }
-    checkmible();
-    addEventListener("resize", checkmible);
-    return () => removeEventListener("resize", checkmible);
   }, []);
 
   return (

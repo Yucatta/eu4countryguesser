@@ -10,6 +10,7 @@ import {
   TransformComponent,
   ReactZoomPanPinchContentRef,
 } from "react-zoom-pan-pinch";
+import { useMapContext } from "@/context/MapContext";
 const Continents = ["Europe", "Asia", "Africa", "New World", "World"];
 
 export default function Page() {
@@ -23,12 +24,8 @@ export default function Page() {
     terraincolors,
     regionnames,
   } = useDataContext();
-  const {
-    currentregion,
-    setcurrentregion,
-    setanswercorrectness,
-    setcorrectanswer,
-  } = useGameContext();
+  const { currentregion, setcurrentregion } = useGameContext();
+  const { setcorrectanswer, setanswercorrectness } = useMapContext();
   const svgRef = useRef<ReactZoomPanPinchContentRef | null>(null);
   const correctanswerref = useRef<number>(-1);
   const answercorrectness = useRef<number[]>(Array(665).fill(0));

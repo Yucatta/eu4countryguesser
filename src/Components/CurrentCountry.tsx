@@ -3,9 +3,11 @@ import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
 import React, { useEffect, useRef, useState } from "react";
 import CompletionStats from "./CompletionStats";
+import { useMapContext } from "@/context/MapContext";
 const CurrentCountry = () => {
   const { countries, regions } = useDataContext();
-  const { correctanswer, answercorrectness, currentregion } = useGameContext();
+  const { currentregion } = useGameContext();
+  const { answercorrectness, correctanswer } = useMapContext();
   const timeinterval = useRef<NodeJS.Timeout | null>(null);
   const [seconds, setseocnds] = useState(0);
   const regionlength = regions[currentregion[0]][currentregion[1]][1].filter(
