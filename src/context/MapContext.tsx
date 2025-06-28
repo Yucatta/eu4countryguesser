@@ -10,6 +10,8 @@ type GameContextType = {
   setanswercorrectness: (e: number[]) => void;
   isitmobile: boolean;
   setisitmobile: (e: boolean) => void;
+  failed: number;
+  setfailed: (e: number) => void;
 };
 
 const MapContext = createContext<GameContextType | null>(null);
@@ -20,6 +22,7 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
   const [answercorrectness, setanswercorrectness] = useState(
     Array(665).fill(0)
   );
+  const [failed, setfailed] = useState(-1);
   const [isitmobile, setisitmobile] = useState(false);
   return (
     <MapContext.Provider
@@ -32,6 +35,8 @@ export const MapContextProvider = ({ children }: { children: ReactNode }) => {
         setanswercorrectness: setanswercorrectness,
         isitmobile: isitmobile,
         setisitmobile: setisitmobile,
+        failed: failed,
+        setfailed: setfailed,
       }}
     >
       {children}

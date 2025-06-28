@@ -51,7 +51,7 @@ export default async function FetchTimes(
     try {
       parsed = JSON.parse(jsonString);
     } catch {
-      throw new Error("Invalid JSON.");
+      throw new Error("NO");
     }
     res
       .status(200)

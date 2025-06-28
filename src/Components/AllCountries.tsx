@@ -27,7 +27,7 @@ const AllCountries = ({
     terraincolors,
   } = useDataContext();
   const { currentregion } = useGameContext();
-  const { setcorrectanswer, setanswercorrectness } = useMapContext();
+  const { setcorrectanswer, setanswercorrectness, setfailed } = useMapContext();
   const correctanswerref = useRef<number>(-1);
   const answercorrectness = useRef<number[]>(Array(665).fill(0));
   const thisregion = regions[currentregion[0]][currentregion[1]];
@@ -49,69 +49,85 @@ const AllCountries = ({
     const a = filteredids[Math.floor(Math.random() * filteredids.length)];
     return a ? a : -1;
   }
-  const Image = useMemo(() => {
-    if (terraincolors && regions && correctanswerref.current) {
-      return (
-        <>
-          {Array(665)
-            .fill(0)
-            .map((_, index) => (
-              <Countries
-                countryindex={index}
-                key={index}
-                findit={(bbox) => {
-                  setreversecircle([
-                    true,
-                    bbox.x + bbox.width / 2,
-                    bbox.y + bbox.height / 2,
-                  ]);
-                  setTimeout(() => {
-                    requestAnimationFrame(() =>
-                      setreversecircle([
-                        false,
-                        bbox.x + bbox.width / 2,
-                        bbox.y + bbox.height / 2,
-                      ])
-                    );
-                  }, 16);
-                }}
-                countryclick={(e, bbox) => {
-                  setcountrynamevisiblity(true);
-                  setTimeout(() => {
-                    setcountrynamevisiblity(false);
-                  }, 600);
-                  setclickedcountry([
-                    index,
-                    bbox.x + bbox.width / 2,
-                    bbox.y + bbox.height / 2,
-                    e.clientX,
-                    e.clientY,
-                  ]);
-                  answercorrectness.current[correctanswerref.current] -= 1;
-                  if (correctanswerref.current === index) {
-                    const a = GetCorrectAnswer(
-                      thisregion[1],
-                      answercorrectness.current
-                        .map((guess, index) => (guess ? index : -1))
-                        .filter((id) => id + 1)
-                    );
-                    setcorrectanswer(a);
-                    correctanswerref.current = a;
-                    answercorrectness.current = answercorrectness.current.map(
-                      (correctness) => Math.abs(correctness)
-                    );
 
-                    setcirclevisibilty(true);
-                    requestAnimationFrame(() => setcirclevisibilty(false));
-                  }
-                  setanswercorrectness(answercorrectness.current);
-                }}
-                isitin={thisregion[1].includes(index)}
-              ></Countries>
-            ))}
-        </>
-      );
-    }
+  const Image = useMemo(() => {
+    return (
+      <>
+        {Array(665)
+          .fill(0)
+          .map((_, index) => (
+            <Countries
+              countryindex={index}
+              key={
+                answercorrectness.current[index] < -3 || answercorrectness
+                  ? index + 666
+                  : index
+              }
+              isitguessed={
+                answercorrectness.current[index] > 0 ||
+                answercorrectness.current[index] < -3
+              }
+              correctanswer={correctanswerref}
+              findit={(bbox) => {
+                setreversecircle([
+                  true,
+                  bbox.x + bbox.width / 2,
+                  bbox.y + bbox.height / 2,
+                ]);
+                setTimeout(() => {
+                  requestAnimationFrame(() =>
+                    setreversecircle([
+                      false,
+                      bbox.x + bbox.width / 2,
+                      bbox.y + bbox.height / 2,
+                    ])
+                  );
+                }, 16);
+              }}
+              countryclick={(e, bbox) => {
+                setcountrynamevisiblity(true);
+                setTimeout(() => {
+                  setcountrynamevisiblity(false);
+                }, 600);
+                setclickedcountry([
+                  index,
+                  bbox.x + bbox.width / 2,
+                  bbox.y + bbox.height / 2,
+                  e.clientX,
+                  e.clientY,
+                ]);
+                answercorrectness.current[correctanswerref.current] -= 1;
+                if (correctanswerref.current === index) {
+                  const a = GetCorrectAnswer(
+                    thisregion[1],
+                    answercorrectness.current
+                      .map((guess, index) => (guess ? index : -1))
+                      .filter((id) => id + 1)
+                  );
+                  setcorrectanswer(a);
+                  correctanswerref.current = a;
+                  answercorrectness.current = answercorrectness.current.map(
+                    (correctness) => Math.abs(correctness)
+                  );
+
+                  setcirclevisibilty(true);
+                  requestAnimationFrame(() => setcirclevisibilty(false));
+                }
+                if (answercorrectness.current[correctanswerref.current] < -3) {
+                  setfailed(
+                    correctanswerref.current +
+                      (answercorrectness.current[correctanswerref.current] +
+                        4) *
+                        -700
+                  );
+                }
+                setanswercorrectness(answercorrectness.current);
+              }}
+              isitin={thisregion[1].includes(index)}
+            ></Countries>
+          ))}
+      </>
+    );
   }, [
     paths,
     emptylands,
@@ -122,7 +138,7 @@ const AllCountries = ({
     regions,
     currentregion,
   ]);
-  return <>{Image ? Image : ""}</>;
+  return <>{Image}</>;
 };
 
 export default AllCountries;
