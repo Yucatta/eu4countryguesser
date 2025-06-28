@@ -9,7 +9,10 @@ const CurrentCountry = () => {
   const { currentregion } = useGameContext();
   const { answercorrectness, correctanswer } = useMapContext();
   const timeinterval = useRef<NodeJS.Timeout | null>(null);
+  const [miliseconds, setmiliseconds] = useState(0);
   const [seconds, setseocnds] = useState(0);
+  const startdate = useRef(0);
+
   const regionlength = regions[currentregion[0]][currentregion[1]][1].filter(
     (id) => id < 665
   ).length;
@@ -20,16 +23,19 @@ const CurrentCountry = () => {
       clearInterval(timeinterval.current);
       setseocnds(sec);
     }
+    startdate.current = Date.now();
     timeinterval.current = setInterval(() => {
       sec++;
+      console.log(sec);
       setseocnds(sec);
     }, 1000);
   }, [currentregion]);
   useEffect(() => {
     if (regionlength === answeredlength) {
       clearInterval(timeinterval.current!);
+      setmiliseconds(Date.now() - startdate.current);
     }
-  }, [answercorrectness]);
+  }, [answercorrectness, startdate]);
   const correctness = answercorrectness.reduce((a, b) => a + Math.abs(b), 0)
     ? Math.floor(
         (answeredlength /
@@ -88,7 +94,8 @@ const CurrentCountry = () => {
         </div>
       </div>
       <CompletionStats
-        seconds={seconds}
+        startdate={startdate.current}
+        seconds={miliseconds}
         correctness={correctness}
       ></CompletionStats>
     </>

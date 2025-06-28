@@ -11,16 +11,9 @@ interface Props {
     index2: number
   ) => void;
   findit?: (bbox: DOMRect) => void;
-  correctanswer: React.RefObject<number>;
 }
 let aaaaaaaaa = 0;
-const Countries = ({
-  countryindex,
-  findit,
-  countryclick,
-  correctanswer,
-  isitin,
-}: Props) => {
+const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
   const pathref = useRef<Array<SVGPathElement | null>>([]);
   const { countryoutlines, countries, countryplace } = useDataContext();
   const [colorpulse, setcolorpulse] = useState(false);
@@ -37,15 +30,16 @@ const Countries = ({
       : undefined;
 
   useEffect(() => {
+    let temp = false;
     const interval = setInterval(() => {
-      setcolorpulse(!colorpulse);
+      temp = !temp;
+      setcolorpulse(temp);
     }, 500);
 
     return () => clearInterval(interval);
-  }, [answercorrectness[countryindex], colorpulse, update]);
+  }, [answercorrectness[countryindex], update]);
   useEffect(() => {
     if (failed % 700 === countryindex) {
-      console.log(failed, "this is failed");
       aaaaaaaaa++;
       setupdate(aaaaaaaaa);
     }
@@ -103,7 +97,7 @@ const Countries = ({
               : "rgb(50,50,50)"
           }
           style={
-            correctness < -4
+            correctness < -3
               ? { fill: colorpulse ? "rgb(255,0,0)" : "rgb(255,255,255)" }
               : undefined
           }

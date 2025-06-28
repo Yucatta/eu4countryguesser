@@ -4,8 +4,8 @@ import React from "react";
 
 const Page = () => {
   const params = useParams();
-  const continent = params.continent;
-  const region = params.region;
+  const continent = params ? params.continent : "";
+  const region = params ? params.region : "";
   console.log("region", continent, region);
   return <div>page</div>;
 };
