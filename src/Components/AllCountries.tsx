@@ -63,10 +63,6 @@ const AllCountries = ({
                   ? index + 666
                   : index
               }
-              isitguessed={
-                answercorrectness.current[index] > 0 ||
-                answercorrectness.current[index] < -3
-              }
               correctanswer={correctanswerref}
               findit={(bbox) => {
                 setreversecircle([

@@ -12,7 +12,6 @@ interface Props {
   ) => void;
   findit?: (bbox: DOMRect) => void;
   correctanswer: React.RefObject<number>;
-  isitguessed: boolean;
 }
 let aaaaaaaaa = 0;
 const Countries = ({
