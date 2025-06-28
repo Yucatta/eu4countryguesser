@@ -1,4 +1,4 @@
-import { GameContextProvider, useGameContext } from "@/context/GameContext";
+import { GameContextProvider } from "@/context/GameContext";
 import HomeWrapper from "./Homewrapper";
 export default function Home() {
   return (
