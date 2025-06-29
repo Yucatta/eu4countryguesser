@@ -1,14 +1,16 @@
 import React from "react";
 interface Props {
   setisitpassed: React.Dispatch<React.SetStateAction<boolean>>;
+  setMenuPassed: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const TopBar = ({ setisitpassed }: Props) => {
+const TopBar = ({ setisitpassed, setMenuPassed }: Props) => {
   return (
     <div
       style={{ width: "clamp(0px, 99vw, 977px)" }}
       className="w-10 h-10 absolute  "
     >
       <svg
+        onClick={() => setMenuPassed(true)}
         viewBox="-10 -170 220 170"
         style={{ right: "clamp(0px,120px,8vw + 32px)" }}
         className="w-8 h-8 z-90 top-3.5 absolute cursor-pointer rounded-md bg-neutral-300 "

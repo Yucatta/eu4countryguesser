@@ -121,10 +121,11 @@ export default function SvgMap() {
                         <circle
                           className={
                             circlevisibilty
-                              ? " opacity-50 pointer-events-none"
-                              : "transition-all duration-1500 opacity-0 pointer-events-none"
+                              ? " opacity-50 "
+                              : "transition-all duration-1500 opacity-0 "
                           }
                           z={10}
+                          pointerEvents="none"
                           cx={clickedcountry[1]}
                           cy={clickedcountry[2]}
                           r={circlevisibilty ? scale / 10 : scale / 3}
@@ -133,9 +134,10 @@ export default function SvgMap() {
                         <circle
                           className={
                             reversecircle[0]
-                              ? " opacity-90 pointer-events-none"
-                              : "transition-all duration-3000 opacity-0 pointer-events-none"
+                              ? " opacity-90 "
+                              : "transition-all duration-3000 opacity-0 "
                           }
+                          pointerEvents="none"
                           z={10}
                           cx={reversecircle[1]}
                           cy={reversecircle[2]}

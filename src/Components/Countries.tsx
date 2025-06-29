@@ -111,7 +111,7 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
             isitoktosend = true;
             setTimeout(() => {
               isitoktosend = false;
-            }, 300);
+            }, 500);
           }}
           onPointerUp={(e) => {
             if (

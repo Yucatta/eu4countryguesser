@@ -1,33 +1,32 @@
 import { useGameContext } from "@/context/GameContext";
-import React from "react";
+import React, { useState } from "react";
+import InputSwitch from "./Switch";
 
 function returnSecondsformat(e: number) {
   const seconds = e / 1000;
-  return `${Math.floor(seconds / 60)}:${seconds % 60 < 10 ? 0 : ""}${
-    parseFloat(seconds.toFixed(1)) % 60
-  }`;
+  return `${Math.floor(seconds / 60)}:${seconds % 60 < 10 ? 0 : ""}${parseFloat(
+    (seconds % 60).toFixed(1)
+  )}`;
 }
 interface Props {
   isitpassed: boolean;
+  setisitpassed: React.Dispatch<React.SetStateAction<boolean>>;
   correctness: number;
   seconds: number;
-  setscoresswitch: React.Dispatch<React.SetStateAction<boolean>>;
-  scoresswitch: boolean;
   thisglobal: number[];
-  setisitpassed: React.Dispatch<React.SetStateAction<boolean>>;
   thispersonal: number[];
 }
 const CompletaionStats = ({
   isitpassed,
   correctness,
   seconds,
-  setscoresswitch,
-  scoresswitch,
   setisitpassed,
   thisglobal,
   thispersonal,
 }: Props) => {
   const { currentregion, setcurrentregion } = useGameContext();
+  const [scoresswitch, setscoresswitch] = useState(false);
+  console.log();
   return (
     <div
       className={
@@ -60,20 +59,10 @@ const CompletaionStats = ({
         </div>
         <div className="flex-row flex justify-evenly w-3/4 text-black text-xl font-bold">
           <div>Personal Best</div>
-          <div>
-            <div
-              className="flex absolute w-18 h-8 rounded-full bg-neutral-700 shadow-md/70 shadow-black cursor-pointer "
-              onClick={() => setscoresswitch(!scoresswitch)}
-            >
-              <div
-                className={
-                  scoresswitch
-                    ? "flex absolute w-6 rounded-full top-1 left-11 transition-all duration-300  z-90 bg-black h-6"
-                    : "flex absolute w-6 rounded-full top-1 left-1  transition-all duration-300 z-90 bg-black h-6"
-                }
-              ></div>
-            </div>
-          </div>
+          <InputSwitch
+            isswitchon={scoresswitch}
+            setswitch={setscoresswitch}
+          ></InputSwitch>
           <div className="ml-20">Global Best</div>
         </div>
 

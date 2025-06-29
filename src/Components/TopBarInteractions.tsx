@@ -5,24 +5,30 @@ import { useMapContext } from "@/context/MapContext";
 import React, { useEffect, useRef, useState } from "react";
 import TopBar from "./TopBar";
 import CompletaionStats from "./CompletaionStats";
+import MenuWrapper from "./MenuWrapper";
+import InputSwitch from "./Switch";
 interface Props {
   startdate: number;
   seconds: number;
   correctness: number;
 }
+const Continents = ["Europe", "Asia", "Africa", "New World", "World"];
+
 const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
   const { currentregion } = useGameContext();
-  const { regions } = useDataContext();
+  const { regions, regionnames } = useDataContext();
   const { answercorrectness } = useMapContext();
   const scores = useRef<number[][][] | null>(null);
-  const [scoresswitch, setscoresswitch] = useState(false);
   const personalscores = useRef<number[][][] | null>(null);
+  const [isitpassed, setisitpassed] = useState(false);
+  const [bestTimesMenu, setBestTimesMenu] = useState(false);
+  const [MenuSwitch, setMenuSwitch] = useState(true);
   const regionlength = regions[currentregion[0]][currentregion[1]][1].filter(
     (id) => id < 665
   ).length;
   const answeredlength = answercorrectness.filter((a) => a > 0).length;
   const isitequal = answeredlength === regionlength;
-  const [isitpassed, setisitpassed] = useState(false);
+  const [selectedcontinent, setselectedcontinent] = useState(0);
   useEffect(() => {
     if (isitpassed) {
       document.body.style.overflow = "hidden";
@@ -117,33 +123,120 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
   }, []);
   return (
     <>
-      <div className="fixed z-70">
-        <div>
-          <button
-            className={
-              isitpassed
-                ? "w-[100vw] h-[100vh] bg-black/40 z-70 fixed top-0 backdrop-blur-sm left-0"
-                : "none"
-            }
-            onClick={() => {
-              console.log("aaa");
-              setisitpassed(false);
-            }}
-          ></button>
+      <MenuWrapper
+        setisitpassed={setisitpassed}
+        isitpassed={isitpassed}
+        Icon={
           <CompletaionStats
             setisitpassed={setisitpassed}
             isitpassed={isitpassed}
-            scoresswitch={scoresswitch}
-            setscoresswitch={setscoresswitch}
             thisglobal={thisglobal}
             thispersonal={thispersonal}
             correctness={correctness}
             seconds={seconds}
           ></CompletaionStats>
+        }
+      ></MenuWrapper>
+      <div className="absolute z-70">
+        <div>
+          <button
+            className={
+              bestTimesMenu
+                ? "w-[100vw] h-[100vh] bg-black/40 z-70 fixed top-0 backdrop-blur-sm left-0"
+                : "none"
+            }
+            onClick={() => {
+              console.log("aaa");
+              setBestTimesMenu(false);
+            }}
+          ></button>
+          <div
+            className={
+              bestTimesMenu
+                ? `bg-[rgb(218,218,218)] w-[clamp(0px,560px,80vw)] h-100 z-100 
+              justify-evenly absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[-35%]
+               overflow-hidden flex flex-col items-center
+               transition-all duration-500 rounded-xl`
+                : `bg-[rgb(218,218,218)] w-120 h-100 z-100 
+              justify-evenly absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[-35%]
+               overflow-hidden flex flex-col items-center scale-60 opacity-0 pointer-events-none
+               transition-all duration-500 rounded-xl`
+            }
+          >
+            <div className="flex flex-row text-black w-full justify-center  ">
+              <div className="mr-1">Personal Best Times</div>
+              <InputSwitch
+                isswitchon={MenuSwitch}
+                setswitch={setMenuSwitch}
+              ></InputSwitch>
+              <div className="ml-20">Global Best Times</div>
+            </div>
+            <div className="flex  flex-col w-full h-2/3 ">
+              <div className="flex-row flex h-8 items-center text-center text-black left-0 border-2 border-neutral-500">
+                {Continents.map((continent, index) => {
+                  return (
+                    <div
+                      style={{ width: "20%", height: "32px" }}
+                      className={
+                        index ? "border-l-2 cursor-pointer" : "cursor-pointer"
+                      }
+                      onClick={() => setselectedcontinent(index)}
+                      key={index}
+                    >
+                      {continent}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="grid  grid-cols-[repeat(auto-fill,_minmax(150px,_1fr))] gap-4 text-black">
+                {regionnames[selectedcontinent].map((region, index) => {
+                  return (
+                    <div key={index}>
+                      {region}:
+                      {scores.current && personalscores.current
+                        ? (MenuSwitch
+                            ? scores.current
+                            : personalscores.current)[selectedcontinent][
+                            index
+                          ][1]
+                          ? `${Math.round(
+                              (MenuSwitch
+                                ? scores.current
+                                : personalscores.current)![selectedcontinent][
+                                index
+                              ][1] /
+                                1000 /
+                                60
+                            )}:${Math.round(
+                              ((MenuSwitch
+                                ? scores.current
+                                : personalscores.current)![selectedcontinent][
+                                index
+                              ][1] /
+                                1000) %
+                                60
+                            )} ` +
+                            (MenuSwitch
+                              ? scores.current
+                              : personalscores.current)![selectedcontinent][
+                              index
+                            ][0] +
+                            "%"
+                          : "NO"
+                        : ""}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <TopBar setisitpassed={setisitpassed}></TopBar>
+      <TopBar
+        setisitpassed={setisitpassed}
+        setMenuPassed={setBestTimesMenu}
+      ></TopBar>
     </>
   );
 };
