@@ -6,12 +6,13 @@ const HomeButton = () => {
   const router = useRouter();
   return (
     <button
-      className="flex cursor-pointer w-20 h-10 bg-purple-900 text-center"
+      style={{ textShadow: "2px 2px 4px rgba(230,230,230,0.3)" }}
+      className="flex cursor-pointer absolute w-auto px-10 font-bold text-2xl h-10 mt-2.5 border-0 items-center z-80 text-center"
       onClick={() => {
         router.push("/Home");
       }}
     >
-      HOME
+      <div>EU4 Guessr</div>
     </button>
   );
 };

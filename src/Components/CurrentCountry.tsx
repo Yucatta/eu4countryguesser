@@ -2,7 +2,7 @@
 import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
 import React, { useEffect, useRef, useState } from "react";
-import CompletionStats from "./CompletionStats";
+import TopBarInteractions from "./TopBarInteractions";
 import { useMapContext } from "@/context/MapContext";
 const CurrentCountry = () => {
   const { countries, regions } = useDataContext();
@@ -26,7 +26,6 @@ const CurrentCountry = () => {
     startdate.current = Date.now();
     timeinterval.current = setInterval(() => {
       sec++;
-      console.log(sec);
       setseocnds(sec);
     }, 1000);
   }, [currentregion]);
@@ -57,7 +56,7 @@ const CurrentCountry = () => {
         {correctanswer > -1 ? (
           <>
             <img
-              className="w-[75px] h-[89px] scale-100 left-[3px] opacity-90 top-[7px] mt-10 overflow-hidden relative"
+              className="w-[75px] h-[89px]  opacity-90  mt-10 overflow-hidden relative"
               style={{
                 WebkitMaskImage: "url('/inverted_shield.png')",
                 maskImage: "url('/inverted_shield.png')",
@@ -66,10 +65,31 @@ const CurrentCountry = () => {
                 WebkitMaskSize: "cover",
                 maskSize: "cover",
                 overflow: "hidden",
+                scale:
+                  typeof window !== "undefined" && window.innerWidth < 500
+                    ? "0.7"
+                    : "1",
+                top:
+                  typeof window !== "undefined" && window.innerWidth < 500
+                    ? -8
+                    : 7,
+                left:
+                  typeof window !== "undefined" && window.innerWidth < 500
+                    ? -4
+                    : 3,
               }}
               src={`/flags/${countries[correctanswer][0]}.png`}
             ></img>
-            <div className=" ml-2 ">{countries[correctanswer][2]}</div>
+            <div
+              style={{
+                marginLeft:
+                  typeof window !== "undefined" && window.innerWidth < 500
+                    ? -10
+                    : 8,
+              }}
+            >
+              {countries[correctanswer][2]}
+            </div>
           </>
         ) : (
           ""
@@ -93,11 +113,11 @@ const CurrentCountry = () => {
           </div>
         </div>
       </div>
-      <CompletionStats
+      <TopBarInteractions
         startdate={startdate.current}
         seconds={miliseconds}
         correctness={correctness}
-      ></CompletionStats>
+      ></TopBarInteractions>
     </>
   );
 };

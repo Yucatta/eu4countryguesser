@@ -19,9 +19,9 @@ const RegionSelect = ({ regionselect }: Props) => {
         return (
           <div
             key={index}
-            className="w-70 h-125 rounded-2xl space-y-5 mb-5 flex flex-col bg-gray-800 justify-start items-center"
+            className="w-70 h-125 rounded-2xl space-y-5 mb-5 flex flex-col shadow-lg shadow-gray-600/40 bg-gray-800 justify-start items-center"
           >
-            <div className="bg-[rgb(0,0,200)] w-50 h-50 mt-5 border-4 overflow-hidden object-center justify-center rounded-full">
+            <div className="bg-[rgb(0,0,200)]  w-50 h-50 mt-5 border-4 border-[rgb(160,160,160)] overflow-hidden object-center justify-center rounded-full">
               <img
                 className={
                   index === 4
@@ -31,26 +31,28 @@ const RegionSelect = ({ regionselect }: Props) => {
                     : index === 1
                     ? "scale-120 mt-3"
                     : index === 3
-                    ? "scale-110"
+                    ? "mt-5 scale-120"
                     : "mt-10 scale-160"
                 }
                 src={`/continents/${index}.svg`}
               ></img>
             </div>
             <div
-              // className={
-              //   currentregion[0] === index
-              //     ? "text-blue-500 text-4xl mt-1 mb-2 font-bold cursor-pointer"
-              //     : "hover:text-blue-400 text-4xl mt-1 mb-2 font-bold cursor-pointer"
-              // }
-              // onClick={() => {
-              //   setcurrentregion([4, index]);
-              //   if (regionselect) {
-              //     regionselect(true);
-              //   }
-              //   handleClick(4, index);
-              // }}
-              className="text-4xl mt-1 mb-2 font-bold"
+              style={{ textShadow: "4px 4px 8px rgba(0,0,0,0.7)" }}
+              className={
+                currentregion[0] === 4 &&
+                currentregion[1] === (index === 4 ? 6 : index)
+                  ? "text-blue-500 text-4xl mt-1 mb-2 font-bold cursor-pointer"
+                  : "hover:text-blue-400 text-4xl mt-1 mb-2 font-bold cursor-pointer"
+              }
+              onClick={() => {
+                setcurrentregion([4, index === 4 ? 6 : index]);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                if (regionselect) {
+                  regionselect(true);
+                }
+              }}
+              // className="text-4xl mt-1 mb-2 font-bold"
             >
               {" "}
               {Continents[index]}
@@ -60,6 +62,7 @@ const RegionSelect = ({ regionselect }: Props) => {
                 return (
                   <div
                     key={index2}
+                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.6)" }}
                     className={
                       currentregion[0] === index && currentregion[1] === index2
                         ? "text-blue-500 w-30 cursor-pointer"
