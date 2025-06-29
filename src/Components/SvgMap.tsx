@@ -17,7 +17,7 @@ const getTextWidth = (text: string, font: string) => {
   return context!.measureText(text).width;
 };
 export default function SvgMap() {
-  const { countries, regions, countryoutlines } = useDataContext();
+  const { countries, regions } = useDataContext();
   const { currentregion } = useGameContext();
   const svgRef = useRef<ReactZoomPanPinchContentRef | null>(null);
   const [clickedcountry, setclickedcountry] = useState([-1, -1, -1, -1, -1]);
