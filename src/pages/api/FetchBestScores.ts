@@ -7,8 +7,6 @@ const ACCESS_KEY = process.env.CLOUDFLARE_R2_ACCESS_KEY_ID;
 const SECRET_KEY = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
 const ENDPOINT = process.env.CLOUDFLARE_R2_ENDPOINT;
 
-const key = "besttimes.json";
-
 if (!ACCESS_KEY || !SECRET_KEY || !ENDPOINT) {
   throw new Error("invalid Bucket Credentials");
 }
@@ -36,7 +34,7 @@ export default async function FetchTimes(
   if (req.method === "GET") {
     const cmd = new GetObjectCommand({
       Bucket: BUCKET_NAME,
-      Key: key,
+      Key: "besttimes.json",
     });
 
     const response = await s3Client.send(cmd);
