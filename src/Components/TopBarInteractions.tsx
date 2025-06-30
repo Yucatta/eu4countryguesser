@@ -16,7 +16,7 @@ interface Props {
 const Continents = ["Europe", "Asia", "Africa", "New World", "World"];
 
 const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
-  const { currentregion, bestTimesMenu, setBestTimesMenu } = useGameContext();
+  const { currentregion, bestTimesMenu } = useGameContext();
   const { regions, regionnames } = useDataContext();
   const { answercorrectness } = useMapContext();
   const scores = useRef<number[][][] | null>(null);

@@ -1,5 +1,4 @@
 import CurrentCountry from "@/Components/CurrentCountry";
-import GuessDistribution from "@/Components/GuessDistribution";
 import HomeButton from "@/Components/HomeButton";
 import RegionSelect from "@/Components/RegionSelect";
 import SvgMap from "@/Components/SvgMap";

@@ -1,5 +1,4 @@
 import React from "react";
-import { isWeakMap } from "util/types";
 interface Props {
   isswitchon: boolean;
   setswitch: React.Dispatch<React.SetStateAction<boolean>>;
