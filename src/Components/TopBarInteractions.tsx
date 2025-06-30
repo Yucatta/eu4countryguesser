@@ -37,7 +37,6 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
     }
   }, [isitpassed, isitequal, bestTimesMenu]);
   function calculatescore(dets: number[]) {
-    console.log(dets, "you are trying to acces this");
     return (1000 * (dets[0] / 100) ** 10) / (5 + dets[1]);
   }
   function CompareScores(
@@ -59,29 +58,22 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
       return false;
     }
   }
-  async function UpdateScores() {
-    const res = await fetch("/api/UpdateBestScores", {
+  function UpdateScores() {
+    fetch("/api/UpdateBestScores", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(scores.current),
     });
-    console.log("update end ");
-    const data = await res.json();
-    console.log(data);
   }
 
   useEffect(() => {
     if (isitequal) {
       setisitpassed(true);
       const secondstemp = Date.now() - startdate;
-      console.log(secondstemp, seconds);
       if (CompareScores(scores, secondstemp)) {
-        console.log("updated global");
         UpdateScores();
       }
       if (CompareScores(personalscores, secondstemp)) {
-        console.log("updating local");
-        console.log(personalscores.current);
         localStorage.setItem(
           "PersonalBestTimes",
           JSON.stringify(personalscores.current)
@@ -115,7 +107,6 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
         personalscores.current = [14, 18, 9, 8, 7].map((len) =>
           Array.from({ length: len }, () => [0, 0])
         );
-        console.log(personalscores.current);
         localStorage.setItem(
           "PersonalBestTimes",
           JSON.stringify(personalscores.current)
@@ -127,16 +118,12 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
       personalscores.current = [14, 18, 9, 8, 7].map((len) =>
         Array.from({ length: len }, () => [0, 0])
       );
-      console.log(personalscores.current);
       localStorage.setItem(
         "PersonalBestTimes",
         JSON.stringify(personalscores.current)
       );
     }
-    console.log(personalscores.current, "personal", scores.current, "global");
   }, []);
-  // console.log(personalscores.current, "personal", scores.current, "global");
-  // console.log(null[0]);
   return (
     <>
       <MenuWrapper

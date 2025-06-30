@@ -91,7 +91,8 @@ const GuessDistribution = () => {
           <div>
             {Math.round(
               (barlengths.reduce((a, b) => a + b, 0) /
-                barlengths.reduce((a, b, index) => a + b * (index + 1), 0)) *
+                (barlengths.reduce((a, b, index) => a + b * (index + 1), 0) +
+                  0.0000000001)) *
                 100
             )}
             %
