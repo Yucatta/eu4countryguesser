@@ -27,7 +27,6 @@ export default async function UpdateTimes(
 ) {
   if (req.method === "POST") {
     const body = req.body;
-    console.log(body);
     await s3Client.send(
       new PutObjectCommand({
         Bucket: BUCKET_NAME,

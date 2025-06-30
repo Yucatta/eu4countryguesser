@@ -103,6 +103,7 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
     const localstorage = localStorage.getItem("PersonalBestTimes");
     if (localstorage) {
       const temp = JSON.parse(localstorage);
+      console.log(temp, "temp localstorage");
       if (temp.current[0].length !== 14) {
         personalscores.current = [14, 18, 9, 8, 7].map((len) =>
           Array.from({ length: len }, () => [0, 0])
