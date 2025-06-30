@@ -40,12 +40,6 @@ export default function SvgMap() {
     clickedcountry[0] !== -1 && svgRef.current
       ? thisregion[0][3] / svgRef.current.instance.transformState.scale
       : 0;
-  console.log(
-    `clamp(50vh,${thisregion[0][3] / thisregion[0][2]} * ${
-      window.innerWidth < 977 ? "99vw" : "977px"
-    } + 30px,70vh)`,
-    typeof window !== "undefined" ? [window.innerWidth, window.innerHeight] : ""
-  );
   return (
     <>
       <div
