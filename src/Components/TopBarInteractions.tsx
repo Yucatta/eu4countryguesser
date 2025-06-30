@@ -357,7 +357,7 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
       ) : (
         ""
       )}
-      <TopBar setisitpassed={setisitpassed}></TopBar>
+      <TopBar setisitpassed={setisitpassed} isitpassed={isitpassed}></TopBar>
     </>
   );
 };
