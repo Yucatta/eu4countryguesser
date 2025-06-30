@@ -24,4 +24,5 @@ body {
   color: rgb(220, 220, 220);
   /* overflow: hidden; */
   /* overflow: auto; */
+  overflow-x: hidden;
 }

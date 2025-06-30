@@ -1,4 +1,5 @@
 import CurrentCountry from "@/Components/CurrentCountry";
+import GuessDistribution from "@/Components/GuessDistribution";
 import HomeButton from "@/Components/HomeButton";
 import RegionSelect from "@/Components/RegionSelect";
 import SvgMap from "@/Components/SvgMap";
@@ -18,12 +19,13 @@ export default function Home() {
           <div
             style={{ width: "clamp(0px, 99vw, 1100px)" }}
             className={
-              " z-20 border-b-2 flex flex-col items-center h-15 top-0 absolute"
+              " z-20 border-b-4 border-[rgb(64,31,128)] flex flex-col items-center h-15 top-0 absolute"
             }
           ></div>
           <GameContextProvider>
             <MapContextProvider>
               <CurrentCountry></CurrentCountry>
+
               <SvgMap></SvgMap>
             </MapContextProvider>
             <RegionSelect></RegionSelect>

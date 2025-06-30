@@ -6,7 +6,7 @@ import TopBarInteractions from "./TopBarInteractions";
 import { useMapContext } from "@/context/MapContext";
 const CurrentCountry = () => {
   const { countries, regions } = useDataContext();
-  const { currentregion } = useGameContext();
+  const { currentregion, bestTimesMenu } = useGameContext();
   const { answercorrectness, correctanswer } = useMapContext();
   const timeinterval = useRef<NodeJS.Timeout | null>(null);
   const [miliseconds, setmiliseconds] = useState(0);
@@ -48,7 +48,7 @@ const CurrentCountry = () => {
       <div
         style={{
           width: "clamp(0px, 99vw, 977px)",
-
+          display: bestTimesMenu ? "none" : "",
           fontSize: "clamp(12px,24px,4vw)",
         }}
         className="bg-[rgba(20,20,20,0.4)] absolute mt-20   flex pointer-events-none flex-row items-center  z-40 w-full  text-[rgb(0,200,200)]   font-semibold h-10"

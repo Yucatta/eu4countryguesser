@@ -4,17 +4,22 @@ import { useContext, createContext, ReactNode, useState } from "react";
 type GameContextType = {
   currentregion: number[];
   setcurrentregion: (e: number[]) => void;
+  bestTimesMenu: boolean;
+  setBestTimesMenu: (e: boolean) => void;
 };
 
 const GameContext = createContext<GameContextType | null>(null);
 
 export const GameContextProvider = ({ children }: { children: ReactNode }) => {
   const [currentregion, setcurrentregion] = useState([4, 0]);
+  const [bestTimesMenu, setBestTimesMenu] = useState(false);
   return (
     <GameContext.Provider
       value={{
         currentregion: currentregion,
         setcurrentregion: setcurrentregion,
+        bestTimesMenu: bestTimesMenu,
+        setBestTimesMenu: setBestTimesMenu,
       }}
     >
       {children}

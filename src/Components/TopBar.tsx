@@ -1,19 +1,26 @@
+import { useGameContext } from "@/context/GameContext";
 import React from "react";
 interface Props {
   setisitpassed: React.Dispatch<React.SetStateAction<boolean>>;
-  setMenuPassed: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const TopBar = ({ setisitpassed, setMenuPassed }: Props) => {
+const TopBar = ({ setisitpassed }: Props) => {
+  const { setBestTimesMenu, bestTimesMenu } = useGameContext();
   return (
     <div
       style={{ width: "clamp(0px, 99vw, 977px)" }}
       className="w-10 h-10 absolute  "
     >
       <svg
-        onClick={() => setMenuPassed(true)}
+        onClick={() => {
+          if (bestTimesMenu) {
+            setBestTimesMenu(false);
+          } else {
+            setBestTimesMenu(true);
+          }
+        }}
         viewBox="-10 -170 220 170"
         style={{ right: "clamp(0px,120px,8vw + 32px)" }}
-        className="w-8 h-8 z-90 top-3.5 absolute cursor-pointer rounded-md bg-neutral-300 "
+        className="w-8 h-8 z-80 top-3.5 absolute cursor-pointer rounded-md bg-neutral-300 "
       >
         <path
           d="M 0 0 L 68 -96 L 126 -56 L 200 -170"

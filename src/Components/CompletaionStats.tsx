@@ -1,6 +1,6 @@
 import { useGameContext } from "@/context/GameContext";
 import React, { useState } from "react";
-import InputSwitch from "./Switch";
+import Switch from "./Switch";
 
 function returnSecondsformat(e: number) {
   const seconds = e / 1000;
@@ -26,16 +26,15 @@ const CompletaionStats = ({
 }: Props) => {
   const { currentregion, setcurrentregion } = useGameContext();
   const [scoresswitch, setscoresswitch] = useState(false);
-  console.log();
   return (
     <div
       className={
         isitpassed
-          ? `bg-[rgb(218,218,218)] w-[clamp(0px,560px,80vw)] h-100 z-80 
+          ? `bg-[rgb(218,218,218)] w-[clamp(0px,560px,80vw)] h-100 z-150 
               justify-evenly absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[-35%]
                overflow-hidden flex flex-row items-center
                transition-all duration-500 rounded-xl`
-          : `bg-[rgb(218,218,218)] w-120 h-100 z-80 
+          : `bg-[rgb(218,218,218)] w-120 h-100 z-150 
               justify-evenly absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[-35%]
                overflow-hidden flex flex-row items-center scale-60 opacity-0 pointer-events-none
                transition-all duration-500 rounded-xl`
@@ -59,10 +58,10 @@ const CompletaionStats = ({
         </div>
         <div className="flex-row flex justify-evenly w-3/4 text-black text-xl font-bold">
           <div>Personal Best</div>
-          <InputSwitch
+          <Switch
             isswitchon={scoresswitch}
             setswitch={setscoresswitch}
-          ></InputSwitch>
+          ></Switch>
           <div className="ml-20">Global Best</div>
         </div>
 
