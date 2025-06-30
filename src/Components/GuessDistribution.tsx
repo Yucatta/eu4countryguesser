@@ -54,6 +54,7 @@ const GuessDistribution = () => {
         JSON.stringify(guessDistributionRef.current)
       );
     }
+    console.log(guessDistributionRef.current, "distribution");
   }, []);
   const barlengths: number[] = guessDistributionRef.current
     ? [0, 1, 2, 3, 4].map((index) =>

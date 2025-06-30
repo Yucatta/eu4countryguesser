@@ -110,9 +110,8 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
     if (localstorage) {
       const temp = JSON.parse(localstorage);
       personalscores.current = temp;
-      console.log(temp);
     } else {
-      personalscores.current = [14, 18, 9, 9, 7].map((len) =>
+      personalscores.current = [14, 18, 9, 8, 7].map((len) =>
         Array.from({ length: len }, () => [0, 0])
       );
       console.log(personalscores.current);
@@ -121,6 +120,7 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
         JSON.stringify(personalscores.current)
       );
     }
+    console.log(personalscores.current, "personal", scores.current, "global");
   }, []);
   return (
     <>
