@@ -16,7 +16,7 @@ interface Props {
 const Continents = ["Europe", "Asia", "Africa", "New World", "World"];
 
 const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
-  const { currentregion, bestTimesMenu } = useGameContext();
+  const { currentregion, setBestTimesMenu, bestTimesMenu } = useGameContext();
   const { regions, regionnames } = useDataContext();
   const { answercorrectness } = useMapContext();
   const scores = useRef<number[][][] | null>(null);
@@ -173,7 +173,20 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
       {bestTimesMenu ? (
         <div className="absolute mt-20  h-auto bg-[rgb(29,29,29)] w-full">
           <GuessDistribution></GuessDistribution>
-
+          <div
+            onClick={() => setBestTimesMenu(false)}
+            className="flex cursor-pointer flex-row absolute top-0 mt-5 w-20 items-center ml-2  h-10 justify-center  "
+          >
+            <svg viewBox="-10 -20 50 40" className="z-120 w-10">
+              <path
+                stroke="rgb(103,0,191)"
+                strokeWidth={3}
+                strokeLinecap="round"
+                d="M 30 0 L 0 0 M 10 10 L 0 0 L 10 -10"
+              ></path>
+            </svg>
+            <div className="w-10 font-bold text-[rgb(136,0,255)]">Back</div>
+          </div>
           <div className="flex flex-row absolute top-0 left-7/12 transform -translate-x-1/2 ml-80 mt-5 w-full justify-center  ">
             <InputSwitch
               isswitchon={MenuSwitch}

@@ -26,10 +26,26 @@ export default function SvgMap() {
   );
   const [countrynamevisiblity, setcountrynamevisiblity] = useState(false);
   const [circlevisibilty, setcirclevisibilty] = useState(false);
+  const [legend, setlegend] = useState([1, 0]);
+  const realsvgref = useRef<SVGSVGElement | null>(null);
   useEffect(() => {
     svgRef.current?.resetTransform();
+    setlegend([
+      1,
+      realsvgref.current ? realsvgref.current.height.animVal.value : 0,
+    ]);
   }, [currentregion]);
   const thisregion = regions[currentregion[0]][currentregion[1]];
+  const scale =
+    clickedcountry[0] !== -1 && svgRef.current
+      ? thisregion[0][3] / svgRef.current.instance.transformState.scale
+      : 0;
+  console.log(
+    `clamp(50vh,${thisregion[0][3] / thisregion[0][2]} * ${
+      window.innerWidth < 977 ? "99vw" : "977px"
+    } + 30px,70vh)`,
+    typeof window !== "undefined" ? [window.innerWidth, window.innerHeight] : ""
+  );
   return (
     <>
       <div
@@ -44,20 +60,22 @@ export default function SvgMap() {
           initialPositionX={0}
           initialPositionY={0}
           ref={svgRef}
+          onZoom={(ref) =>
+            setlegend([
+              ref.state.scale,
+              realsvgref.current ? realsvgref.current.height.animVal.value : 0,
+            ])
+          }
           maxScale={20}
         >
           {() => {
-            const scale =
-              clickedcountry[0] !== -1
-                ? thisregion[0][3] /
-                  svgRef.current!.instance.transformState.scale
-                : 0;
             return (
               <>
                 <TransformComponent>
                   <svg
                     className="  h-auto max-h-[70vh] min-h-[50vh] bg-[rgb(0,0,200)]"
                     style={{ width: "clamp(0px, 99vw, 977px)" }}
+                    ref={realsvgref}
                     viewBox={`${thisregion[0][0]} ${thisregion[0][1]} ${thisregion[0][2]} ${thisregion[0][3]}`}
                     xmlns="http://www.w3.org/2000/svg"
                     width="100%"
@@ -163,6 +181,24 @@ export default function SvgMap() {
             );
           }}
         </TransformWrapper>
+        {typeof window !== "undefined" ? (
+          <div
+            style={{
+              right: "clamp(10px,50vw - 485px,75px)",
+              // typeof window !== "undefined" && window.innerWidth < 1100
+              //   ? window.innerWidth < 977
+              //     ? "10px"
+              //     : "calc(50vw-485px)"
+              //   : "80px",
+              top: legend[1] + 30,
+            }}
+            className="absolute w-10 h-10 justify-center items-center flex rounded-full border-2 text-[rgb(0,200,200)] font-bold pointer-events-none z-100 right-0 svg"
+          >
+            <div>{legend[0]}x</div>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </>
   );

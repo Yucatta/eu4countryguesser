@@ -11,7 +11,7 @@ type GameContextType = {
 const GameContext = createContext<GameContextType | null>(null);
 
 export const GameContextProvider = ({ children }: { children: ReactNode }) => {
-  const [currentregion, setcurrentregion] = useState([4, 0]);
+  const [currentregion, setcurrentregion] = useState([0, 2]);
   const [bestTimesMenu, setBestTimesMenu] = useState(false);
   return (
     <GameContext.Provider

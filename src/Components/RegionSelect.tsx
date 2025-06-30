@@ -58,16 +58,18 @@ const RegionSelect = ({ regionselect }: Props) => {
               {" "}
               {Continents[index]}
             </div>
-            <div className="flex flex-wrap justify-center">
+            <div className="flex flex-wrap  justify-center">
               {continent.map((region, index2) => {
                 return (
                   <div
                     key={index2}
-                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.6)" }}
+                    style={{
+                      textShadow: "2px 2px 4px rgba(0,0,0,0.6)",
+                    }}
                     className={
                       currentregion[0] === index && currentregion[1] === index2
-                        ? "text-blue-500 w-30 cursor-pointer"
-                        : "hover:text-blue-400 w-30 cursor-pointer"
+                        ? "text-blue-500 w-35 cursor-pointer h-6 items-center flex flex-row"
+                        : "hover:text-blue-400 w-35 cursor-pointer h-6 items-center flex flex-row"
                     }
                     onClick={() => {
                       setcurrentregion([index, index2]);
@@ -77,7 +79,17 @@ const RegionSelect = ({ regionselect }: Props) => {
                       }
                     }}
                   >
-                    {region}
+                    <div>
+                      <svg className="w-2 h-6 mr-1" viewBox="-12 -12 14 24">
+                        <path
+                          stroke="white"
+                          fill="none"
+                          strokeWidth={3}
+                          d="M -10 10 L 0 0 L -10 -10"
+                        ></path>
+                      </svg>
+                    </div>
+                    <div>{region}</div>
                   </div>
                 );
               })}
