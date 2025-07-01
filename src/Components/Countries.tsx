@@ -5,11 +5,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 interface Props {
   countryindex: number;
   isitin: boolean;
-  countryclick: (
-    mouse: React.MouseEvent<SVGPathElement, MouseEvent>,
-    bbox: DOMRect,
-    index2: number
-  ) => void;
+  countryclick: (bbox: DOMRect) => void;
   findit?: (bbox: DOMRect) => void;
 }
 let aaaaaaaaa = 0;
@@ -111,7 +107,7 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
             isitoktosend = true;
             setTimeout(() => {
               isitoktosend = false;
-            }, 500);
+            }, 900);
           }}
           onPointerUp={(e) => {
             if (
@@ -120,7 +116,7 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
               isitoktosend &&
               answercorrectness[countryindex] < 1
             ) {
-              countryclick(e, pathref.current[index2]!.getBBox(), index2);
+              countryclick(pathref.current[index2]!.getBBox());
             }
           }}
           key={index2}

@@ -19,6 +19,8 @@ const s3Client = new S3Client({
     secretAccessKey: SECRET_KEY,
   },
 });
+let fetcheddata: number[][] | null = null;
+let lastcachetime = 0;
 async function streamToString(stream: Readable): Promise<string> {
   const chunks: Uint8Array[] = [];
   for await (const chunk of stream) {
@@ -32,6 +34,12 @@ export default async function FetchTimes(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
+    if (fetcheddata && Date.now() - lastcachetime < 1000 * 60 * 2) {
+      console.log(fetcheddata, "fettcheddata");
+      return res.status(200).json({
+        BestTimes: fetcheddata,
+      });
+    }
     const cmd = new GetObjectCommand({
       Bucket: BUCKET_NAME,
       Key: "besttimes.json",
@@ -51,9 +59,11 @@ export default async function FetchTimes(
     } catch {
       throw new Error("NO");
     }
-    res
-      .status(200)
-      .json({ message: "Data successfully written to CSV", BestTimes: parsed });
+    fetcheddata = parsed as number[][];
+    lastcachetime = Date.now();
+    return res.status(200).json({
+      BestTimes: parsed,
+    });
   } else {
     res.status(405).json({ error: "NOT GET" });
   }

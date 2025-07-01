@@ -7,8 +7,8 @@ interface Props {
   regionselect?: (e: boolean) => void;
 }
 const RegionSelect = ({ regionselect }: Props) => {
-  const { regionnames } = useDataContext();
-  const { setcurrentregion, bestTimesMenu, currentregion } = useGameContext();
+  const { regionnames, regions } = useDataContext();
+  const { setcurrentregion, currentregion, setcountrylist } = useGameContext();
 
   return (
     <div
@@ -19,8 +19,7 @@ const RegionSelect = ({ regionselect }: Props) => {
         return (
           <div
             key={index}
-            style={{ display: bestTimesMenu ? "none" : "" }}
-            className="w-70 h-125 rounded-2xl space-y-5 mb-5 flex flex-col shadow-lg shadow-gray-600/40 bg-gray-800 justify-start items-center"
+            className="w-70 h-125 rounded-2xl space-y-5 mb-5 flex flex-col shadow-lg shadow-gray-black bg-[rgb(48,48,48)] justify-start items-center"
           >
             <div className="bg-[rgb(0,0,200)]  w-50 h-50 mt-5 border-4 border-[rgb(160,160,160)] overflow-hidden object-center justify-center rounded-full">
               <img
@@ -53,7 +52,6 @@ const RegionSelect = ({ regionselect }: Props) => {
                   regionselect(true);
                 }
               }}
-              // className="text-4xl mt-1 mb-2 font-bold"
             >
               {" "}
               {Continents[index]}
@@ -73,6 +71,7 @@ const RegionSelect = ({ regionselect }: Props) => {
                     }
                     onClick={() => {
                       setcurrentregion([index, index2]);
+                      setcountrylist(regions[index][index2][1]);
                       window.scrollTo({ top: 0, behavior: "smooth" });
                       if (regionselect) {
                         regionselect(true);

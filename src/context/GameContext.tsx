@@ -4,22 +4,22 @@ import { useContext, createContext, ReactNode, useState } from "react";
 type GameContextType = {
   currentregion: number[];
   setcurrentregion: (e: number[]) => void;
-  bestTimesMenu: boolean;
-  setBestTimesMenu: (e: boolean) => void;
+  countrylist: number[];
+  setcountrylist: (e: number[]) => void;
 };
 
 const GameContext = createContext<GameContextType | null>(null);
 
 export const GameContextProvider = ({ children }: { children: ReactNode }) => {
   const [currentregion, setcurrentregion] = useState([0, 2]);
-  const [bestTimesMenu, setBestTimesMenu] = useState(false);
+  const [countrylist, setcountrylist] = useState<number[]>([]);
   return (
     <GameContext.Provider
       value={{
         currentregion: currentregion,
         setcurrentregion: setcurrentregion,
-        bestTimesMenu: bestTimesMenu,
-        setBestTimesMenu: setBestTimesMenu,
+        countrylist: countrylist,
+        setcountrylist: setcountrylist,
       }}
     >
       {children}
