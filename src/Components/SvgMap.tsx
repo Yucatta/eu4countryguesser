@@ -37,10 +37,22 @@ export default function SvgMap() {
   return (
     <>
       <div
-        style={{
-          width: "clamp(0px, 99vw, 977px)",
-          display: pathname !== "/" ? "none" : "",
-        }}
+        style={
+          pathname === "/custom-region"
+            ? {
+                pointerEvents: "none",
+                width: "clamp(0px, 40vw, 500px)",
+                // height: "20vh",
+                minHeight: "10vh",
+                maxHeight: "25vh",
+                position: "absolute",
+                left: "5vw",
+              }
+            : {
+                width: "clamp(0px, 99vw, 977px)",
+                display: pathname === "/" ? "" : "none",
+              }
+        }
         className=" p-0 mt-20 h-auto  max-h-[70vh] min-h-[50vh] flex object-contain object-center  bg-[rgb(50,50,50)] "
       >
         <TransformWrapper
@@ -62,7 +74,18 @@ export default function SvgMap() {
                 <TransformComponent>
                   <svg
                     className="  h-auto max-h-[70vh] min-h-[50vh] bg-[rgb(0,0,200)]"
-                    style={{ width: "clamp(0px, 99vw, 977px)" }}
+                    style={
+                      pathname === "/custom-region"
+                        ? {
+                            pointerEvents: "none",
+                            width: "clamp(0px, 40vw, 500px)",
+                            minHeight: "10vh",
+                            maxHeight: "25vh",
+                            left: "5vw",
+                            // height: "20vh",
+                          }
+                        : { width: "clamp(0px, 99vw, 977px)" }
+                    }
                     ref={realsvgref}
                     viewBox={`${thisregion[0][0]} ${thisregion[0][1]} ${thisregion[0][2]} ${thisregion[0][3]}`}
                     xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +99,6 @@ export default function SvgMap() {
                         isitin={countrylist.includes(i)}
                       ></Uncolonized>
                     ))}
-                    {/* <Uncolonized countryindex={699} isitin={true}></Uncolonized> */}
                     {Array.from({ length: 10 }, (_, i) => i + 689).map((i) => (
                       <Uncolonized
                         countryindex={i}
@@ -84,7 +106,6 @@ export default function SvgMap() {
                         isitin={countrylist.includes(i)}
                       ></Uncolonized>
                     ))}
-
                     <AllCountries
                       setcountrynames={setcountrynames}
                       setCorrectCircles={setCorrectCircles}
@@ -129,6 +150,7 @@ export default function SvgMap() {
           style={{
             right: "clamp(10px,50vw - 485px,75px)",
             top: legend[1] ? legend[1] + 20 : "calc(70vh + 20px)",
+            display: pathname === "/custom-region" ? "none" : "",
           }}
           className="absolute w-12 h-12 justify-center items-center flex rounded-full border-2 text-[rgb(0,200,200)] font-bold pointer-events-none z-100 right-0 svg"
         >
