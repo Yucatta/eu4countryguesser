@@ -16,7 +16,7 @@ import ReverseCircle from "./ReverseCircle";
 import { usePathname } from "next/navigation";
 export default function SvgMap() {
   const { regions } = useDataContext();
-  const { currentregion, countrylist } = useGameContext();
+  const { currentregion, countrylist, mapBbox } = useGameContext();
   const svgRef = useRef<ReactZoomPanPinchContentRef | null>(null);
   const [countrynames, setcountrynames] = useState<number[][]>([]);
   const [correctCircles, setCorrectCircles] = useState<number[][]>([]);
@@ -42,9 +42,9 @@ export default function SvgMap() {
             ? {
                 pointerEvents: "none",
                 width: "clamp(0px, 40vw, 500px)",
-                // height: "20vh",
-                minHeight: "10vh",
-                maxHeight: "25vh",
+                minHeight: "20vh",
+                maxHeight: "35vh",
+                height: "30vh",
                 position: "absolute",
                 left: "5vw",
               }
@@ -79,15 +79,15 @@ export default function SvgMap() {
                         ? {
                             pointerEvents: "none",
                             width: "clamp(0px, 40vw, 500px)",
-                            minHeight: "10vh",
-                            maxHeight: "25vh",
+                            minHeight: "25vh",
+                            maxHeight: "35vh",
                             left: "5vw",
-                            // height: "20vh",
+                            height: "30vh",
                           }
                         : { width: "clamp(0px, 99vw, 977px)" }
                     }
                     ref={realsvgref}
-                    viewBox={`${thisregion[0][0]} ${thisregion[0][1]} ${thisregion[0][2]} ${thisregion[0][3]}`}
+                    viewBox={`${mapBbox[0]} ${mapBbox[1]} ${mapBbox[2]} ${mapBbox[3]}`}
                     xmlns="http://www.w3.org/2000/svg"
                     width="100%"
                     height="100%"

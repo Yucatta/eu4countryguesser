@@ -23,7 +23,7 @@ const AllCountries = ({
     regions,
     terraincolors,
   } = useDataContext();
-  const { currentregion } = useGameContext();
+  const { currentregion, countrylist } = useGameContext();
   const { setcorrectanswer, setanswercorrectness, setfailed } = useMapContext();
   const correctanswerref = useRef<number>(-1);
   const answercorrectness = useRef<number[]>(Array(665).fill(0));
@@ -80,7 +80,7 @@ const AllCountries = ({
 
                 if (correctanswerref.current === index) {
                   const a = GetCorrectAnswer(
-                    thisregion[1],
+                    countrylist,
                     answercorrectness.current
                       .map((guess, index) => (guess ? index : -1))
                       .filter((id) => id + 1)
@@ -103,7 +103,7 @@ const AllCountries = ({
                 }
                 setanswercorrectness(answercorrectness.current);
               }}
-              isitin={thisregion[1].includes(index)}
+              isitin={countrylist.includes(index)}
             ></Countries>
           ))}
       </>
@@ -117,6 +117,7 @@ const AllCountries = ({
     countryoutlines,
     regions,
     currentregion,
+    countrylist,
   ]);
   return <>{Image}</>;
 };

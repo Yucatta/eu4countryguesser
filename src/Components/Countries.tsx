@@ -97,11 +97,7 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
               ? { fill: colorpulse ? "rgb(255,0,0)" : "rgb(255,255,255)" }
               : undefined
           }
-          // style={{}}
-          onMouseEnter={
-            () => setishovered(true)
-            // setcurrentcountry([currentcountry[1], countryindex])
-          }
+          onMouseEnter={() => setishovered(true)}
           onMouseLeave={() => setishovered(false)}
           onPointerDown={() => {
             isitoktosend = true;

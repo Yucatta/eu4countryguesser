@@ -8,7 +8,8 @@ interface Props {
 }
 const RegionSelect = ({ regionselect }: Props) => {
   const { regionnames, regions } = useDataContext();
-  const { setcurrentregion, currentregion, setcountrylist } = useGameContext();
+  const { setcurrentregion, currentregion, setMapBbox, setcountrylist } =
+    useGameContext();
 
   return (
     <div
@@ -72,6 +73,7 @@ const RegionSelect = ({ regionselect }: Props) => {
                     onClick={() => {
                       setcurrentregion([index, index2]);
                       setcountrylist(regions[index][index2][1]);
+                      setMapBbox(regions[index][index2][0]);
                       window.scrollTo({ top: 0, behavior: "smooth" });
                       if (regionselect) {
                         regionselect(true);
