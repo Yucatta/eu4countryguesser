@@ -6,8 +6,6 @@ import React, { useEffect, useRef, useState } from "react";
 import TopBar from "./TopBar";
 import CompletaionStats from "./CompletaionStats";
 import MenuWrapper from "./MenuWrapper";
-import InputSwitch from "./Switch";
-import GuessDistribution from "./GuessDistribution";
 interface Props {
   startdate: number;
   seconds: number;

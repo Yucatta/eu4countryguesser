@@ -27,16 +27,13 @@ const AllCountries = ({
   const { setcorrectanswer, setanswercorrectness, setfailed } = useMapContext();
   const correctanswerref = useRef<number>(-1);
   const answercorrectness = useRef<number[]>(Array(665).fill(0));
-  const thisregion = regions[currentregion[0]][currentregion[1]];
   useEffect(() => {
-    correctanswerref.current = GetCorrectAnswer(
-      regions[currentregion[0]][currentregion[1]][1],
-      []
-    );
+    correctanswerref.current = GetCorrectAnswer(countrylist, []);
+    console.log(correctanswerref.current);
     setcorrectanswer(correctanswerref.current);
     setanswercorrectness(Array(665).fill(0));
     answercorrectness.current = Array(665).fill(0);
-  }, [currentregion, regions]);
+  }, [currentregion, countrylist, regions]);
 
   function GetCorrectAnswer(list: number[], badlist: number[]) {
     const filteredids = list

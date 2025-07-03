@@ -7,16 +7,14 @@ import { useMapContext } from "@/context/MapContext";
 import { usePathname } from "next/navigation";
 const CurrentCountry = () => {
   const { countries, regions } = useDataContext();
-  const { currentregion } = useGameContext();
+  const { currentregion, countrylist } = useGameContext();
   const { answercorrectness, correctanswer } = useMapContext();
   const timeinterval = useRef<NodeJS.Timeout | null>(null);
   const [miliseconds, setmiliseconds] = useState(0);
   const [seconds, setseocnds] = useState(0);
   const startdate = useRef(0);
   const pathname = usePathname();
-  const regionlength = regions[currentregion[0]][currentregion[1]][1].filter(
-    (id) => id < 665
-  ).length;
+  const regionlength = countrylist.filter((id) => id < 665).length;
   const answeredlength = answercorrectness.filter((a) => a > 0).length;
   useEffect(() => {
     let sec = 0;

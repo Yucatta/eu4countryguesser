@@ -32,8 +32,7 @@ export default function SvgMap() {
       setlegend([1, realsvgref.current.height.animVal.value]);
     }
   }, [currentregion]);
-  const thisregion = regions[currentregion[0]][currentregion[1]];
-  const scale = thisregion[0][3] / legend[0];
+  const scale = mapBbox[3] / legend[0];
   return (
     <>
       <div
@@ -135,7 +134,7 @@ export default function SvgMap() {
                       <ReverseCircle
                         xcord={reverseCircle[0]}
                         ycord={reverseCircle[1]}
-                        regionheight={thisregion[0][3]}
+                        regionheight={mapBbox[3]}
                       ></ReverseCircle>
                     ) : (
                       ""

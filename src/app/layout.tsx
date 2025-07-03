@@ -47,7 +47,7 @@ export default async function RootLayout({
             <div
               style={{ width: "clamp(0px, 99vw, 1100px)" }}
               className={
-                " h-auto min-h-screen bg-[rgb(29,29,29)] flex flex-col items-center pb-20  absolute"
+                " h-auto min-h-screen bg-[rgb(34,34,34)] flex flex-col items-center pb-20  absolute"
               }
             >
               <div
