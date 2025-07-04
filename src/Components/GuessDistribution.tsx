@@ -1,11 +1,11 @@
 "use client";
 import { useDataContext } from "@/context/DataContext";
-import { useGameContext } from "@/context/GameContext";
 import React, { useEffect, useRef, useState } from "react";
 
 const GuessDistribution = () => {
   const { regions } = useDataContext();
   const [guessDistribution, setGuessDistribution] = useState<number[][][]>([]);
+  const [amountofplays, setamountofplays] = useState(0);
   useEffect(() => {
     const localstorage = localStorage.getItem("GuessDistribution");
     if (localstorage) {
@@ -16,6 +16,10 @@ const GuessDistribution = () => {
       );
       localStorage.setItem("GuessDistribution", JSON.stringify(temp));
       setGuessDistribution(temp);
+    }
+    const timesplayed = localStorage.getItem("TimesPlayed");
+    if (timesplayed) {
+      setamountofplays(Number(timesplayed));
     }
   }, []);
   const barlengths: number[] = [0, 1, 2, 3, 4].map((index) =>
@@ -31,17 +35,7 @@ const GuessDistribution = () => {
       </div>
       <div className="flex-row flex justify-center text-3xl font-semibold items-center">
         <div className="flex justify-center items-center flex-col mr-10">
-          {guessDistribution
-            .map((cont, index) => {
-              return cont
-                .map(
-                  (region, index2) =>
-                    region.reduce((a, b) => a + b, 0) /
-                    regions[index][index2][1].filter((a) => a < 665).length
-                )
-                .reduce((a, b) => a + b, 0);
-            })
-            .reduce((a, b) => a + b, 0)}
+          {amountofplays}
           <div className="text-lg text-[rgb(176,176,176)]">Times Played</div>
         </div>
         <div className="flex justify-center items-center flex-col">

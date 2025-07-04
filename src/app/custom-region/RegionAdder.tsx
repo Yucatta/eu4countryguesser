@@ -9,7 +9,7 @@ const Continents = ["Europe", "Asia", "Africa", "New World", "World"];
 const RegionAdder = () => {
   const router = useRouter();
   const { regionnames, regions } = useDataContext();
-  const { setMapBbox, setcountrylist } = useGameContext();
+  const { setMapBbox, setcountrylist, setisitcustom } = useGameContext();
   const [selectedRegions, setSelectedRegions] = useState<number[][]>([]);
   const [selectedcontinent, setselectedcontinent] = useState(0);
   const [_, setupdate] = useState(0);
@@ -50,13 +50,13 @@ const RegionAdder = () => {
       lengthfromleftedge < 1
         ? 0
         : xcord > bbox.right
-        ? bbox.right - bbox.left
+        ? bbox.width
         : lengthfromleftedge;
     setValue(tempvalue);
     const indexofuncolonized = allIncludedCountries.findIndex((id) => id > 664);
     if (indexofuncolonized + 1) {
       const tempamountofcountry = Math.round(
-        (tempvalue / (bbox.right - bbox.left)) *
+        (tempvalue / bbox.width) *
           allIncludedCountries.slice(0, indexofuncolonized).length
       );
       setamountofcountry(tempamountofcountry);
@@ -65,10 +65,11 @@ const RegionAdder = () => {
         ...allIncludedCountries.slice(indexofuncolonized),
       ]);
     } else {
-      const amountofcountry = Math.round(
+      const tempamountofcountry = Math.round(
         (tempvalue / (bbox.right - bbox.left)) * allIncludedCountries.length
       );
-      setcountrylist(allIncludedCountries.slice(0, amountofcountry));
+      setamountofcountry(tempamountofcountry);
+      setcountrylist(allIncludedCountries.slice(0, tempamountofcountry));
     }
   }
   if (ismounted) {
@@ -139,6 +140,7 @@ const RegionAdder = () => {
     const sliderbbox = sliderref.current!.getBoundingClientRect();
     setamountofcountry(countlist.filter((id) => id < 665).length);
     setValue(sliderbbox.width);
+    setisitcustom(true);
   }, [selectedRegions]);
   return (
     <>

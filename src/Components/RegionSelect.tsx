@@ -2,20 +2,29 @@
 import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
 import React from "react";
-const Continents = ["Europe", "Asia", "Africa", "New World", "World"];
+const Continents = [
+  "Europe",
+  "Asia",
+  "Africa",
+  "New World",
+  "World",
+  "By Development",
+];
 interface Props {
   regionselect?: (e: boolean) => void;
 }
 const RegionSelect = ({ regionselect }: Props) => {
   const { regionnames, regions } = useDataContext();
-  const { setcurrentregion, currentregion, setMapBbox, setcountrylist } =
-    useGameContext();
+  const {
+    setcurrentregion,
+    currentregion,
+    setMapBbox,
+    setisitcustom,
+    setcountrylist,
+  } = useGameContext();
 
   return (
-    <div
-      // style={{ marginTop: isitmobile ? "57vh" : "" }}
-      className="flex flex-wrap w-11/12 h-full items-center mt-10   justify-evenly"
-    >
+    <div className="flex flex-wrap w-11/12 h-full items-center mt-10   justify-evenly">
       {regionnames.map((continent, index) => {
         return (
           <div
@@ -74,6 +83,7 @@ const RegionSelect = ({ regionselect }: Props) => {
                       setcurrentregion([index, index2]);
                       setcountrylist(regions[index][index2][1]);
                       setMapBbox(regions[index][index2][0]);
+                      setisitcustom(false);
                       window.scrollTo({ top: 0, behavior: "smooth" });
                       if (regionselect) {
                         regionselect(true);

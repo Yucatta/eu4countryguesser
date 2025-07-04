@@ -29,7 +29,6 @@ const AllCountries = ({
   const answercorrectness = useRef<number[]>(Array(665).fill(0));
   useEffect(() => {
     correctanswerref.current = GetCorrectAnswer(countrylist, []);
-    console.log(correctanswerref.current);
     setcorrectanswer(correctanswerref.current);
     setanswercorrectness(Array(665).fill(0));
     answercorrectness.current = Array(665).fill(0);

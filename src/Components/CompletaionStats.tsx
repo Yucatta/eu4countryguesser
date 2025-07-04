@@ -24,7 +24,7 @@ const CompletaionStats = ({
   thisglobal,
   thispersonal,
 }: Props) => {
-  const { currentregion, setcurrentregion } = useGameContext();
+  const { currentregion, setcurrentregion, isitcustom } = useGameContext();
   const [scoresswitch, setscoresswitch] = useState(false);
   return (
     <div
@@ -40,6 +40,16 @@ const CompletaionStats = ({
                transition-all duration-500 rounded-xl`
       }
     >
+      {isitcustom ? (
+        ""
+      ) : (
+        <div className="absolute top-5 left-8 justify-evenly w-3/4 text-black text-xl font-bold">
+          <Switch
+            isswitchon={scoresswitch}
+            setswitch={setscoresswitch}
+          ></Switch>
+        </div>
+      )}
       <div className="flex w-full items-center flex-col">
         <div className="text-black text-xl font-bold ">YOUR SCORE</div>
         <div className="flex  justify-evenly w-1/2 flex-row">
@@ -56,52 +66,50 @@ const CompletaionStats = ({
             </div>
           </div>
         </div>
-        <div className="flex-row flex justify-evenly w-3/4 text-black text-xl font-bold">
-          <div>Personal Best</div>
-          <Switch
-            isswitchon={scoresswitch}
-            setswitch={setscoresswitch}
-          ></Switch>
-          <div className="ml-20">Global Best</div>
-        </div>
 
-        <div className="text-black text-xl font-bold mt-2">
-          {scoresswitch ? "Global Record" : "Personal Record"}
-        </div>
-        <div className="flex justify-evenly w-full flex-row  text-center ">
-          <div className="flex-col">
-            <div className="text-neutral-700">Time</div>
-            {scoresswitch ? (
-              <div className="text-neutral-950 font-semibold text-3xl">
-                {returnSecondsformat(thisglobal[1])}
-              </div>
-            ) : (
-              <div className="text-neutral-950 font-semibold text-3xl">
-                {returnSecondsformat(thispersonal[1])}
-              </div>
-            )}
-          </div>
-          <div className="flex-col  justify-center">
-            <div className="text-neutral-700">Score</div>
-            <div className="text-neutral-950 font-semibold text-3xl">
-              {scoresswitch ? thisglobal[0] : thispersonal[0]}%
+        {isitcustom ? (
+          ""
+        ) : (
+          <>
+            <div className="text-black text-xl font-bold mt-2">
+              {scoresswitch ? "Global Record" : "Personal Record"}
             </div>
-          </div>
-        </div>
-        <div
-          style={{ textShadow: "2px 2px 4px rgba(21,125,92,0.3)" }}
-          className="text-[rgb(0,184,125)] text-[25px] font-semibold"
-        >
-          {scoresswitch
-            ? thisglobal[0] === correctness &&
-              10 > Math.abs(thisglobal[1] - seconds)
-              ? "New Record"
-              : ""
-            : thispersonal[0] === correctness &&
-              10 > Math.abs(thispersonal[1] - seconds)
-            ? "New Record"
-            : ""}
-        </div>
+            <div className="flex justify-evenly w-full flex-row  text-center ">
+              <div className="flex-col">
+                <div className="text-neutral-700">Time</div>
+                {scoresswitch ? (
+                  <div className="text-neutral-950 font-semibold text-3xl">
+                    {returnSecondsformat(thisglobal[1])}
+                  </div>
+                ) : (
+                  <div className="text-neutral-950 font-semibold text-3xl">
+                    {returnSecondsformat(thispersonal[1])}
+                  </div>
+                )}
+              </div>
+              <div className="flex-col  justify-center">
+                <div className="text-neutral-700">Score</div>
+                <div className="text-neutral-950 font-semibold text-3xl">
+                  {scoresswitch ? thisglobal[0] : thispersonal[0]}%
+                </div>
+              </div>
+            </div>
+            <div
+              style={{ textShadow: "2px 2px 4px rgba(21,125,92,0.3)" }}
+              className="text-[rgb(0,184,125)] text-[25px] font-semibold"
+            >
+              {scoresswitch
+                ? thisglobal[0] === correctness &&
+                  10 > Math.abs(thisglobal[1] - seconds)
+                  ? "New Record"
+                  : ""
+                : thispersonal[0] === correctness &&
+                  10 > Math.abs(thispersonal[1] - seconds)
+                ? "New Record"
+                : ""}
+            </div>
+          </>
+        )}
         <button
           style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
           onClick={() => {

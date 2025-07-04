@@ -6,7 +6,7 @@ import TopBarInteractions from "./TopBarInteractions";
 import { useMapContext } from "@/context/MapContext";
 import { usePathname } from "next/navigation";
 const CurrentCountry = () => {
-  const { countries, regions } = useDataContext();
+  const { countries } = useDataContext();
   const { currentregion, countrylist } = useGameContext();
   const { answercorrectness, correctanswer } = useMapContext();
   const timeinterval = useRef<NodeJS.Timeout | null>(null);

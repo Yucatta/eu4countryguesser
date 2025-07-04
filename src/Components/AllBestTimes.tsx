@@ -3,7 +3,14 @@ import React, { useEffect, useRef, useState } from "react";
 import Switch from "./Switch";
 import { useDataContext } from "@/context/DataContext";
 import { useRouter } from "next/navigation";
-const Continents = ["Europe", "Asia", "Africa", "New World", "World"];
+const Continents = [
+  "Europe",
+  "Asia",
+  "Africa",
+  "New World",
+  "World",
+  "By Development",
+];
 const AllBestTimes = () => {
   const { regionnames } = useDataContext();
   const [MenuSwitch, setMenuSwitch] = useState(false);
@@ -11,7 +18,6 @@ const AllBestTimes = () => {
   const [selectedcontinent, setselectedcontinent] = useState(0);
   const [scores, settscores] = useState<number[][][] | null>(null);
   const [personalscores, setpersonalscores] = useState<number[][][]>([]);
-
   function calculatescore(dets: number[]) {
     return (1000 * (dets[0] / 100) ** 10) / (5 + dets[1]);
   }
@@ -31,24 +37,24 @@ const AllBestTimes = () => {
     const localstorage = localStorage.getItem("PersonalBestTimes");
     if (localstorage) {
       const temp = JSON.parse(localstorage);
-      if (temp[0].length !== 14) {
-        const temp = [14, 18, 9, 8, 7].map((len) =>
-          Array.from({ length: len }, () => [0, 0])
+      if (temp.length !== 6) {
+        localStorage.setItem(
+          "PersonalBestTimes",
+          JSON.stringify(temp.push(Array(11).fill([0, 0])))
         );
-        localStorage.setItem("PersonalBestTimes", JSON.stringify(temp));
         setpersonalscores(temp);
       } else {
         setpersonalscores(temp);
       }
+      console.log(JSON.stringify(temp));
     } else {
-      const temp = [14, 18, 9, 8, 7].map((len) =>
+      const temp = [14, 18, 9, 8, 7, 11].map((len) =>
         Array.from({ length: len }, () => [0, 0])
       );
       localStorage.setItem("PersonalBestTimes", JSON.stringify(temp));
       setpersonalscores(temp);
     }
   }, []);
-  console.log(scores, personalscores);
   return (
     <>
       <div
@@ -75,15 +81,7 @@ const AllBestTimes = () => {
         >
           {MenuSwitch ? "Global Best Times" : "Personal Best Times"}
         </div>
-        <div
-          style={{
-            height:
-              typeof window !== "undefined" && window.innerWidth < 500
-                ? "64px"
-                : "32px",
-          }}
-          className="flex-wrap flex  items-center text-center justify-evenly   left-0 "
-        >
+        <div className="flex-wrap flex h-auto inherit  items-center text-center  justify-evenly   left-0 ">
           {Continents.map((continent, index) => {
             return (
               <div
@@ -103,13 +101,9 @@ const AllBestTimes = () => {
 
         <div
           style={{
-            gap:
-              typeof window !== "undefined" && window.innerWidth < 500
-                ? "4px"
-                : "12px",
             marginLeft: "16.6%",
           }}
-          className="grid pointer-events-none w-2/3  grid-cols-[repeat(auto-fill,_minmax(240px,_1fr))]  overflow-auto mt-5  text-center  "
+          className="grid pointer-events-none w-2/3 sm:gap-3 gap-1 grid-cols-[repeat(auto-fill,_minmax(240px,_1fr))]  overflow-y-auto overflow-x-hidden mt-2  text-center  "
         >
           {regionnames[selectedcontinent].map((region, index) => {
             return (

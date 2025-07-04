@@ -8,14 +8,19 @@ type GameContextType = {
   setcountrylist: (e: number[]) => void;
   mapBbox: number[];
   setMapBbox: (e: number[]) => void;
+  isitcustom: boolean;
+  setisitcustom: (e: boolean) => void;
 };
 
 const GameContext = createContext<GameContextType | null>(null);
 
 export const GameContextProvider = ({ children }: { children: ReactNode }) => {
   const [currentregion, setcurrentregion] = useState([0, 2]);
-  const [countrylist, setcountrylist] = useState<number[]>([]);
-  const [mapBbox, setMapBbox] = useState<number[]>([0, 0, 5632, 2048]);
+  const [countrylist, setcountrylist] = useState<number[]>([
+    8, 11, 38, 46, 49, 54, 60, 73, 163, 214, 230, 292, 331, 336, 337, 359, 440,
+  ]);
+  const [mapBbox, setMapBbox] = useState<number[]>([2909, 575, 182, 225]);
+  const [isitcustom, setisitcustom] = useState(false);
   return (
     <GameContext.Provider
       value={{
@@ -25,6 +30,8 @@ export const GameContextProvider = ({ children }: { children: ReactNode }) => {
         setcountrylist: setcountrylist,
         mapBbox: mapBbox,
         setMapBbox: setMapBbox,
+        isitcustom: isitcustom,
+        setisitcustom: setisitcustom,
       }}
     >
       {children}

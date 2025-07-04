@@ -1,5 +1,4 @@
 "use client";
-import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
 import { useMapContext } from "@/context/MapContext";
 import React, { useEffect, useRef, useState } from "react";
@@ -11,18 +10,14 @@ interface Props {
   seconds: number;
   correctness: number;
 }
-const Continents = ["Europe", "Asia", "Africa", "New World", "World"];
 
 const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
-  const { currentregion } = useGameContext();
-  const { regions, regionnames } = useDataContext();
+  const { currentregion, isitcustom, countrylist } = useGameContext();
   const { answercorrectness } = useMapContext();
   const scores = useRef<number[][][] | null>(null);
   const personalscores = useRef<number[][][] | null>(null);
   const [isitpassed, setisitpassed] = useState(false);
-  const regionlength = regions[currentregion[0]][currentregion[1]][1].filter(
-    (id) => id < 665
-  ).length;
+  const regionlength = countrylist.filter((id) => id < 665).length;
   const answeredlength = answercorrectness.filter((a) => a > 0).length;
   const isitequal = answeredlength === regionlength;
   useEffect(() => {
@@ -65,18 +60,26 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
   useEffect(() => {
     if (isitequal) {
       setisitpassed(true);
-      const secondstemp = Date.now() - startdate;
-      if (CompareScores(scores, secondstemp)) {
-        UpdateScores();
+      const templocal = localStorage.getItem("TimesPlayed");
+      if (templocal) {
+        localStorage.setItem("TimesPlayed", `${Number(templocal) + 1}`);
+      } else {
+        localStorage.setItem("TimesPlayed", "1");
       }
-      if (CompareScores(personalscores, secondstemp)) {
-        localStorage.setItem(
-          "PersonalBestTimes",
-          JSON.stringify(personalscores.current)
-        );
+      if (isitcustom) {
+        const secondstemp = Date.now() - startdate;
+        if (CompareScores(scores, secondstemp)) {
+          UpdateScores();
+        }
+        if (CompareScores(personalscores, secondstemp)) {
+          localStorage.setItem(
+            "PersonalBestTimes",
+            JSON.stringify(personalscores.current)
+          );
+        }
       }
     }
-  }, [isitequal]);
+  }, [isitequal, isitcustom]);
   const thisglobal = scores.current
     ? scores.current[currentregion[0]][currentregion[1]]
     : [0, 0];
@@ -99,11 +102,9 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
     const localstorage = localStorage.getItem("PersonalBestTimes");
     if (localstorage) {
       const temp = JSON.parse(localstorage);
-      // console.log(temp, "temp localstorage");
-      if (temp[0].length !== 14) {
-        personalscores.current = [14, 18, 9, 8, 7].map((len) =>
-          Array.from({ length: len }, () => [0, 0])
-        );
+      if (temp.length !== 6) {
+        temp.push(Array(11).fill([0, 0]));
+        personalscores.current = temp;
         localStorage.setItem(
           "PersonalBestTimes",
           JSON.stringify(personalscores.current)
@@ -112,7 +113,7 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
         personalscores.current = temp;
       }
     } else {
-      personalscores.current = [14, 18, 9, 8, 7].map((len) =>
+      personalscores.current = [14, 18, 9, 8, 7, 11].map((len) =>
         Array.from({ length: len }, () => [0, 0])
       );
       localStorage.setItem(
