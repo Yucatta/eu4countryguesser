@@ -12,7 +12,7 @@ const RegionAdder = () => {
   const { setMapBbox, setcountrylist, setisitcustom } = useGameContext();
   const [selectedRegions, setSelectedRegions] = useState<number[][]>([]);
   const [selectedcontinent, setselectedcontinent] = useState(0);
-  const [_, setupdate] = useState(0);
+  const [, setupdate] = useState(0);
   const [ismounted, setismounted] = useState(false);
   const [isitpassed, setisitpassed] = useState(false);
   const [highestDevValue, setHighestDevValue] = useState<number | undefined>(

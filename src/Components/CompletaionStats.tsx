@@ -10,7 +10,6 @@ function returnSecondsformat(e: number) {
 }
 interface Props {
   isitpassed: boolean;
-  isitequal: boolean;
   setisitpassed: React.Dispatch<React.SetStateAction<boolean>>;
   correctness: number;
   seconds: number;
@@ -23,7 +22,6 @@ const CompletaionStats = ({
   seconds,
   setisitpassed,
   thisglobal,
-  isitequal,
   thispersonal,
 }: Props) => {
   const { currentregion, setcurrentregion, isitcustom } = useGameContext();

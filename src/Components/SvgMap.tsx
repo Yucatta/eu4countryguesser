@@ -1,5 +1,4 @@
 "use client";
-import { useDataContext } from "@/context/DataContext";
 import React, { useEffect, useRef, useState } from "react";
 import Uncolonized from "./uncolonized";
 import { useGameContext } from "@/context/GameContext";
@@ -15,7 +14,6 @@ import CorrectGuessCircle from "./CorrectGuessCircle";
 import ReverseCircle from "./ReverseCircle";
 import { usePathname } from "next/navigation";
 export default function SvgMap() {
-  const { regions } = useDataContext();
   const { countrylist, mapBbox } = useGameContext();
   const svgRef = useRef<ReactZoomPanPinchContentRef | null>(null);
   const [countrynames, setcountrynames] = useState<number[][]>([]);

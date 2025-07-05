@@ -1,9 +1,7 @@
 "use client";
-import { useDataContext } from "@/context/DataContext";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const GuessDistribution = () => {
-  const { regions } = useDataContext();
   const [guessDistribution, setGuessDistribution] = useState<number[][][]>([]);
   const [amountofplays, setamountofplays] = useState(0);
   useEffect(() => {

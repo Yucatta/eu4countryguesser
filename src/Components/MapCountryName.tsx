@@ -1,5 +1,4 @@
 import { useDataContext } from "@/context/DataContext";
-import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const getTextWidth = (text: string, font: string) => {

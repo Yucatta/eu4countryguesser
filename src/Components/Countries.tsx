@@ -107,7 +107,7 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
               isitoktosend = false;
             }, 900);
           }}
-          onPointerUp={(e) => {
+          onPointerUp={() => {
             if (
               isitin &&
               pathref.current.length &&
