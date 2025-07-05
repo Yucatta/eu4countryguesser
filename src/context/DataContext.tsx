@@ -12,6 +12,7 @@ type DataContextType = {
   regions: number[][][][];
   regionnames: string[][];
   countryplace: number[][][][];
+  countrydevelopments: number[];
 };
 
 const DataContext = createContext<DataContextType | null>(null);

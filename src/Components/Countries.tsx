@@ -5,11 +5,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 interface Props {
   countryindex: number;
   isitin: boolean;
-  countryclick: (
-    mouse: React.MouseEvent<SVGPathElement, MouseEvent>,
-    bbox: DOMRect,
-    index2: number
-  ) => void;
+  countryclick: (bbox: DOMRect) => void;
   findit?: (bbox: DOMRect) => void;
 }
 let aaaaaaaaa = 0;
@@ -94,33 +90,31 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
                 : `rgb(255,${255 - 60 * (correctness - 1)},${
                     255 - 60 * (correctness - 1)
                   } )`
-              : "rgb(50,50,50)"
+              : `rgb(${Math.floor((Number(rgbs[0]) / 10) * 3)},${Math.floor(
+                  (Number(rgbs[1]) / 10) * 3
+                )},${Math.floor((Number(rgbs[2]) / 10) * 3)}`
           }
           style={
             correctness < -3
               ? { fill: colorpulse ? "rgb(255,0,0)" : "rgb(255,255,255)" }
               : undefined
           }
-          // style={{}}
-          onMouseEnter={
-            () => setishovered(true)
-            // setcurrentcountry([currentcountry[1], countryindex])
-          }
+          onMouseEnter={() => setishovered(true)}
           onMouseLeave={() => setishovered(false)}
           onPointerDown={() => {
             isitoktosend = true;
             setTimeout(() => {
               isitoktosend = false;
-            }, 300);
+            }, 900);
           }}
-          onPointerUp={(e) => {
+          onPointerUp={() => {
             if (
               isitin &&
               pathref.current.length &&
               isitoktosend &&
               answercorrectness[countryindex] < 1
             ) {
-              countryclick(e, pathref.current[index2]!.getBBox(), index2);
+              countryclick(pathref.current[index2]!.getBBox());
             }
           }}
           key={index2}

@@ -7,8 +7,6 @@ const ACCESS_KEY = process.env.CLOUDFLARE_R2_ACCESS_KEY_ID;
 const SECRET_KEY = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
 const ENDPOINT = process.env.CLOUDFLARE_R2_ENDPOINT;
 
-const key = "besttimes.json";
-
 if (!ACCESS_KEY || !SECRET_KEY || !ENDPOINT) {
   throw new Error("invalid Bucket Credentials");
 }
@@ -21,6 +19,8 @@ const s3Client = new S3Client({
     secretAccessKey: SECRET_KEY,
   },
 });
+let fetcheddata: number[][] | null = null;
+let lastcachetime = 0;
 async function streamToString(stream: Readable): Promise<string> {
   const chunks: Uint8Array[] = [];
   for await (const chunk of stream) {
@@ -34,9 +34,14 @@ export default async function FetchTimes(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
+    if (fetcheddata && Date.now() - lastcachetime < 1000 * 60 * 2) {
+      return res.status(200).json({
+        BestTimes: fetcheddata,
+      });
+    }
     const cmd = new GetObjectCommand({
       Bucket: BUCKET_NAME,
-      Key: key,
+      Key: "besttimes.json",
     });
 
     const response = await s3Client.send(cmd);
@@ -53,9 +58,11 @@ export default async function FetchTimes(
     } catch {
       throw new Error("NO");
     }
-    res
-      .status(200)
-      .json({ message: "Data successfully written to CSV", BestTimes: parsed });
+    fetcheddata = parsed as number[][];
+    lastcachetime = Date.now();
+    return res.status(200).json({
+      BestTimes: parsed,
+    });
   } else {
     res.status(405).json({ error: "NOT GET" });
   }

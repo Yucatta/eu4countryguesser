@@ -6,8 +6,6 @@ const ACCESS_KEY = process.env.CLOUDFLARE_R2_ACCESS_KEY_ID;
 const SECRET_KEY = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
 const ENDPOINT = process.env.CLOUDFLARE_R2_ENDPOINT;
 
-const key = "besttimes.json";
-
 if (!ACCESS_KEY || !SECRET_KEY || !ENDPOINT) {
   throw new Error(
     "Missing Cloudflare R2 credentials or endpoint in environment variables."
@@ -29,11 +27,10 @@ export default async function UpdateTimes(
 ) {
   if (req.method === "POST") {
     const body = req.body;
-    console.log(body);
     await s3Client.send(
       new PutObjectCommand({
         Bucket: BUCKET_NAME,
-        Key: key,
+        Key: "besttimes.json",
         Body: JSON.stringify(body),
         ContentType: "application/json",
       })

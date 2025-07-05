@@ -13,9 +13,9 @@ export default function HomeWrapper() {
 
   return (
     <GameContextProvider>
-      <div className=" h-full  flex justify-center items-start">
+      <div className=" h-full mt-10  flex justify-center items-start">
         <div
-          style={{ width: "clamp(0px, 100vw, 977px)" }}
+          style={{ width: "clamp(0px, 100vw, 1100px)" }}
           className={
             " h-full bg-[rgb(29,29,29)] flex flex-col items-center pb-20  "
           }
