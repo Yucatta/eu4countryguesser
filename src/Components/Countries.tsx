@@ -90,7 +90,9 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
                 : `rgb(255,${255 - 60 * (correctness - 1)},${
                     255 - 60 * (correctness - 1)
                   } )`
-              : "rgb(50,50,50)"
+              : `rgb(${Math.floor((Number(rgbs[0]) / 10) * 3)},${Math.floor(
+                  (Number(rgbs[1]) / 10) * 3
+                )},${Math.floor((Number(rgbs[2]) / 10) * 3)}`
           }
           style={
             correctness < -3

@@ -60,6 +60,7 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
   useEffect(() => {
     if (isitequal) {
       setisitpassed(true);
+      console.log("aaa it is is ");
       const templocal = localStorage.getItem("TimesPlayed");
       if (templocal) {
         localStorage.setItem("TimesPlayed", `${Number(templocal) + 1}`);
@@ -138,7 +139,7 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
           ></CompletaionStats>
         }
       ></MenuWrapper>
-      <TopBar setisitpassed={setisitpassed} isitpassed={isitpassed}></TopBar>
+      <TopBar setisitpassed={setisitpassed} isitequal={isitequal}></TopBar>
     </>
   );
 };

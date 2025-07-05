@@ -16,7 +16,7 @@ import ReverseCircle from "./ReverseCircle";
 import { usePathname } from "next/navigation";
 export default function SvgMap() {
   const { regions } = useDataContext();
-  const { currentregion, countrylist, mapBbox } = useGameContext();
+  const { countrylist, mapBbox } = useGameContext();
   const svgRef = useRef<ReactZoomPanPinchContentRef | null>(null);
   const [countrynames, setcountrynames] = useState<number[][]>([]);
   const [correctCircles, setCorrectCircles] = useState<number[][]>([]);
@@ -31,7 +31,7 @@ export default function SvgMap() {
     if (realsvgref.current) {
       setlegend([1, realsvgref.current.height.animVal.value]);
     }
-  }, [currentregion]);
+  }, [countrylist]);
   const scale = mapBbox[3] / legend[0];
   return (
     <>

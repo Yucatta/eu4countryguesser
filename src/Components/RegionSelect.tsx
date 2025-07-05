@@ -42,6 +42,8 @@ const RegionSelect = ({ regionselect }: Props) => {
                     ? "scale-120 mt-3"
                     : index === 3
                     ? "mt-5 scale-120"
+                    : index === 5
+                    ? "scale-140 mt-12 ml-3"
                     : "mt-10 scale-160"
                 }
                 src={`/continents/${index}.svg`}

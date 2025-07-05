@@ -8,25 +8,29 @@ const Continents = ["Europe", "Asia", "Africa", "New World", "World"];
 
 const RegionAdder = () => {
   const router = useRouter();
-  const { regionnames, regions } = useDataContext();
+  const { regionnames, regions, countrydevelopments } = useDataContext();
   const { setMapBbox, setcountrylist, setisitcustom } = useGameContext();
   const [selectedRegions, setSelectedRegions] = useState<number[][]>([]);
   const [selectedcontinent, setselectedcontinent] = useState(0);
   const [_, setupdate] = useState(0);
   const [ismounted, setismounted] = useState(false);
   const [isitpassed, setisitpassed] = useState(false);
-  const [mouseonslider, setmouseonslider] = useState(false);
-  const [value, setValue] = useState<number | undefined>(undefined);
+  const [highestDevValue, setHighestDevValue] = useState<number | undefined>(
+    undefined
+  );
+  const [LowestDevValue, setLowestDevValue] = useState<number | undefined>(
+    undefined
+  );
   const [allIncludedCountries, setallIncludedCountries] = useState<number[]>(
     []
   );
-  const [amountofcountry, setamountofcountry] = useState(665);
+  const [highestdevindex, sethighestdevindex] = useState(664);
+  const [lowestdevindex, setlowestdevindex] = useState(0);
   const sliderref = useRef<HTMLDivElement | null>(null);
-
   const allcountrieswithoutunc = allIncludedCountries.filter(
     (id) => id < 665
   ).length;
-  const itmaybeworks: number = amountofcountry;
+  const itmaybeworks: number = highestdevindex;
 
   useEffect(() => {
     setismounted(true);
@@ -40,7 +44,7 @@ const RegionAdder = () => {
     addEventListener("resize", a);
     return () => removeEventListener("resize", a);
   }, []);
-  function setmousecoordinates(xcord: number) {
+  function setmousecoordinates(xcord: number, highorlow: boolean) {
     if (!ismounted) {
       return;
     }
@@ -52,46 +56,73 @@ const RegionAdder = () => {
         : xcord > bbox.right
         ? bbox.width
         : lengthfromleftedge;
-    setValue(tempvalue);
+    if (highorlow) {
+      if (LowestDevValue && tempvalue < LowestDevValue) {
+        return;
+      }
+      setHighestDevValue(tempvalue);
+    } else {
+      if (highestDevValue && tempvalue > highestDevValue) {
+        return;
+      }
+      setLowestDevValue(tempvalue);
+    }
+
     const indexofuncolonized = allIncludedCountries.findIndex((id) => id > 664);
     if (indexofuncolonized + 1) {
-      const tempamountofcountry = Math.round(
-        (tempvalue / bbox.width) *
-          allIncludedCountries.slice(0, indexofuncolonized).length
-      );
-      setamountofcountry(tempamountofcountry);
-      setcountrylist([
-        ...allIncludedCountries.slice(0, tempamountofcountry),
-        ...allIncludedCountries.slice(indexofuncolonized),
-      ]);
+      if (highorlow) {
+        const highestindex = Math.round(
+          (tempvalue / bbox.width) *
+            allIncludedCountries.slice(0, indexofuncolonized).length
+        );
+        sethighestdevindex(highestindex);
+        setcountrylist([
+          ...allIncludedCountries.slice(lowestdevindex, highestindex),
+          ...allIncludedCountries.slice(indexofuncolonized),
+        ]);
+      } else {
+        const lowestindex = Math.round(
+          (tempvalue / bbox.width) *
+            allIncludedCountries.slice(0, indexofuncolonized).length
+        );
+        setlowestdevindex(lowestindex);
+        setcountrylist([
+          ...allIncludedCountries.slice(lowestindex, highestdevindex),
+          ...allIncludedCountries.slice(indexofuncolonized),
+        ]);
+      }
     } else {
-      const tempamountofcountry = Math.round(
-        (tempvalue / (bbox.right - bbox.left)) * allIncludedCountries.length
-      );
-      setamountofcountry(tempamountofcountry);
-      setcountrylist(allIncludedCountries.slice(0, tempamountofcountry));
+      if (highorlow) {
+        const highestindex = Math.round(
+          (tempvalue / bbox.width) * allIncludedCountries.length
+        );
+        sethighestdevindex(highestindex);
+        setcountrylist(
+          allIncludedCountries.slice(lowestdevindex, highestindex)
+        );
+      } else {
+        const lowestindex = Math.round(
+          (tempvalue / bbox.width) * allIncludedCountries.length
+        );
+        setlowestdevindex(lowestindex);
+        setcountrylist(
+          allIncludedCountries.slice(lowestindex, highestdevindex)
+        );
+      }
     }
   }
   if (ismounted) {
-    addEventListener("mouseup", () => setmouseonslider(false));
+    addEventListener("mouseup", () => {
+      removeEventListener("mousemove", highestdevwrapper);
+      removeEventListener("mousemove", lowestdevwrapper);
+    });
   }
-  function thisisstupidwhythereisneedforthiskindoffunction(e: MouseEvent) {
-    setmousecoordinates(e.clientX);
+  function highestdevwrapper(e: MouseEvent) {
+    setmousecoordinates(e.clientX, true);
   }
-  useEffect(() => {
-    if (mouseonslider) {
-      addEventListener(
-        "mousemove",
-        thisisstupidwhythereisneedforthiskindoffunction
-      );
-      return () => {
-        removeEventListener(
-          "mousemove",
-          thisisstupidwhythereisneedforthiskindoffunction
-        );
-      };
-    }
-  }, [mouseonslider]);
+  function lowestdevwrapper(e: MouseEvent) {
+    setmousecoordinates(e.clientX, false);
+  }
   useEffect(() => {
     let bbox: number[] | null = null;
     selectedRegions.forEach((region) => {
@@ -138,9 +169,10 @@ const RegionAdder = () => {
     setallIncludedCountries(countlist);
     console.log(itmaybeworks);
     const sliderbbox = sliderref.current!.getBoundingClientRect();
-    setamountofcountry(countlist.filter((id) => id < 665).length);
-    setValue(sliderbbox.width);
-    setisitcustom(true);
+    sethighestdevindex(countlist.filter((id) => id < 665).length);
+    setHighestDevValue(sliderbbox.width);
+    setlowestdevindex(0);
+    setLowestDevValue(0);
   }, [selectedRegions]);
   return (
     <>
@@ -249,9 +281,7 @@ const RegionAdder = () => {
             )}
           </div>
         </div>
-        <div className="mt-4 flex justify-center w-full text-xl font-semibold">
-          Total Country: {allcountrieswithoutunc}
-        </div>
+
         <div className="flex flex-col items-center justify-center">
           <div
             className="text-3xl mt-6 font-bold select-none"
@@ -259,73 +289,149 @@ const RegionAdder = () => {
           >
             Development Slider
           </div>
-
-          <div
-            ref={sliderref}
-            onClick={(e) => setmousecoordinates(e.clientX)}
-            className="flex flex-row justify-end w-1/2 h-5 bg-[rgb(225,225,225)] rounded-md absolute select-none mt-25   items-center"
-          >
-            <div className="absolute w-full">
-              <div className="relative group">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-10 h-10 left-[-40px] absolute bottom-[-17px] "
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="9"
-                    stroke="rgb(51,54,63)"
-                    strokeWidth="2"
-                  />
-                  <path
-                    d="M12.5 7.5C12.5 7.77614 12.2761 8 12 8C11.7239 8 11.5 7.77614 11.5 7.5C11.5 7.22386 11.7239 7 12 7C12.2761 7 12.5 7.22386 12.5 7.5Z"
-                    fill="#33363F"
-                    stroke="#33363F"
-                  />
-                  <path d="M12 17V10" stroke="#33363F" strokeWidth="2" />
-                </svg>
-                <div
-                  className="group-hover:opacity-85 opacity-0 absolute left-[-90px] bottom-10 w-40 h-20
-                 bg-[rgb(200,200,200)] text-black px-2 flex items-center justify-center"
-                >
-                  Top {amountofcountry} Developed Countries Will be Included
-                </div>
-              </div>
+          <div className="flex flex-row justify-between ">
+            <div className="mt-4 flex justify-center w-auto mr-4 text-xl font-semibold">
+              Total Country: {allcountrieswithoutunc}
             </div>
-            <div
-              style={{
-                width: value ? value : "100%",
-                backgroundImage: `linear-gradient(to right, rgb(190,60,255) , rgb(${
-                  245 - (amountofcountry / allcountrieswithoutunc) * 150
-                },0,${
-                  245 - (amountofcountry / allcountrieswithoutunc) * 100
-                }))`,
-              }}
-              className="flex flex-row justify-end left-0 h-5 rounded-md bg-[rgb(103,0,191)] pointer-events-none absolute  items-center"
-            ></div>
-            <div
-              style={{
-                left: value ? value - 16 : "",
-                right: value ? "" : "0px",
-                backgroundColor: `rgb(${
-                  205 - (amountofcountry / allcountrieswithoutunc) * 150
-                },0,${205 - (amountofcountry / allcountrieswithoutunc) * 100})`,
-              }}
-              className="flex w-10 h-10 rounded-full  justify-center shadow-md shadow-black/50 items-center absolute"
-              onMouseDown={() => setmouseonslider(true)}
-            >
-              {amountofcountry}
+
+            <div className="mt-4 flex justify-center w-auto text-xl font-semibold">
+              Included Country: {highestdevindex - lowestdevindex}
             </div>
           </div>
+          <div className="text-lg font-semibold">
+            Development Range:{" "}
+            {countrydevelopments[allIncludedCountries[highestdevindex - 1]]} -{" "}
+            {countrydevelopments[allIncludedCountries[lowestdevindex]]}
+          </div>
+          <div className="flex items-center justify-center">
+            <div
+              ref={sliderref}
+              // onClick={(e) => setmousecoordinates(e.clientX, true)}
+              className="flex flex-row justify-end w-1/2 h-3 mt-10 bg-[rgb(225,225,225)] rounded-md absolute select-none   items-center"
+            >
+              <div className="absolute w-full">
+                <div className="relative group">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-10 h-10 left-[-60px] absolute bottom-[-17px] "
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="9"
+                      stroke="rgb(51,54,63)"
+                      strokeWidth="2"
+                    />
+                    <path
+                      d="M12.5 7.5C12.5 7.77614 12.2761 8 12 8C11.7239 8 11.5 7.77614 11.5 7.5C11.5 7.22386 11.7239 7 12 7C12.2761 7 12.5 7.22386 12.5 7.5Z"
+                      fill="#33363F"
+                      stroke="#33363F"
+                    />
+                    <path d="M12 17V10" stroke="#33363F" strokeWidth="2" />
+                  </svg>
+                  <div
+                    className="group-hover:opacity-85 opacity-0 absolute left-[-160px] bottom-10 rounded-lg w-70 h-auto
+                 bg-[rgb(230,230,230)] text-black px-2 flex items-center justify-center"
+                  >
+                    Countries whose developments are between{" "}
+                    {lowestdevindex + 1}
+                    {(lowestdevindex + 1) % 10 === 1
+                      ? "st"
+                      : (lowestdevindex + 1) % 10 === 2
+                      ? "nd"
+                      : (lowestdevindex + 1) % 10 === 3
+                      ? "rd"
+                      : "th"}{" "}
+                    most developed country (
+                    {countrydevelopments[allIncludedCountries[lowestdevindex]]}{" "}
+                    Development) and {highestdevindex}
+                    {highestdevindex % 10 === 1
+                      ? "st"
+                      : highestdevindex % 10 === 2
+                      ? "nd"
+                      : highestdevindex % 10 === 3
+                      ? "rd"
+                      : "th"}{" "}
+                    most developed country (
+                    {
+                      countrydevelopments[
+                        allIncludedCountries[highestdevindex - 1]
+                      ]
+                    }{" "}
+                    Development) will be included.
+                  </div>
+                </div>
+              </div>
+              <div
+                style={{
+                  width:
+                    typeof highestDevValue === "number" &&
+                    typeof LowestDevValue === "number"
+                      ? highestDevValue - LowestDevValue
+                      : "100%",
+                  left:
+                    typeof LowestDevValue === "number" ? LowestDevValue : "",
+                  backgroundImage: `linear-gradient(to right, rgb(190,60,255) , rgb(${
+                    245 - (highestdevindex / allcountrieswithoutunc) * 150
+                  },0,${
+                    245 - (highestdevindex / allcountrieswithoutunc) * 100
+                  }))`,
+                }}
+                className="flex flex-row justify-end h-3 rounded-md bg-[rgb(103,0,191)] pointer-events-none absolute  items-center"
+              ></div>
+              <div
+                style={{
+                  left:
+                    typeof highestDevValue === "number"
+                      ? highestDevValue - 16
+                      : "0px",
+                  right: highestDevValue ? "" : "0px",
+                  backgroundColor: `rgb(${
+                    205 - (highestdevindex / allcountrieswithoutunc) * 150
+                  },0,${
+                    205 - (highestdevindex / allcountrieswithoutunc) * 100
+                  })`,
+                }}
+                className="flex w-10 h-10 rounded-full z-20 justify-center shadow-md shadow-black/50 items-center absolute"
+                onMouseDown={() =>
+                  addEventListener("mousemove", highestdevwrapper)
+                }
+              >
+                {highestdevindex}
+              </div>
+              <div
+                style={{
+                  left:
+                    typeof LowestDevValue === "number"
+                      ? LowestDevValue - 16
+                      : "-16px",
+                  backgroundColor: `rgb(${
+                    205 - (lowestdevindex / allcountrieswithoutunc) * 150
+                  },0,${
+                    205 - (lowestdevindex / allcountrieswithoutunc) * 100
+                  })`,
+                }}
+                className="flex w-10 h-10 rounded-full z-10 justify-center shadow-md shadow-black/50 items-center absolute"
+                onMouseDown={() =>
+                  addEventListener("mousemove", lowestdevwrapper)
+                }
+              >
+                {lowestdevindex + 1}
+              </div>
+            </div>
+          </div>{" "}
         </div>
+
         <div className="w-full justify-center flex items-center mt-10">
           <button
-            style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-            onClick={() => router.push("/")}
-            className={`bg-gradient-to-t from-[rgb(3,159,19)] shadow-lg/70 shadow-black
+            style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.7)" }}
+            onClick={() => {
+              setisitcustom(true);
+              router.push("/");
+            }}
+            className={`bg-gradient-to-t from-[rgb(1,110,12)] shadow-lg/70 shadow-black
                  to-[rgb(3,219,10)] font-bold text-lg text-shadow-black w-40 h-15 rounded-full mt-6 cursor-pointer
                  active:scale-90 hover:scale-110 transition-all 
             `}
@@ -334,11 +440,11 @@ const RegionAdder = () => {
           </button>
         </div>
       </div>
-      <div className="fixed">
+      <div className="fixed z-2000">
         <button
           className={
             isitpassed
-              ? "w-[100vw] h-[100vh] bg-black/40 z-100 fixed top-0 backdrop-blur-sm left-0"
+              ? "w-[100vw] h-[100vh] bg-black/40 z-140 fixed top-0 backdrop-blur-sm left-0"
               : "none"
           }
           onClick={() => {

@@ -35,7 +35,6 @@ export default async function FetchTimes(
 ) {
   if (req.method === "GET") {
     if (fetcheddata && Date.now() - lastcachetime < 1000 * 60 * 2) {
-      console.log(fetcheddata, "fettcheddata");
       return res.status(200).json({
         BestTimes: fetcheddata,
       });

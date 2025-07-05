@@ -1,17 +1,17 @@
 import React from "react";
 interface Props {
-  isitpassed: boolean;
+  isitequal: boolean;
   setisitpassed: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const TopBar = ({ setisitpassed, isitpassed }: Props) => {
+const TopBar = ({ setisitpassed, isitequal }: Props) => {
   return (
     <div
       style={{ width: "clamp(0px, 99vw, 977px)" }}
       className="w-10 h-10 absolute  "
     >
-      {isitpassed ? (
+      {isitequal ? (
         <div
-          style={{ left: "clamp(0px,40px,4vw)" }}
+          style={{ left: "clamp(0px,90px,4vw + 50px)" }}
           className="w-8 h-8 z-90 top-3.5 cursor-pointer absolute flex shadow-sm shadow-neutral-300/30 rounded-md flex-row justify-evenly items-end pb-1 bg-[rgb(80,80,80)]"
           onClick={() => {
             setisitpassed(true);

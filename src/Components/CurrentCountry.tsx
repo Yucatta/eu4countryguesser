@@ -7,7 +7,7 @@ import { useMapContext } from "@/context/MapContext";
 import { usePathname } from "next/navigation";
 const CurrentCountry = () => {
   const { countries } = useDataContext();
-  const { currentregion, countrylist } = useGameContext();
+  const { currentregion, countrylist, isitcustom } = useGameContext();
   const { answercorrectness, correctanswer } = useMapContext();
   const timeinterval = useRef<NodeJS.Timeout | null>(null);
   const [miliseconds, setmiliseconds] = useState(0);
@@ -17,35 +17,39 @@ const CurrentCountry = () => {
   const regionlength = countrylist.filter((id) => id < 665).length;
   const answeredlength = answercorrectness.filter((a) => a > 0).length;
   useEffect(() => {
-    let sec = 0;
-    if (timeinterval.current) {
-      clearInterval(timeinterval.current);
-      setseocnds(sec);
-    }
-    startdate.current = Date.now();
-    setmiliseconds(0);
-    timeinterval.current = setInterval(() => {
-      sec++;
-      setseocnds(sec);
-    }, 1000);
-  }, [currentregion]);
-
-  useEffect(() => {
-    if (pathname !== "/" && timeinterval.current) {
-      clearInterval(timeinterval.current);
-      setmiliseconds((prev) => prev + Date.now() - startdate.current);
-    } else if (timeinterval.current) {
-      clearInterval(timeinterval.current);
+    if (pathname === "/") {
+      let sec = 0;
+      if (timeinterval.current) {
+        clearInterval(timeinterval.current);
+        setseocnds(sec);
+      }
       startdate.current = Date.now();
-      setseocnds((prev) => prev + 1);
+      setmiliseconds(0);
       timeinterval.current = setInterval(() => {
-        setseocnds((prev) => prev + 1);
+        sec++;
+        setseocnds(sec);
       }, 1000);
     }
-  }, [pathname]);
+  }, [countrylist, isitcustom]);
 
   useEffect(() => {
-    if (regionlength === answeredlength) {
+    if (timeinterval.current && !(regionlength === answeredlength)) {
+      if (pathname !== "/") {
+        clearInterval(timeinterval.current);
+        setmiliseconds((prev) => prev + Date.now() - startdate.current);
+      } else {
+        clearInterval(timeinterval.current);
+        startdate.current = Date.now();
+        setseocnds((prev) => prev + 1);
+        timeinterval.current = setInterval(() => {
+          setseocnds((prev) => prev + 1);
+        }, 1000);
+      }
+    }
+  }, [pathname, countrylist]);
+
+  useEffect(() => {
+    if (regionlength === answeredlength && pathname === "/") {
       clearInterval(timeinterval.current!);
       setmiliseconds((prev) => prev + Date.now() - startdate.current);
       const includedones = answercorrectness.filter((a) => a > 0);
@@ -61,7 +65,7 @@ const CurrentCountry = () => {
       if (local) {
         guessDistribution = JSON.parse(local);
       } else {
-        guessDistribution = [14, 18, 9, 8, 7].map((len) =>
+        guessDistribution = [14, 18, 9, 8, 7, 11].map((len) =>
           Array.from({ length: len }, () => Array(5).fill(0))
         );
         localStorage.setItem(
@@ -158,11 +162,15 @@ const CurrentCountry = () => {
           </div>
         </div>
       </div>
-      <TopBarInteractions
-        startdate={startdate.current}
-        seconds={miliseconds}
-        correctness={correctness}
-      ></TopBarInteractions>
+      {pathname === "/" ? (
+        <TopBarInteractions
+          startdate={startdate.current}
+          seconds={miliseconds}
+          correctness={correctness}
+        ></TopBarInteractions>
+      ) : (
+        ""
+      )}
     </>
   );
 };

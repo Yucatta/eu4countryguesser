@@ -15,7 +15,6 @@ const MenuWrapper = ({ Icon, isitpassed, setisitpassed }: Props) => {
               : "none"
           }
           onClick={() => {
-            console.log("aaa");
             setisitpassed(false);
           }}
         ></button>

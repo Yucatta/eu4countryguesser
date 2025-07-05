@@ -46,7 +46,6 @@ const AllBestTimes = () => {
       } else {
         setpersonalscores(temp);
       }
-      console.log(JSON.stringify(temp));
     } else {
       const temp = [14, 18, 9, 8, 7, 11].map((len) =>
         Array.from({ length: len }, () => [0, 0])
@@ -81,7 +80,7 @@ const AllBestTimes = () => {
         >
           {MenuSwitch ? "Global Best Times" : "Personal Best Times"}
         </div>
-        <div className="flex-wrap flex h-auto inherit  items-center text-center  justify-evenly   left-0 ">
+        <div className="flex-wrap flex h-auto inherit  items-center text-center bg-[rgba(0,0,0,0)] justify-evenly   left-0 ">
           {Continents.map((continent, index) => {
             return (
               <div

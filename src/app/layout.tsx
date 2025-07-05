@@ -41,6 +41,7 @@ export default async function RootLayout({
             terraincolors: fetcheddata.terraincolors,
             regionnames: fetcheddata.regionnames,
             countryplace: fetcheddata.countryplaces,
+            countrydevelopments: fetcheddata.countrydevelopments,
           }}
         >
           <div className=" h-full  flex justify-center items-start">
