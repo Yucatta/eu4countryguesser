@@ -67,7 +67,7 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
       } else {
         localStorage.setItem("TimesPlayed", "1");
       }
-      if (isitcustom) {
+      if (!isitcustom) {
         const secondstemp = Date.now() - startdate;
         if (CompareScores(scores, secondstemp)) {
           UpdateScores();

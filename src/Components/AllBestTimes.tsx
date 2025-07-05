@@ -13,7 +13,7 @@ const Continents = [
 ];
 const AllBestTimes = () => {
   const { regionnames } = useDataContext();
-  const [MenuSwitch, setMenuSwitch] = useState(false);
+  const [MenuSwitch, setMenuSwitch] = useState(true);
   const router = useRouter();
   const [selectedcontinent, setselectedcontinent] = useState(0);
   const [scores, settscores] = useState<number[][][] | null>(null);
