@@ -1,6 +1,7 @@
 "use client";
 import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
+import { useRouter } from "next/navigation";
 import React from "react";
 const Continents = [
   "Europe",
@@ -22,7 +23,7 @@ const RegionSelect = ({ regionselect }: Props) => {
     setisitcustom,
     setcountrylist,
   } = useGameContext();
-
+  const router = useRouter();
   return (
     <div className="flex flex-wrap w-11/12 h-full items-center mt-10   justify-evenly">
       {regionnames.map((continent, index) => {
@@ -110,6 +111,15 @@ const RegionSelect = ({ regionselect }: Props) => {
           </div>
         );
       })}
+      <div
+        className="text-4xl font-bold text-center hover:text-[rgb(155,0,224)] cursor-pointer"
+        onClick={() => {
+          router.push("/custom-region");
+          setisitcustom(false);
+        }}
+      >
+        Want More Regions ? You can create your own !
+      </div>
     </div>
   );
 };
