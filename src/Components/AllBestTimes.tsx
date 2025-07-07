@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Switch from "./Switch";
 import { useDataContext } from "@/context/DataContext";
 import { useRouter } from "next/navigation";
+import { useGameContext } from "@/context/GameContext";
 const Continents = [
   "Europe",
   "Asia",
@@ -13,6 +14,7 @@ const Continents = [
 ];
 const AllBestTimes = () => {
   const { regionnames } = useDataContext();
+  const { setisitloading } = useGameContext();
   const [MenuSwitch, setMenuSwitch] = useState(true);
   const router = useRouter();
   const [selectedcontinent, setselectedcontinent] = useState(0);
@@ -57,7 +59,10 @@ const AllBestTimes = () => {
   return (
     <>
       <div
-        onClick={() => router.push("/")}
+        onClick={() => {
+          router.push("/");
+          setisitloading(true);
+        }}
         className="flex cursor-pointer flex-row absolute top-0 mt-5 w-20 items-center ml-2  h-10 justify-center  "
       >
         <svg viewBox="-10 -20 50 40" className="z-120 w-10">
@@ -80,7 +85,7 @@ const AllBestTimes = () => {
         >
           {MenuSwitch ? "Global Best Times" : "Personal Best Times"}
         </div>
-        <div className="flex-wrap flex h-auto inherit  items-center text-center bg-[rgba(0,0,0,0)] justify-evenly   left-0 ">
+        <div className="flex-wrap flex h-auto inherit z-10 items-center text-center justify-evenly  left-0 ">
           {Continents.map((continent, index) => {
             return (
               <div
@@ -97,12 +102,11 @@ const AllBestTimes = () => {
             );
           })}
         </div>
-
         <div
           style={{
             marginLeft: "16.6%",
           }}
-          className="grid pointer-events-none w-2/3 sm:gap-3 gap-1 grid-cols-[repeat(auto-fill,_minmax(240px,_1fr))]  overflow-y-auto overflow-x-hidden mt-2  text-center  "
+          className="grid pointer-events-none  w-2/3 sm:gap-3 gap-1 pt-6 grid-cols-[repeat(auto-fill,_minmax(240px,_1fr))]  overflow-y-auto overflow-x-hidden mt-2  text-center  "
         >
           {regionnames[selectedcontinent].map((region, index) => {
             return (
@@ -119,7 +123,7 @@ const AllBestTimes = () => {
                   <div className="relative group">
                     <svg
                       style={{ pointerEvents: "all" }}
-                      className="w-5 h-5 mr-1 z-150 "
+                      className="w-5 h-5 mr-1  "
                       viewBox="10.5 10.1 80 72.9"
                     >
                       <path
@@ -140,7 +144,7 @@ const AllBestTimes = () => {
                     </svg>
                     <div
                       className="absolute bottom-full opacity-0 h-8 flex text-center w-30 justify-center  items-center
-                      group-hover:opacity-90 bg-gray-200  rounded text-black z-150"
+                      group-hover:opacity-90 bg-gray-200  rounded text-black"
                     >
                       <div>You Hold This!</div>
                     </div>

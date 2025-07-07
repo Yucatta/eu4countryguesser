@@ -10,6 +10,8 @@ type GameContextType = {
   setMapBbox: (e: number[]) => void;
   isitcustom: boolean;
   setisitcustom: (e: boolean) => void;
+  isitloading: boolean;
+  setisitloading: (e: boolean) => void;
 };
 
 const GameContext = createContext<GameContextType | null>(null);
@@ -21,6 +23,7 @@ export const GameContextProvider = ({ children }: { children: ReactNode }) => {
   ]);
   const [mapBbox, setMapBbox] = useState<number[]>([2909, 575, 182, 225]);
   const [isitcustom, setisitcustom] = useState(false);
+  const [isitloading, setisitloading] = useState(false);
   return (
     <GameContext.Provider
       value={{
@@ -32,6 +35,8 @@ export const GameContextProvider = ({ children }: { children: ReactNode }) => {
         setMapBbox: setMapBbox,
         isitcustom: isitcustom,
         setisitcustom: setisitcustom,
+        isitloading: isitloading,
+        setisitloading: setisitloading,
       }}
     >
       {children}

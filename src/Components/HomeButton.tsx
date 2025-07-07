@@ -5,14 +5,17 @@ import { useGameContext } from "@/context/GameContext";
 
 const HomeButton = () => {
   const router = useRouter();
-  const { setisitcustom } = useGameContext();
+  const { setisitcustom, setisitloading } = useGameContext();
   return (
     <div
       style={{ width: "clamp(0px, 99vw, 977px)" }}
       className="flex justify-center absolute"
     >
       <svg
-        onClick={() => router.push("/statistics")}
+        onClick={() => {
+          setisitloading(true);
+          router.push("/statistics");
+        }}
         viewBox="-10 -170 220 170"
         style={{ right: "clamp(0px,40px,4vw)" }}
         className="w-8 h-8 z-80 top-3.5 absolute cursor-pointer  rounded-md bg-neutral-300 "
@@ -32,6 +35,8 @@ const HomeButton = () => {
         fill="none"
         onClick={() => {
           router.push("/custom-region");
+          setisitloading(true);
+
           setisitcustom(false);
         }}
       >
@@ -63,6 +68,7 @@ const HomeButton = () => {
         className="flex cursor-pointer absolute w-auto px-10 font-bold text-2xl h-10 mt-2.5 border-0 items-center z-80 text-center"
         onClick={() => {
           router.push("/Home");
+          setisitloading(true);
         }}
       >
         <div>EU4 Guessr</div>

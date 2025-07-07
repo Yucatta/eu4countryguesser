@@ -19,7 +19,6 @@ const CurrentCountry = () => {
   const answeredlength = answercorrectness.filter((a) => a > 0).length;
   useEffect(() => {
     if (pathname === "/") {
-      console.log("re run ? ");
       let sec = 0;
       if (timeinterval.current) {
         clearInterval(timeinterval.current);

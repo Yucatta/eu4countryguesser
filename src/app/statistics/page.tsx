@@ -4,7 +4,7 @@ import React from "react";
 
 const Statistics = () => {
   return (
-    <div className="absolute mt-20 min-h-screen  h-auto bg-[rgb(29,29,29)] w-full">
+    <div className="absolute mt-20 min-h-screen  h-auto bg-[rgb(34,34,34)] w-full">
       <GuessDistribution></GuessDistribution>
       <AllBestTimes></AllBestTimes>
     </div>

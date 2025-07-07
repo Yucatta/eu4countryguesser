@@ -9,6 +9,8 @@ import { GameContextProvider } from "@/context/GameContext";
 import { MapContextProvider } from "@/context/MapContext";
 import CurrentCountry from "@/Components/CurrentCountry";
 import SvgMap from "@/Components/SvgMap";
+import LoadingScreen from "@/Components/loadingscreen";
+import { Suspense } from "react";
 const jost = Jost({
   variable: "--font-jost",
   subsets: ["latin"],
@@ -58,6 +60,9 @@ export default async function RootLayout({
                 }
               ></div>
               <GameContextProvider>
+                <Suspense>
+                  <LoadingScreen></LoadingScreen>
+                </Suspense>
                 <HomeButton></HomeButton>
                 <MapContextProvider>
                   <CurrentCountry></CurrentCountry>

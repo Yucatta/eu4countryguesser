@@ -22,6 +22,7 @@ const RegionSelect = ({ regionselect }: Props) => {
     setMapBbox,
     setisitcustom,
     setcountrylist,
+    setisitloading,
   } = useGameContext();
   const router = useRouter();
   return (
@@ -34,6 +35,18 @@ const RegionSelect = ({ regionselect }: Props) => {
           >
             <div className="bg-[rgb(0,0,200)]  w-50 h-50 mt-5 border-4 border-[rgb(160,160,160)] overflow-hidden object-center justify-center rounded-full">
               <img
+                onClick={() => {
+                  const indexofregion = [4, index === 4 ? 6 : index];
+                  setcurrentregion(indexofregion);
+                  setcountrylist(regions[4][indexofregion[1]][1]);
+                  setMapBbox(regions[4][indexofregion[1]][0]);
+                  setisitcustom(false);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  if (regionselect) {
+                    regionselect(true);
+                  }
+                }}
+                style={{ cursor: "pointer" }}
                 className={
                   index === 4
                     ? "mt-15 scale-140"
@@ -59,7 +72,11 @@ const RegionSelect = ({ regionselect }: Props) => {
                   : "hover:text-blue-400 text-4xl mt-1 mb-2 font-bold cursor-pointer"
               }
               onClick={() => {
-                setcurrentregion([4, index === 4 ? 6 : index]);
+                const indexofregion = [4, index === 4 ? 6 : index];
+                setcurrentregion(indexofregion);
+                setcountrylist(regions[4][indexofregion[1]][1]);
+                setMapBbox(regions[4][indexofregion[1]][0]);
+                setisitcustom(false);
                 window.scrollTo({ top: 0, behavior: "smooth" });
                 if (regionselect) {
                   regionselect(true);
@@ -115,6 +132,7 @@ const RegionSelect = ({ regionselect }: Props) => {
         className="text-4xl font-bold text-center hover:text-[rgb(155,0,224)] cursor-pointer"
         onClick={() => {
           router.push("/custom-region");
+          setisitloading(true);
           setisitcustom(false);
         }}
       >

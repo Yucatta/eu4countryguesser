@@ -9,7 +9,8 @@ const Continents = ["Europe", "Asia", "Africa", "New World", "World"];
 const RegionAdder = () => {
   const router = useRouter();
   const { regionnames, regions, countrydevelopments } = useDataContext();
-  const { setMapBbox, setcountrylist, setisitcustom } = useGameContext();
+  const { setMapBbox, setcountrylist, setisitloading, setisitcustom } =
+    useGameContext();
   const [selectedRegions, setSelectedRegions] = useState<number[][]>([]);
   const [selectedcontinent, setselectedcontinent] = useState(0);
   const [, setupdate] = useState(0);
@@ -112,9 +113,9 @@ const RegionAdder = () => {
     }
   }
   if (ismounted) {
-    addEventListener("mouseup", () => {
-      removeEventListener("mousemove", highestdevwrapper);
-      removeEventListener("mousemove", lowestdevwrapper);
+    addEventListener("pointerup", () => {
+      removeEventListener("pointermove", highestdevwrapper);
+      removeEventListener("pointermove", lowestdevwrapper);
     });
   }
   function highestdevwrapper(e: MouseEvent) {
@@ -306,7 +307,20 @@ const RegionAdder = () => {
           <div className="flex items-center justify-center">
             <div
               ref={sliderref}
-              // onClick={(e) => setmousecoordinates(e.clientX, true)}
+              onClick={(e) => {
+                if (ismounted) {
+                  const bbox = sliderref.current!.getBoundingClientRect();
+                  console.log(e.clientX, bbox.left);
+                  if (
+                    typeof LowestDevValue === "number" &&
+                    e.clientX - bbox.left > LowestDevValue
+                  ) {
+                    setmousecoordinates(e.clientX, true);
+                  } else {
+                    setmousecoordinates(e.clientX, false);
+                  }
+                }
+              }}
               className="flex flex-row justify-end w-1/2 h-3 mt-10 bg-[rgb(225,225,225)] rounded-md absolute select-none   items-center"
             >
               <div className="absolute w-full">
@@ -395,8 +409,8 @@ const RegionAdder = () => {
                   })`,
                 }}
                 className="flex w-10 h-10 rounded-full z-20 justify-center shadow-md shadow-black/50 items-center absolute"
-                onMouseDown={() =>
-                  addEventListener("mousemove", highestdevwrapper)
+                onPointerDown={() =>
+                  addEventListener("pointermove", highestdevwrapper)
                 }
               >
                 {highestdevindex}
@@ -414,8 +428,8 @@ const RegionAdder = () => {
                   })`,
                 }}
                 className="flex w-10 h-10 rounded-full z-10 justify-center shadow-md shadow-black/50 items-center absolute"
-                onMouseDown={() =>
-                  addEventListener("mousemove", lowestdevwrapper)
+                onPointerDown={() =>
+                  addEventListener("pointermove", lowestdevwrapper)
                 }
               >
                 {lowestdevindex + 1}
@@ -429,6 +443,7 @@ const RegionAdder = () => {
             style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.7)" }}
             onClick={() => {
               setisitcustom(true);
+              setisitloading(true);
               router.push("/");
             }}
             className={`bg-gradient-to-t from-[rgb(1,110,12)] shadow-lg/70 shadow-black
