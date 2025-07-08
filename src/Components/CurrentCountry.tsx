@@ -14,7 +14,6 @@ const CurrentCountry = () => {
   const [seconds, setseocnds] = useState(0);
   const startdate = useRef(0);
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const regionlength = countrylist.filter((id) => id < 665).length;
   const answeredlength = answercorrectness.filter((a) => a > 0).length;
   useEffect(() => {
@@ -31,7 +30,7 @@ const CurrentCountry = () => {
         setseocnds(sec);
       }, 1000);
     }
-  }, [countrylist, isitcustom, searchParams?.toString()]);
+  }, [countrylist, isitcustom]);
 
   useEffect(() => {
     if (timeinterval.current && !(regionlength === answeredlength)) {
