@@ -12,7 +12,7 @@ const Continents = [
   "By Development",
 ];
 interface Props {
-  regionselect: () => void;
+  regionselect?: () => void;
 }
 const RegionSelect = ({ regionselect }: Props) => {
   const { regionnames, regions } = useDataContext();
