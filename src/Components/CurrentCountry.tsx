@@ -4,7 +4,7 @@ import { useGameContext } from "@/context/GameContext";
 import React, { useEffect, useRef, useState } from "react";
 import TopBarInteractions from "./TopBarInteractions";
 import { useMapContext } from "@/context/MapContext";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 const CurrentCountry = () => {
   const { countries } = useDataContext();
   const { currentregion, countrylist, isitcustom } = useGameContext();
