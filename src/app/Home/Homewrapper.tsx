@@ -22,7 +22,7 @@ export default function HomeWrapper() {
         >
           <Suspense>
             <RegionSelect
-              regionselect={(e) => {
+              regionselect={() => {
                 router.push("/");
                 setisitloading(true);
               }}

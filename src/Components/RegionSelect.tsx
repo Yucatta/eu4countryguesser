@@ -12,7 +12,7 @@ const Continents = [
   "By Development",
 ];
 interface Props {
-  regionselect?: (e: boolean) => void;
+  regionselect: () => void;
 }
 const RegionSelect = ({ regionselect }: Props) => {
   const { regionnames, regions } = useDataContext();
@@ -43,7 +43,7 @@ const RegionSelect = ({ regionselect }: Props) => {
                   setisitcustom(false);
                   window.scrollTo({ top: 0, behavior: "smooth" });
                   if (regionselect) {
-                    regionselect(true);
+                    regionselect();
                   }
                 }}
                 style={{ cursor: "pointer" }}
@@ -79,7 +79,7 @@ const RegionSelect = ({ regionselect }: Props) => {
                 setisitcustom(false);
                 window.scrollTo({ top: 0, behavior: "smooth" });
                 if (regionselect) {
-                  regionselect(true);
+                  regionselect();
                 }
               }}
             >
@@ -106,7 +106,7 @@ const RegionSelect = ({ regionselect }: Props) => {
                       setisitcustom(false);
                       window.scrollTo({ top: 0, behavior: "smooth" });
                       if (regionselect) {
-                        regionselect(true);
+                        regionselect();
                       }
                     }}
                   >
