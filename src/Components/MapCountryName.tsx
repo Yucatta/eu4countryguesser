@@ -19,7 +19,7 @@ const MapCountryName = ({ scale, countryindex, xcord, ycord }: Props) => {
   useEffect(() => {
     setTimeout(() => {
       setvisiblity(false);
-    }, 500);
+    }, 300);
   }, []);
   const { countries } = useDataContext();
   return (
@@ -47,7 +47,7 @@ const MapCountryName = ({ scale, countryindex, xcord, ycord }: Props) => {
         className={
           visibility
             ? " opacity-70 p-0 flex z-20 justify-center  items-center text-white bg-neutral-800"
-            : "transition-all z-20 text-white flex justify-center items-center  bg-neutral-800 duration-2500 opacity-0 "
+            : "transition-all z-20 text-white flex justify-center items-center  bg-neutral-800 duration-1500 opacity-0 "
         }
       >
         <div>{countries[countryindex][2]}</div>

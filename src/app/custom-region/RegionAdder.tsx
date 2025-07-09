@@ -1,4 +1,5 @@
 "use client";
+import RegionSelect from "@/Components/RegionSelect";
 import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
 import { useRouter } from "next/navigation";
@@ -49,6 +50,7 @@ const RegionAdder = () => {
     if (!ismounted) {
       return;
     }
+    setisitcustom(true);
     const bbox = sliderref.current!.getBoundingClientRect();
     const lengthfromleftedge = xcord - bbox.left;
     const tempvalue =
@@ -152,6 +154,9 @@ const RegionAdder = () => {
     if (!bbox) {
       bbox = [0, 0, 5632, 2048];
     }
+    if (selectedRegions.length > 1) {
+      setisitcustom(true);
+    }
     setMapBbox([bbox[0], bbox[1], bbox[2] - bbox[0], bbox[3] - bbox[1]]);
     const temp: number[] = [];
     selectedRegions.forEach((region) =>
@@ -181,7 +186,7 @@ const RegionAdder = () => {
         style={{
           width: ismounted && window.innerWidth < 1250 ? "53vw" : "500px",
         }}
-        className="h-[30vh] w-5 top-16 right-0 absolute "
+        className="h-[30vh] w-5 top-28 right-0 absolute "
       >
         <div className="text-center text-2xl font-bold mb-0.5">
           ADDED REGIONS
@@ -205,8 +210,9 @@ const RegionAdder = () => {
                     ...prev.slice(index + 1),
                   ]);
                 }}
-                className="cursor-pointer h-8 px-1 w-auto bg-[rgb(97,16,156)] flex rounded-lg justify-center items-center"
+                className="cursor-pointer h-8 px-1 w-auto bg-[rgb(97,16,156)] flex flex-row rounded-full items-center"
               >
+                <div className="text-md  items-center mr-1 mb-[3px]">{"–"}</div>
                 {regionnames[region[0]][region[1]]}
               </div>
             ))}
@@ -284,11 +290,62 @@ const RegionAdder = () => {
         </div>
 
         <div className="flex flex-col items-center justify-center">
-          <div
-            className="text-3xl mt-6 font-bold select-none"
-            style={{ textShadow: "4px 4px 8px rgba(0,0,0,1)" }}
-          >
-            Development Slider
+          <div className="  mt-6 select-none flex flex-row">
+            {" "}
+            <div className="relative group">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-10 h-10 mt-[-2px] "
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                  stroke="rgb(200,200,200)"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M12.5 7.5C12.5 7.77614 12.2761 8 12 8C11.7239 8 11.5 7.77614 11.5 7.5C11.5 7.22386 11.7239 7 12 7C12.2761 7 12.5 7.22386 12.5 7.5Z"
+                  fill="rgb(200,200,200)"
+                  stroke="rgb(200,200,200)"
+                />
+                <path d="M12 17V10" stroke="rgb(200,200,200)" strokeWidth="2" />
+              </svg>
+              <div
+                className="group-hover:opacity-85 opacity-0 absolute left-[-160px] bottom-10 rounded-lg w-70 h-auto
+                 bg-[rgb(230,230,230)] text-black px-2 pointer-events-none flex items-center justify-center"
+              >
+                Countries whose developments are between {lowestdevindex + 1}
+                {(lowestdevindex + 1) % 10 === 1
+                  ? "st"
+                  : (lowestdevindex + 1) % 10 === 2
+                  ? "nd"
+                  : (lowestdevindex + 1) % 10 === 3
+                  ? "rd"
+                  : "th"}{" "}
+                most developed country (
+                {countrydevelopments[allIncludedCountries[lowestdevindex]]}{" "}
+                Development) and {highestdevindex}
+                {highestdevindex % 10 === 1
+                  ? "st"
+                  : highestdevindex % 10 === 2
+                  ? "nd"
+                  : highestdevindex % 10 === 3
+                  ? "rd"
+                  : "th"}{" "}
+                most developed country (
+                {countrydevelopments[allIncludedCountries[highestdevindex - 1]]}{" "}
+                Development) will be included.
+              </div>
+            </div>
+            <div
+              className="text-3xl font-bold"
+              style={{ textShadow: "4px 4px 8px rgba(0,0,0,1)" }}
+            >
+              Development Slider
+            </div>
           </div>
           <div className="flex flex-row justify-between ">
             <div className="mt-4 flex justify-center w-auto mr-4 text-xl font-semibold">
@@ -323,61 +380,7 @@ const RegionAdder = () => {
               }}
               className="flex flex-row justify-end w-1/2 h-3 mt-10 bg-[rgb(225,225,225)] rounded-md absolute select-none   items-center"
             >
-              <div className="absolute w-full">
-                <div className="relative group">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-10 h-10 left-[-60px] absolute bottom-[-17px] "
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <circle
-                      cx="12"
-                      cy="12"
-                      r="9"
-                      stroke="rgb(51,54,63)"
-                      strokeWidth="2"
-                    />
-                    <path
-                      d="M12.5 7.5C12.5 7.77614 12.2761 8 12 8C11.7239 8 11.5 7.77614 11.5 7.5C11.5 7.22386 11.7239 7 12 7C12.2761 7 12.5 7.22386 12.5 7.5Z"
-                      fill="#33363F"
-                      stroke="#33363F"
-                    />
-                    <path d="M12 17V10" stroke="#33363F" strokeWidth="2" />
-                  </svg>
-                  <div
-                    className="group-hover:opacity-85 opacity-0 absolute left-[-160px] bottom-10 rounded-lg w-70 h-auto
-                 bg-[rgb(230,230,230)] text-black px-2 flex items-center justify-center"
-                  >
-                    Countries whose developments are between{" "}
-                    {lowestdevindex + 1}
-                    {(lowestdevindex + 1) % 10 === 1
-                      ? "st"
-                      : (lowestdevindex + 1) % 10 === 2
-                      ? "nd"
-                      : (lowestdevindex + 1) % 10 === 3
-                      ? "rd"
-                      : "th"}{" "}
-                    most developed country (
-                    {countrydevelopments[allIncludedCountries[lowestdevindex]]}{" "}
-                    Development) and {highestdevindex}
-                    {highestdevindex % 10 === 1
-                      ? "st"
-                      : highestdevindex % 10 === 2
-                      ? "nd"
-                      : highestdevindex % 10 === 3
-                      ? "rd"
-                      : "th"}{" "}
-                    most developed country (
-                    {
-                      countrydevelopments[
-                        allIncludedCountries[highestdevindex - 1]
-                      ]
-                    }{" "}
-                    Development) will be included.
-                  </div>
-                </div>
-              </div>
+              <div className="absolute w-full"></div>
               <div
                 style={{
                   width:
@@ -442,7 +445,6 @@ const RegionAdder = () => {
           <button
             style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.7)" }}
             onClick={() => {
-              setisitcustom(true);
               setisitloading(true);
               router.push("/");
             }}
@@ -496,8 +498,9 @@ const RegionAdder = () => {
                     ...prev.slice(index + 1),
                   ]);
                 }}
-                className="cursor-pointer h-8 px-1 w-auto shrink bg-[rgb(97,16,156)] flex rounded-lg justify-center items-center"
+                className="cursor-pointer h-8 px-1.5 w-auto bg-[rgb(97,16,156)] flex flex-row rounded-xl  items-center"
               >
+                <div className="text-md  items-center mr-1 mb-[3px]">{"-"}</div>
                 {regionnames[region[0]][region[1]]}
               </div>
             ))}

@@ -72,7 +72,7 @@ const CompletaionStats = ({
         ) : (
           <>
             <div className="text-black text-xl font-bold mt-2">
-              {scoresswitch ? "Global Record" : "Personal Record"}
+              {scoresswitch ? "Global Best" : "Personal Best"}
             </div>
             <div className="flex justify-evenly w-full flex-row  text-center ">
               <div className="flex-col">

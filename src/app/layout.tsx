@@ -46,7 +46,7 @@ export default async function RootLayout({
             countrydevelopments: fetcheddata.countrydevelopments,
           }}
         >
-          <div className=" h-full  flex justify-center items-start">
+          <div className=" h-full  flex justify-center items-start invisible-scrollbar">
             <div
               style={{ width: "clamp(0px, 99vw, 1100px)" }}
               className={

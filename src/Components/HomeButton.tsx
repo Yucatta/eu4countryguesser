@@ -5,7 +5,7 @@ import { useGameContext } from "@/context/GameContext";
 
 const HomeButton = () => {
   const router = useRouter();
-  const { setisitcustom, setisitloading } = useGameContext();
+  const { setisitloading } = useGameContext();
   return (
     <div
       style={{ width: "clamp(0px, 99vw, 977px)" }}
@@ -36,8 +36,6 @@ const HomeButton = () => {
         onClick={() => {
           router.push("/custom-region");
           setisitloading(true);
-
-          setisitcustom(false);
         }}
       >
         <path

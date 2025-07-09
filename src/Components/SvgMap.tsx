@@ -12,7 +12,7 @@ import AllCountries from "./AllCountries";
 import MapCountryName from "./MapCountryName";
 import CorrectGuessCircle from "./CorrectGuessCircle";
 import ReverseCircle from "./ReverseCircle";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 export default function SvgMap() {
   const { countrylist, mapBbox } = useGameContext();
   const svgRef = useRef<ReactZoomPanPinchContentRef | null>(null);
@@ -20,6 +20,7 @@ export default function SvgMap() {
   const [correctCircles, setCorrectCircles] = useState<number[][]>([]);
   const [reverseCircle, setReverseCircle] = useState<number[]>([]);
   const [legend, setlegend] = useState([1, 0, 0]);
+  const router = useRouter();
   const pathname = usePathname();
   const realsvgref = useRef<SVGSVGElement | null>(null);
   useEffect(() => {
@@ -29,7 +30,7 @@ export default function SvgMap() {
     if (realsvgref.current) {
       setlegend([1, realsvgref.current.height.animVal.value]);
     }
-  }, [countrylist]);
+  }, [countrylist, pathname, router]);
   const scale = mapBbox[3] / legend[0];
   return (
     <>
@@ -41,6 +42,7 @@ export default function SvgMap() {
                 width: "clamp(0px, 40vw, 500px)",
                 minHeight: "20vh",
                 maxHeight: "35vh",
+                top: "35px",
                 height: "30vh",
                 position: "absolute",
                 left: "5vw",
@@ -149,7 +151,7 @@ export default function SvgMap() {
             top: legend[1] ? legend[1] + 20 : "calc(70vh + 20px)",
             display: pathname === "/custom-region" ? "none" : "",
           }}
-          className="absolute w-12 h-12 justify-center items-center flex rounded-full border-2 text-[rgb(0,200,200)] font-bold pointer-events-none z-100 right-0 svg"
+          className="absolute w-12 h-12 justify-center items-center flex rounded-full border-2 text-[rgb(0,200,200)] font-bold pointer-events-none z-60 right-0 svg"
         >
           <div>{legend[0].toFixed(1)}x</div>
         </div>

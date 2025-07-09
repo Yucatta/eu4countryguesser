@@ -1,6 +1,7 @@
 import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
 import { useMapContext } from "@/context/MapContext";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 interface Props {
   countryindex: number;
@@ -12,25 +13,28 @@ let aaaaaaaaa = 0;
 const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
   const pathref = useRef<Array<SVGPathElement | null>>([]);
   const { countryoutlines, countries, countryplace } = useDataContext();
-  const [colorpulse, setcolorpulse] = useState(false);
-  const { currentregion } = useGameContext();
+  const [colorpulse, setcolorpulse] = useState(true);
+  const { currentregion, isitcustom } = useGameContext();
+  const pathname = usePathname();
   const { answercorrectness, failed } = useMapContext();
   const [ishovered, setishovered] = useState(false);
   const [update, setupdate] = useState(0);
+  const timeinterval = useRef<NodeJS.Timeout>(null);
   const countryplacea =
-    countryplace.length > currentregion[0] &&
-    countryplace[currentregion[0]].length > currentregion[1]
-      ? countryplace[currentregion[0]][currentregion[1]].find(
-          (country) => country[0] === countryindex
-        )
-      : undefined;
-
+    pathname === "/" && !isitcustom
+      ? countryplace.length > currentregion[0] &&
+        countryplace[currentregion[0]].length > currentregion[1]
+        ? countryplace[currentregion[0]][currentregion[1]].find(
+            (country) => country[0] === countryindex
+          )
+        : undefined
+      : 0;
   useEffect(() => {
     let temp = false;
     const interval = setInterval(() => {
       temp = !temp;
       setcolorpulse(temp);
-    }, 500);
+    }, 700);
 
     return () => clearInterval(interval);
   }, [answercorrectness[countryindex], update]);
@@ -87,9 +91,15 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
                       (Number(rgbs[1]) / 7) * 10
                     )},${Math.floor((Number(rgbs[2]) / 7) * 10)}`
                   : countries[countryindex][1]
-                : `rgb(255,${255 - 60 * (correctness - 1)},${
-                    255 - 60 * (correctness - 1)
-                  } )`
+                : correctness === 1
+                ? "rgb(255,255,255)"
+                : correctness === 2
+                ? "rgb(255,255,130)"
+                : correctness === 3
+                ? "rgb(255,150,100)"
+                : correctness === 4
+                ? "rgb(255,100,100)"
+                : "rgb(255,0,0)"
               : `rgb(${Math.floor((Number(rgbs[0]) / 10) * 3)},${Math.floor(
                   (Number(rgbs[1]) / 10) * 3
                 )},${Math.floor((Number(rgbs[2]) / 10) * 3)}`
@@ -103,17 +113,13 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
           onMouseLeave={() => setishovered(false)}
           onPointerDown={() => {
             isitoktosend = true;
-            setTimeout(() => {
+            timeinterval.current = setTimeout(() => {
               isitoktosend = false;
-            }, 900);
+            }, 1500);
           }}
           onPointerUp={() => {
-            if (
-              isitin &&
-              pathref.current.length &&
-              isitoktosend &&
-              answercorrectness[countryindex] < 1
-            ) {
+            if (isitin && pathref.current.length && isitoktosend) {
+              clearTimeout(timeinterval.current!);
               countryclick(pathref.current[index2]!.getBBox());
             }
           }}

@@ -71,7 +71,9 @@ const AllCountries = ({
                 const ycord = bbox.y + bbox.height / 2;
 
                 setcountrynames((prev) => [...prev, [index, xcord, ycord]]);
-
+                if (answercorrectness.current[index] > 0) {
+                  return;
+                }
                 answercorrectness.current[correctanswerref.current] -= 1;
 
                 if (correctanswerref.current === index) {

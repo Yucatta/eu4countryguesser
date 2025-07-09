@@ -4,7 +4,7 @@ import { useGameContext } from "@/context/GameContext";
 import React, { useEffect, useRef, useState } from "react";
 import TopBarInteractions from "./TopBarInteractions";
 import { useMapContext } from "@/context/MapContext";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 const CurrentCountry = () => {
   const { countries } = useDataContext();
   const { currentregion, countrylist, isitcustom } = useGameContext();
@@ -14,6 +14,7 @@ const CurrentCountry = () => {
   const [seconds, setseocnds] = useState(0);
   const startdate = useRef(0);
   const pathname = usePathname();
+  const router = useRouter();
   const regionlength = countrylist.filter((id) => id < 665).length;
   const answeredlength = answercorrectness.filter((a) => a > 0).length;
   useEffect(() => {
@@ -30,7 +31,7 @@ const CurrentCountry = () => {
         setseocnds(sec);
       }, 1000);
     }
-  }, [countrylist, isitcustom]);
+  }, [countrylist, isitcustom, pathname, router]);
 
   useEffect(() => {
     if (timeinterval.current && !(regionlength === answeredlength)) {

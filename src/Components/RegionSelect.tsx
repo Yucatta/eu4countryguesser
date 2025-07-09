@@ -20,7 +20,6 @@ const RegionSelect = ({ regionselect }: Props) => {
     setcurrentregion,
     currentregion,
     setMapBbox,
-    setisitcustom,
     setcountrylist,
     setisitloading,
   } = useGameContext();
@@ -40,7 +39,6 @@ const RegionSelect = ({ regionselect }: Props) => {
                   setcurrentregion(indexofregion);
                   setcountrylist(regions[4][indexofregion[1]][1]);
                   setMapBbox(regions[4][indexofregion[1]][0]);
-                  setisitcustom(false);
                   window.scrollTo({ top: 0, behavior: "smooth" });
                   if (regionselect) {
                     regionselect();
@@ -76,7 +74,6 @@ const RegionSelect = ({ regionselect }: Props) => {
                 setcurrentregion(indexofregion);
                 setcountrylist(regions[4][indexofregion[1]][1]);
                 setMapBbox(regions[4][indexofregion[1]][0]);
-                setisitcustom(false);
                 window.scrollTo({ top: 0, behavior: "smooth" });
                 if (regionselect) {
                   regionselect();
@@ -103,7 +100,6 @@ const RegionSelect = ({ regionselect }: Props) => {
                       setcurrentregion([index, index2]);
                       setcountrylist(regions[index][index2][1]);
                       setMapBbox(regions[index][index2][0]);
-                      setisitcustom(false);
                       window.scrollTo({ top: 0, behavior: "smooth" });
                       if (regionselect) {
                         regionselect();
@@ -133,7 +129,6 @@ const RegionSelect = ({ regionselect }: Props) => {
         onClick={() => {
           router.push("/custom-region");
           setisitloading(true);
-          setisitcustom(false);
         }}
       >
         Want More Regions ? You can create your own !
