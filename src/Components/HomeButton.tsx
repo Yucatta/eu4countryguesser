@@ -1,18 +1,18 @@
 "use client";
 import React from "react";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useGameContext } from "@/context/GameContext";
 import Link from "next/link";
 
 const HomeButton = () => {
-  const router = useRouter();
+  const pathname = usePathname();
   const { setisitloading } = useGameContext();
   return (
     <div
       style={{ width: "clamp(0px, 99vw, 977px)" }}
       className="flex justify-center absolute"
     >
-      <Link href={"statistics"}>
+      <Link href={pathname === "/statistics" ? "/" : "/statistics"}>
         <svg
           onClick={() => setisitloading(true)}
           viewBox="-10 -170 220 170"
@@ -27,7 +27,7 @@ const HomeButton = () => {
           ></path>
         </svg>
       </Link>
-      <Link href={"/custom-region"}>
+      <Link href={pathname === "/custom-region" ? "/" : "/custom-region"}>
         {" "}
         <svg
           xmlns="http://www.w3.org/2000/svg"

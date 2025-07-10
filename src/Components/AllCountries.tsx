@@ -25,23 +25,28 @@ const AllCountries = ({
   } = useDataContext();
   const { currentregion, countrylist } = useGameContext();
   const { setcorrectanswer, setanswercorrectness, setfailed } = useMapContext();
-  const correctanswerref = useRef<number>(-1);
+  const correctanswerref = useRef<number[]>([-1, -1]);
   const answercorrectness = useRef<number[]>(Array(665).fill(0));
+
+  function GetCorrectAnswer(list: number[], badlist: number[]) {
+    const filteredids = list
+      .filter((countryid) => countryid < 665)
+      .filter((countryid) => !badlist.includes(countryid));
+    const a = filteredids[Math.floor(Math.random() * filteredids.length)];
+    return a ? a : -1;
+  }
+
   useEffect(() => {
-    correctanswerref.current = GetCorrectAnswer(countrylist, []);
+    const firstone = GetCorrectAnswer(countrylist, []);
+    correctanswerref.current = [
+      firstone,
+      GetCorrectAnswer(countrylist, [firstone]),
+    ];
     setcorrectanswer(correctanswerref.current);
     setanswercorrectness(Array(665).fill(0));
     answercorrectness.current = Array(665).fill(0);
   }, [currentregion, countrylist, regions]);
 
-  function GetCorrectAnswer(list: number[], badlist: number[]) {
-    const filteredids = list
-      .filter((countryid) => !badlist.includes(countryid))
-      .filter((countryid) => countryid < 665);
-
-    const a = filteredids[Math.floor(Math.random() * filteredids.length)];
-    return a ? a : -1;
-  }
   const Image = useMemo(() => {
     return (
       <>
@@ -74,27 +79,29 @@ const AllCountries = ({
                 if (answercorrectness.current[index] > 0) {
                   return;
                 }
-                answercorrectness.current[correctanswerref.current] -= 1;
+                answercorrectness.current[correctanswerref.current[0]] -= 1;
 
-                if (correctanswerref.current === index) {
-                  const a = GetCorrectAnswer(
-                    countrylist,
-                    answercorrectness.current
+                if (correctanswerref.current[0] === index) {
+                  const a = GetCorrectAnswer(countrylist, [
+                    correctanswerref.current[1],
+                    ...answercorrectness.current
                       .map((guess, index) => (guess ? index : -1))
-                      .filter((id) => id + 1)
-                  );
-                  setcorrectanswer(a);
-                  correctanswerref.current = a;
+                      .filter((id) => id + 1),
+                  ]);
+                  correctanswerref.current = [correctanswerref.current[1], a];
+                  setcorrectanswer(correctanswerref.current);
                   answercorrectness.current = answercorrectness.current.map(
                     (correctness) => Math.abs(correctness)
                   );
 
                   setCorrectCircles((prev) => [...prev, [xcord, ycord]]);
                 }
-                if (answercorrectness.current[correctanswerref.current] < -3) {
+                if (
+                  answercorrectness.current[correctanswerref.current[0]] < -3
+                ) {
                   setfailed(
-                    correctanswerref.current +
-                      (answercorrectness.current[correctanswerref.current] +
+                    correctanswerref.current[0] +
+                      (answercorrectness.current[correctanswerref.current[0]] +
                         4) *
                         -700
                   );

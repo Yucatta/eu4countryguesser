@@ -103,7 +103,7 @@ const CurrentCountry = () => {
         }}
         className="bg-[rgba(20,20,20,0.4)] absolute mt-20   flex pointer-events-none flex-row items-center  z-40 w-full  text-[rgb(0,200,200)]   font-semibold h-10"
       >
-        {correctanswer > -1 ? (
+        {correctanswer[0] > -1 ? (
           <>
             <img
               className="w-[75px] h-[89px]  opacity-90  mt-10 overflow-hidden relative"
@@ -128,7 +128,7 @@ const CurrentCountry = () => {
                     ? -4
                     : 3,
               }}
-              src={`/flags/${countries[correctanswer][0]}.png`}
+              src={`/flags/${countries[correctanswer[0]][0]}.png`}
             ></img>
             <div
               style={{
@@ -138,8 +138,16 @@ const CurrentCountry = () => {
                     : 8,
               }}
             >
-              {countries[correctanswer][2]}
+              {countries[correctanswer[0]][2]}
             </div>
+            {correctanswer[1] !== -1 ? (
+              <img
+                style={{ display: "none" }}
+                src={`/flags/${countries[correctanswer[1]][0]}.png`}
+              ></img>
+            ) : (
+              ""
+            )}
           </>
         ) : (
           ""
