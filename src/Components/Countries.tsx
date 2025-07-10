@@ -1,43 +1,49 @@
 import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
 import { useMapContext } from "@/context/MapContext";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 interface Props {
   countryindex: number;
   isitin: boolean;
-  countryclick: (
-    mouse: React.MouseEvent<SVGPathElement, MouseEvent>,
-    bbox: DOMRect,
-    index2: number
-  ) => void;
+  countryclick: (bbox: DOMRect) => void;
   findit?: (bbox: DOMRect) => void;
 }
 let aaaaaaaaa = 0;
 const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
   const pathref = useRef<Array<SVGPathElement | null>>([]);
   const { countryoutlines, countries, countryplace } = useDataContext();
-  const [colorpulse, setcolorpulse] = useState(false);
-  const { currentregion } = useGameContext();
+  const [colorpulse, setcolorpulse] = useState(true);
+  const { currentregion, isitcustom } = useGameContext();
+  const pathname = usePathname();
   const { answercorrectness, failed } = useMapContext();
   const [ishovered, setishovered] = useState(false);
   const [update, setupdate] = useState(0);
+  const timeinterval = useRef<NodeJS.Timeout>(null);
   const countryplacea =
-    countryplace.length > currentregion[0] &&
-    countryplace[currentregion[0]].length > currentregion[1]
-      ? countryplace[currentregion[0]][currentregion[1]].find(
-          (country) => country[0] === countryindex
-        )
-      : undefined;
-
+    pathname === "/" && !isitcustom
+      ? countryplace.length > currentregion[0] &&
+        currentregion[0] !== -1 &&
+        countryplace[currentregion[0]].length > currentregion[1]
+        ? countryplace[currentregion[0]][currentregion[1]].find(
+            (country) => country[0] === countryindex
+          )
+        : undefined
+      : 0;
   useEffect(() => {
-    let temp = false;
-    const interval = setInterval(() => {
-      temp = !temp;
-      setcolorpulse(temp);
-    }, 500);
-
-    return () => clearInterval(interval);
-  }, [answercorrectness[countryindex], update]);
+    if (
+      pathname === "/" &&
+      currentregion[0] !== -1 &&
+      answercorrectness[countryindex] < -3
+    ) {
+      let temp = false;
+      const interval = setInterval(() => {
+        temp = !temp;
+        setcolorpulse(temp);
+      }, 700);
+      return () => clearInterval(interval);
+    }
+  }, [answercorrectness[countryindex], update, currentregion, pathname]);
   useEffect(() => {
     if (failed % 700 === countryindex) {
       aaaaaaaaa++;
@@ -91,36 +97,36 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
                       (Number(rgbs[1]) / 7) * 10
                     )},${Math.floor((Number(rgbs[2]) / 7) * 10)}`
                   : countries[countryindex][1]
-                : `rgb(255,${255 - 60 * (correctness - 1)},${
-                    255 - 60 * (correctness - 1)
-                  } )`
-              : "rgb(50,50,50)"
+                : correctness === 1
+                ? "rgb(255,255,255)"
+                : correctness === 2
+                ? "rgb(255,255,130)"
+                : correctness === 3
+                ? "rgb(255,150,100)"
+                : correctness === 4
+                ? "rgb(255,100,100)"
+                : "rgb(255,0,0)"
+              : `rgb(${Math.floor((Number(rgbs[0]) / 10) * 3)},${Math.floor(
+                  (Number(rgbs[1]) / 10) * 3
+                )},${Math.floor((Number(rgbs[2]) / 10) * 3)}`
           }
           style={
             correctness < -3
               ? { fill: colorpulse ? "rgb(255,0,0)" : "rgb(255,255,255)" }
               : undefined
           }
-          // style={{}}
-          onMouseEnter={
-            () => setishovered(true)
-            // setcurrentcountry([currentcountry[1], countryindex])
-          }
+          onMouseEnter={() => setishovered(true)}
           onMouseLeave={() => setishovered(false)}
           onPointerDown={() => {
             isitoktosend = true;
-            setTimeout(() => {
+            timeinterval.current = setTimeout(() => {
               isitoktosend = false;
-            }, 300);
+            }, 1500);
           }}
-          onPointerUp={(e) => {
-            if (
-              isitin &&
-              pathref.current.length &&
-              isitoktosend &&
-              answercorrectness[countryindex] < 1
-            ) {
-              countryclick(e, pathref.current[index2]!.getBBox(), index2);
+          onPointerUp={() => {
+            if (isitin && pathref.current.length && isitoktosend) {
+              clearTimeout(timeinterval.current!);
+              countryclick(pathref.current[index2]!.getBBox());
             }
           }}
           key={index2}

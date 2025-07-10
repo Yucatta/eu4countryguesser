@@ -27,7 +27,7 @@ export default function AnnotationWrapper() {
   const { currentregion, setcurrentregion } = useGameContext();
   const { setcorrectanswer, setanswercorrectness } = useMapContext();
   const svgRef = useRef<ReactZoomPanPinchContentRef | null>(null);
-  const correctanswerref = useRef<number>(-1);
+  const correctanswerref = useRef<number[]>([-1, -1]);
   const answercorrectness = useRef<number[]>(Array(665).fill(0));
   function GetCorrectAnswer(list: number[], badlist: number[]) {
     const filteredids = list
@@ -39,10 +39,16 @@ export default function AnnotationWrapper() {
   }
 
   useEffect(() => {
-    correctanswerref.current = GetCorrectAnswer(
+    const firstone = GetCorrectAnswer(
       regions[currentregion[0]][currentregion[1]][1],
       []
     );
+    correctanswerref.current = [
+      firstone,
+      GetCorrectAnswer(regions[currentregion[0]][currentregion[1]][1], [
+        firstone,
+      ]),
+    ];
     setcorrectanswer(correctanswerref.current);
     setanswercorrectness(Array(665).fill(0));
     answercorrectness.current = Array(665).fill(0);
@@ -65,7 +71,6 @@ export default function AnnotationWrapper() {
                     (correctness) => Math.abs(correctness)
                   );
                   setanswercorrectness(answercorrectness.current);
-                  console.log(index);
                 }}
                 isitin={thisregion[1].includes(index)}
               ></Countries>
@@ -84,7 +89,6 @@ export default function AnnotationWrapper() {
     currentregion,
     correctanswerref.current,
   ]);
-  // console.log("");
   return (
     <>
       <div

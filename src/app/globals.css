@@ -8,8 +8,6 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,8 +18,18 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: black;
   font-family: var(--font-jost), sans-serif;
   color: rgb(220, 220, 220);
+  /* overflow: hidden; */
+  /* overflow: auto; */
+  overflow-x: hidden;
 }
+
+/* * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+} */

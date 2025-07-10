@@ -1,5 +1,4 @@
 "use client";
-import { useDataContext } from "@/context/DataContext";
 import React, { useEffect, useRef, useState } from "react";
 import Uncolonized from "./uncolonized";
 import { useGameContext } from "@/context/GameContext";
@@ -10,52 +9,84 @@ import {
   ReactZoomPanPinchContentRef,
 } from "react-zoom-pan-pinch";
 import AllCountries from "./AllCountries";
-const getTextWidth = (text: string, font: string) => {
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
-  context!.font = font;
-  return context!.measureText(text).width;
-};
+import MapCountryName from "./MapCountryName";
+import CorrectGuessCircle from "./CorrectGuessCircle";
+import ReverseCircle from "./ReverseCircle";
+import { usePathname, useRouter } from "next/navigation";
 export default function SvgMap() {
-  const { countries, regions } = useDataContext();
-  const { currentregion } = useGameContext();
+  const { countrylist, mapBbox } = useGameContext();
   const svgRef = useRef<ReactZoomPanPinchContentRef | null>(null);
-  const [clickedcountry, setclickedcountry] = useState([-1, -1, -1, -1, -1]);
-  const [reversecircle, setreversecircle] = useState<[boolean, number, number]>(
-    [false, -1, -1]
-  );
-  const [countrynamevisiblity, setcountrynamevisiblity] = useState(false);
-  const [circlevisibilty, setcirclevisibilty] = useState(false);
+  const [countrynames, setcountrynames] = useState<number[][]>([]);
+  const [correctCircles, setCorrectCircles] = useState<number[][]>([]);
+  const [reverseCircle, setReverseCircle] = useState<number[]>([]);
+  const [legend, setlegend] = useState([1, 0, 0]);
+  const router = useRouter();
+  const pathname = usePathname();
+  const realsvgref = useRef<SVGSVGElement | null>(null);
   useEffect(() => {
     svgRef.current?.resetTransform();
-  }, [currentregion]);
-  const thisregion = regions[currentregion[0]][currentregion[1]];
+    setCorrectCircles([]);
+    setcountrynames([]);
+    if (realsvgref.current) {
+      setlegend([1, realsvgref.current.height.animVal.value]);
+    }
+  }, [countrylist, pathname, router]);
+  const scale = mapBbox[3] / legend[0];
   return (
     <>
       <div
-        style={{ width: "clamp(0px, 99vw, 977px)" }}
-        className=" p-0 mt-10 h-auto  max-h-[70vh] min-h-[50vh] flex object-contain object-center  bg-[rgb(50,50,50)] "
+        style={
+          pathname === "/custom-region"
+            ? {
+                pointerEvents: "none",
+                width: "clamp(0px, 40vw, 500px)",
+                minHeight: "20vh",
+                maxHeight: "35vh",
+                top: "35px",
+                height: "30vh",
+                position: "absolute",
+                left: "5vw",
+              }
+            : {
+                width: "clamp(0px, 99vw, 977px)",
+                display: pathname === "/" ? "" : "none",
+              }
+        }
+        className=" p-0 mt-20 h-auto  max-h-[70vh] min-h-[50vh] flex object-contain object-center  bg-[rgb(50,50,50)] "
       >
         <TransformWrapper
           initialScale={1}
           initialPositionX={0}
           initialPositionY={0}
           ref={svgRef}
+          onZoom={(ref) =>
+            setlegend([
+              ref.state.scale,
+              realsvgref.current ? realsvgref.current.height.animVal.value : 0,
+            ])
+          }
           maxScale={20}
         >
           {() => {
-            const scale =
-              clickedcountry[0] !== -1
-                ? thisregion[0][3] /
-                  svgRef.current!.instance.transformState.scale
-                : 0;
             return (
               <>
                 <TransformComponent>
                   <svg
                     className="  h-auto max-h-[70vh] min-h-[50vh] bg-[rgb(0,0,200)]"
-                    style={{ width: "clamp(0px, 99vw, 977px)" }}
-                    viewBox={`${thisregion[0][0]} ${thisregion[0][1]} ${thisregion[0][2]} ${thisregion[0][3]}`}
+                    style={
+                      pathname === "/custom-region"
+                        ? {
+                            pointerEvents: "none",
+                            width: "clamp(0px, 40vw, 500px)",
+                            minHeight: "25vh",
+                            maxHeight: "35vh",
+                            left: "5vw",
+                            height: "30vh",
+                          }
+                        : { width: "clamp(0px, 99vw, 977px)" }
+                    }
+                    ref={realsvgref}
+                    viewBox={`${mapBbox[0]} ${mapBbox[1]} ${mapBbox[2]} ${mapBbox[3]}`}
                     xmlns="http://www.w3.org/2000/svg"
                     width="100%"
                     height="100%"
@@ -64,91 +95,47 @@ export default function SvgMap() {
                       <Uncolonized
                         countryindex={i}
                         key={i}
-                        isitin={thisregion[1].includes(i)}
+                        isitin={countrylist.includes(i)}
                       ></Uncolonized>
                     ))}
-                    <Uncolonized countryindex={699} isitin={true}></Uncolonized>
                     {Array.from({ length: 10 }, (_, i) => i + 689).map((i) => (
                       <Uncolonized
                         countryindex={i}
                         key={i}
-                        isitin={thisregion[1].includes(i)}
+                        isitin={countrylist.includes(i)}
                       ></Uncolonized>
                     ))}
-
                     <AllCountries
-                      setcirclevisibilty={setcirclevisibilty}
-                      setclickedcountry={setclickedcountry}
-                      setcountrynamevisiblity={setcountrynamevisiblity}
-                      setreversecircle={setreversecircle}
+                      setcountrynames={setcountrynames}
+                      setCorrectCircles={setCorrectCircles}
+                      setReverseCircle={setReverseCircle}
                     ></AllCountries>
                     <Provinces></Provinces>
-                    {clickedcountry[0] !== -1 ? (
-                      <>
-                        <foreignObject
-                          x={clickedcountry[1] - scale / 100}
-                          y={clickedcountry[2] - scale / 25}
-                          width={
-                            typeof window !== "undefined"
-                              ? getTextWidth(
-                                  countries[clickedcountry[0]][2],
-                                  `${scale / 30}px Arial`
-                                ) +
-                                scale / 30
-                              : ""
-                          }
-                          height={scale / 20}
-                          pointerEvents="none"
-                        >
-                          <div
-                            {...{
-                              xmlns: "http://www.w3.org/1999/xhtml",
-                            }}
-                            style={{
-                              fontSize: scale / 30,
-                              borderRadius: scale / 60,
-                              pointerEvents: "none",
-                            }}
-                            className={
-                              countrynamevisiblity
-                                ? " opacity-70 p-0 flex z-20 justify-center items-center text-white bg-neutral-800"
-                                : "transition-all z-20 text-white flex justify-center items-center  bg-neutral-800 duration-2500 opacity-0 "
-                            }
-                          >
-                            <div>{countries[clickedcountry[0]][2]}</div>
-                          </div>
-                        </foreignObject>
-                        <circle
-                          className={
-                            circlevisibilty
-                              ? " opacity-50 pointer-events-none"
-                              : "transition-all duration-1500 opacity-0 pointer-events-none"
-                          }
-                          z={10}
-                          cx={clickedcountry[1]}
-                          cy={clickedcountry[2]}
-                          r={circlevisibilty ? scale / 10 : scale / 3}
-                          fill="rgb(240,240,240)"
-                        />
-                        <circle
-                          className={
-                            reversecircle[0]
-                              ? " opacity-90 pointer-events-none"
-                              : "transition-all duration-3000 opacity-0 pointer-events-none"
-                          }
-                          z={10}
-                          cx={reversecircle[1]}
-                          cy={reversecircle[2]}
-                          r={
-                            reversecircle[0]
-                              ? thisregion[0][3] / 3
-                              : thisregion[0][3] / 15
-                          }
-                          fill="none"
-                          stroke="rgb(240,240,240)"
-                          strokeWidth={thisregion[0][3] / 80}
-                        />
-                      </>
+                    {correctCircles.map((dets, index) => (
+                      <CorrectGuessCircle
+                        key={index}
+                        xcord={dets[0]}
+                        ycord={dets[1]}
+                        scale={scale}
+                      ></CorrectGuessCircle>
+                    ))}
+                    {countrynames.map((dets, index) => {
+                      return (
+                        <MapCountryName
+                          key={index}
+                          countryindex={dets[0]}
+                          xcord={dets[1]}
+                          ycord={dets[2]}
+                          scale={scale}
+                        ></MapCountryName>
+                      );
+                    })}
+                    {reverseCircle.length ? (
+                      <ReverseCircle
+                        xcord={reverseCircle[0]}
+                        ycord={reverseCircle[1]}
+                        regionheight={mapBbox[3]}
+                      ></ReverseCircle>
                     ) : (
                       ""
                     )}
@@ -158,6 +145,16 @@ export default function SvgMap() {
             );
           }}
         </TransformWrapper>
+        <div
+          style={{
+            right: "clamp(10px,50vw - 485px,75px)",
+            top: legend[1] ? legend[1] + 20 : "calc(70vh + 20px)",
+            display: pathname === "/custom-region" ? "none" : "",
+          }}
+          className="absolute w-12 h-12 justify-center items-center flex rounded-full border-2 text-[rgb(0,200,200)] font-bold pointer-events-none z-60 right-0 svg"
+        >
+          <div>{legend[0].toFixed(1)}x</div>
+        </div>
       </div>
     </>
   );

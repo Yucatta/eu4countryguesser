@@ -14,6 +14,7 @@ interface AppData {
   regions: number[][][][];
   regionnames: string[][];
   countryplaces: number[][][][];
+  countrydevelopments: number[];
 }
 
 function loadAllDataOnce(): AppData {
@@ -39,9 +40,10 @@ function loadAllDataOnce(): AppData {
     const pathsJson = JSON.parse(
       fs.readFileSync(path.join(root, "provinces.json"), "utf-8")
     );
-    const Countries: Array<[string, string, string, number[]]> = JSON.parse(
-      fs.readFileSync(path.join(root, "countryprovinces.json"), "utf-8")
-    );
+    const Countries: Array<[string, string, string, number[], number]> =
+      JSON.parse(
+        fs.readFileSync(path.join(root, "countryprovinces.json"), "utf-8")
+      );
     const countryoutlines: Array<[number, string[]]> = JSON.parse(
       fs.readFileSync(path.join(root, "countryoutlines.json"), "utf-8")
     );
@@ -60,6 +62,7 @@ function loadAllDataOnce(): AppData {
       paths: Object.entries(pathsJson),
       countries: Countries.map((country) => country.slice(0, 3) as string[]),
       countryprovinces: Countries.map((country) => country[3]),
+      countrydevelopments: Countries.map((country) => country[4]),
       countryoutlines: countryoutlines.map((country) => [
         country[0],
         country[1],

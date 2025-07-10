@@ -1,9 +1,8 @@
-import { GameContextProvider } from "@/context/GameContext";
+import React from "react";
 import HomeWrapper from "./Homewrapper";
-export default function Home() {
-  return (
-    <GameContextProvider>
-      <HomeWrapper></HomeWrapper>
-    </GameContextProvider>
-  );
-}
+
+const page = () => {
+  return <HomeWrapper />;
+};
+
+export default page;
