@@ -23,6 +23,7 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
   const countryplacea =
     pathname === "/" && !isitcustom
       ? countryplace.length > currentregion[0] &&
+        currentregion[0] !== -1 &&
         countryplace[currentregion[0]].length > currentregion[1]
         ? countryplace[currentregion[0]][currentregion[1]].find(
             (country) => country[0] === countryindex
@@ -30,14 +31,19 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
         : undefined
       : 0;
   useEffect(() => {
-    let temp = false;
-    const interval = setInterval(() => {
-      temp = !temp;
-      setcolorpulse(temp);
-    }, 700);
-
-    return () => clearInterval(interval);
-  }, [answercorrectness[countryindex], update]);
+    if (
+      pathname === "/" &&
+      currentregion[0] !== -1 &&
+      answercorrectness[countryindex] < -3
+    ) {
+      let temp = false;
+      const interval = setInterval(() => {
+        temp = !temp;
+        setcolorpulse(temp);
+      }, 700);
+      return () => clearInterval(interval);
+    }
+  }, [answercorrectness[countryindex], update, currentregion, pathname]);
   useEffect(() => {
     if (failed % 700 === countryindex) {
       aaaaaaaaa++;

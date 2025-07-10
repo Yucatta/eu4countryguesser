@@ -4,6 +4,7 @@ import Switch from "./Switch";
 import { useDataContext } from "@/context/DataContext";
 import { useRouter } from "next/navigation";
 import { useGameContext } from "@/context/GameContext";
+import Link from "next/link";
 const Continents = [
   "Europe",
   "Asia",
@@ -58,11 +59,9 @@ const AllBestTimes = () => {
   }, []);
   return (
     <>
-      <div
-        onClick={() => {
-          router.push("/");
-          setisitloading(true);
-        }}
+      <Link
+        href={"/"}
+        onClick={() => setisitloading(true)}
         className="flex cursor-pointer flex-row absolute top-0 mt-5 w-20 items-center ml-2  h-10 justify-center  "
       >
         <svg viewBox="-10 -20 50 40" className="z-120 w-10">
@@ -74,7 +73,7 @@ const AllBestTimes = () => {
           ></path>
         </svg>
         <div className="w-10 font-bold text-[rgb(136,0,255)]">Back</div>
-      </div>
+      </Link>
       <div className="flex flex-row absolute top-0 left-7/12 transform -translate-x-1/2 ml-80 mt-5 w-full justify-center  ">
         <Switch isswitchon={MenuSwitch} setswitch={setMenuSwitch}></Switch>
       </div>

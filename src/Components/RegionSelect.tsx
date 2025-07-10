@@ -22,8 +22,19 @@ const RegionSelect = ({ regionselect }: Props) => {
     setMapBbox,
     setcountrylist,
     setisitloading,
+    setisitcustom,
   } = useGameContext();
   const router = useRouter();
+  function regionclick(indexofregion: number[]) {
+    setcurrentregion(indexofregion);
+    setcountrylist(regions[indexofregion[0]][indexofregion[1]][1]);
+    setMapBbox(regions[indexofregion[0]][indexofregion[1]][0]);
+    setisitcustom(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (regionselect) {
+      regionselect();
+    }
+  }
   return (
     <div className="flex flex-wrap w-11/12 h-full items-center mt-10   justify-evenly">
       {regionnames.map((continent, index) => {
@@ -36,13 +47,7 @@ const RegionSelect = ({ regionselect }: Props) => {
               <img
                 onClick={() => {
                   const indexofregion = [4, index === 4 ? 6 : index];
-                  setcurrentregion(indexofregion);
-                  setcountrylist(regions[4][indexofregion[1]][1]);
-                  setMapBbox(regions[4][indexofregion[1]][0]);
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                  if (regionselect) {
-                    regionselect();
-                  }
+                  regionclick(indexofregion);
                 }}
                 style={{ cursor: "pointer" }}
                 className={
@@ -71,13 +76,7 @@ const RegionSelect = ({ regionselect }: Props) => {
               }
               onClick={() => {
                 const indexofregion = [4, index === 4 ? 6 : index];
-                setcurrentregion(indexofregion);
-                setcountrylist(regions[4][indexofregion[1]][1]);
-                setMapBbox(regions[4][indexofregion[1]][0]);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-                if (regionselect) {
-                  regionselect();
-                }
+                regionclick(indexofregion);
               }}
             >
               {" "}
@@ -97,13 +96,7 @@ const RegionSelect = ({ regionselect }: Props) => {
                         : "hover:text-blue-400 w-35 cursor-pointer h-6 items-center flex flex-row"
                     }
                     onClick={() => {
-                      setcurrentregion([index, index2]);
-                      setcountrylist(regions[index][index2][1]);
-                      setMapBbox(regions[index][index2][0]);
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                      if (regionselect) {
-                        regionselect();
-                      }
+                      regionclick([index, index2]);
                     }}
                   >
                     <div>

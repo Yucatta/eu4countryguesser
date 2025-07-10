@@ -60,7 +60,6 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
   useEffect(() => {
     if (isitequal) {
       setisitpassed(true);
-      console.log("aaa it is is ");
       const templocal = localStorage.getItem("TimesPlayed");
       if (templocal) {
         localStorage.setItem("TimesPlayed", `${Number(templocal) + 1}`);
@@ -81,12 +80,14 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
       }
     }
   }, [isitequal, isitcustom]);
-  const thisglobal = scores.current
-    ? scores.current[currentregion[0]][currentregion[1]]
-    : [0, 0];
-  const thispersonal = personalscores.current
-    ? personalscores.current[currentregion[0]][currentregion[1]]
-    : [0, 0];
+  const thisglobal =
+    scores.current && currentregion[0] !== -1
+      ? scores.current[currentregion[0]][currentregion[1]]
+      : [0, 0];
+  const thispersonal =
+    personalscores.current && currentregion[0] !== -1
+      ? personalscores.current[currentregion[0]][currentregion[1]]
+      : [0, 0];
 
   useEffect(() => {
     async function besttimes() {

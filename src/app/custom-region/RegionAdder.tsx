@@ -1,5 +1,4 @@
 "use client";
-import RegionSelect from "@/Components/RegionSelect";
 import { useDataContext } from "@/context/DataContext";
 import { useGameContext } from "@/context/GameContext";
 import { useRouter } from "next/navigation";
@@ -10,19 +9,18 @@ const Continents = ["Europe", "Asia", "Africa", "New World", "World"];
 const RegionAdder = () => {
   const router = useRouter();
   const { regionnames, regions, countrydevelopments } = useDataContext();
-  const { setMapBbox, setcountrylist, setisitloading, setisitcustom } =
-    useGameContext();
+  const {
+    setMapBbox,
+    setcountrylist,
+    setisitloading,
+    setisitcustom,
+    setcurrentregion,
+  } = useGameContext();
   const [selectedRegions, setSelectedRegions] = useState<number[][]>([]);
   const [selectedcontinent, setselectedcontinent] = useState(0);
   const [, setupdate] = useState(0);
   const [ismounted, setismounted] = useState(false);
   const [isitpassed, setisitpassed] = useState(false);
-  const [highestDevValue, setHighestDevValue] = useState<number | undefined>(
-    undefined
-  );
-  const [LowestDevValue, setLowestDevValue] = useState<number | undefined>(
-    undefined
-  );
   const [allIncludedCountries, setallIncludedCountries] = useState<number[]>(
     []
   );
@@ -32,16 +30,11 @@ const RegionAdder = () => {
   const allcountrieswithoutunc = allIncludedCountries.filter(
     (id) => id < 665
   ).length;
-  const itmaybeworks: number = highestdevindex;
 
   useEffect(() => {
     setismounted(true);
     function a() {
-      console.log("resize");
-      setupdate((prev) => {
-        console.log(prev);
-        return prev + 1;
-      });
+      setupdate((prev) => prev + 1);
     }
     addEventListener("resize", a);
     return () => removeEventListener("resize", a);
@@ -50,6 +43,7 @@ const RegionAdder = () => {
     if (!ismounted) {
       return;
     }
+    setcurrentregion([-1, -1]);
     setisitcustom(true);
     const bbox = sliderref.current!.getBoundingClientRect();
     const lengthfromleftedge = xcord - bbox.left;
@@ -63,12 +57,10 @@ const RegionAdder = () => {
       if (LowestDevValue && tempvalue < LowestDevValue) {
         return;
       }
-      setHighestDevValue(tempvalue);
     } else {
       if (highestDevValue && tempvalue > highestDevValue) {
         return;
       }
-      setLowestDevValue(tempvalue);
     }
 
     const indexofuncolonized = allIncludedCountries.findIndex((id) => id > 664);
@@ -156,6 +148,13 @@ const RegionAdder = () => {
     }
     if (selectedRegions.length > 1) {
       setisitcustom(true);
+      setcurrentregion([-1, -1]);
+    } else if (selectedRegions.length === 1) {
+      setisitcustom(false);
+      setcurrentregion(selectedRegions[0]);
+    } else {
+      setisitcustom(false);
+      setcurrentregion([4, 6]);
     }
     setMapBbox([bbox[0], bbox[1], bbox[2] - bbox[0], bbox[3] - bbox[1]]);
     const temp: number[] = [];
@@ -173,13 +172,18 @@ const RegionAdder = () => {
 
     setcountrylist(countlist);
     setallIncludedCountries(countlist);
-    console.log(itmaybeworks);
-    const sliderbbox = sliderref.current!.getBoundingClientRect();
     sethighestdevindex(countlist.filter((id) => id < 665).length);
-    setHighestDevValue(sliderbbox.width);
     setlowestdevindex(0);
-    setLowestDevValue(0);
   }, [selectedRegions]);
+  const sliderbbox = sliderref.current
+    ? sliderref.current.getBoundingClientRect()
+    : undefined;
+  const LowestDevValue = sliderbbox
+    ? (lowestdevindex / allcountrieswithoutunc) * sliderbbox.width
+    : undefined;
+  const highestDevValue = sliderbbox
+    ? (highestdevindex / allcountrieswithoutunc) * sliderbbox.width
+    : undefined;
   return (
     <>
       <div
@@ -367,7 +371,6 @@ const RegionAdder = () => {
               onClick={(e) => {
                 if (ismounted) {
                   const bbox = sliderref.current!.getBoundingClientRect();
-                  console.log(e.clientX, bbox.left);
                   if (
                     typeof LowestDevValue === "number" &&
                     e.clientX - bbox.left > LowestDevValue
@@ -396,22 +399,22 @@ const RegionAdder = () => {
                     245 - (highestdevindex / allcountrieswithoutunc) * 100
                   }))`,
                 }}
-                className="flex flex-row justify-end h-3 rounded-md bg-[rgb(103,0,191)] pointer-events-none absolute  items-center"
+                className="flex flex-row justify-end h-3 rounded-md bg-[rgb(103,0,191)]  pointer-events-none absolute  items-center"
               ></div>
               <div
                 style={{
                   left:
                     typeof highestDevValue === "number"
                       ? highestDevValue - 16
-                      : "0px",
-                  right: highestDevValue ? "" : "0px",
+                      : "",
+                  right: typeof highestDevValue === "number" ? "" : "0px",
                   backgroundColor: `rgb(${
                     205 - (highestdevindex / allcountrieswithoutunc) * 150
                   },0,${
                     205 - (highestdevindex / allcountrieswithoutunc) * 100
                   })`,
                 }}
-                className="flex w-10 h-10 rounded-full z-20 justify-center shadow-md shadow-black/50 items-center absolute"
+                className="flex w-10 h-10 rounded-full z-20 justify-center cursor-pointer shadow-md shadow-black/50 items-center absolute"
                 onPointerDown={() =>
                   addEventListener("pointermove", highestdevwrapper)
                 }
@@ -430,7 +433,7 @@ const RegionAdder = () => {
                     205 - (lowestdevindex / allcountrieswithoutunc) * 100
                   })`,
                 }}
-                className="flex w-10 h-10 rounded-full z-10 justify-center shadow-md shadow-black/50 items-center absolute"
+                className="flex w-10 h-10 rounded-full z-10 justify-center cursor-pointer shadow-md shadow-black/50 items-center absolute"
                 onPointerDown={() =>
                   addEventListener("pointermove", lowestdevwrapper)
                 }
