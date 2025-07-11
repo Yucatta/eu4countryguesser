@@ -4,13 +4,13 @@ import { usePathname } from "next/navigation";
 import { useGameContext } from "@/context/GameContext";
 import Link from "next/link";
 
-const HomeButton = () => {
+const Header = () => {
   const pathname = usePathname();
   const { setisitloading } = useGameContext();
   return (
     <div
       style={{ width: "clamp(0px, 99vw, 977px)" }}
-      className="flex justify-center absolute"
+      className="flex justify-center absolute "
     >
       <Link href={pathname === "/statistics" ? "/" : "/statistics"}>
         <svg
@@ -76,4 +76,4 @@ const HomeButton = () => {
   );
 };
 
-export default HomeButton;
+export default Header;
