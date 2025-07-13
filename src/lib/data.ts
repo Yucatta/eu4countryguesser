@@ -5,7 +5,7 @@ import path from "path";
 
 interface AppData {
   emptylands: number[];
-  areapaths: string[][];
+  areapaths: Array<[number, string[]]>;
   countries: string[][];
   countryprovinces: number[][];
   paths: string[][];
@@ -34,7 +34,7 @@ function loadAllDataOnce(): AppData {
     });
 
     const areapaths = JSON.parse(
-      fs.readFileSync(path.join(root, "stateoutlines.json"), "utf-8")
+      fs.readFileSync(path.join(root, "areaoutlines.json"), "utf-8")
     );
 
     const pathsJson = JSON.parse(
@@ -58,7 +58,7 @@ function loadAllDataOnce(): AppData {
     );
     return {
       emptylands: tempids4,
-      areapaths: Object.entries(areapaths),
+      areapaths: areapaths,
       paths: Object.entries(pathsJson),
       countries: Countries.map((country) => country.slice(0, 3) as string[]),
       countryprovinces: Countries.map((country) => country[3]),

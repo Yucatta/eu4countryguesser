@@ -3,17 +3,18 @@ import React, { useMemo } from "react";
 const AreaOutlines = () => {
   const { areapaths } = useDataContext();
   const areas = useMemo(() => {
-    return areapaths.map((path, index) => {
-      return (
+    return areapaths.map((patharray) =>
+      patharray[1].map((path, index) => (
         <path
-          d={String(path[1])}
+          d={path}
           fill={"none"}
-          stroke="rgb(50,50,50)"
-          strokeWidth="1.2"
+          stroke="rgb(20,20,20)"
+          strokeWidth="0.5"
+          className="pointer-events-none"
           key={index}
         ></path>
-      );
-    });
+      ))
+    );
   }, [areapaths]);
   return <>{areas}</>;
 };

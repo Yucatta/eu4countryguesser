@@ -3,7 +3,7 @@ import { createContext, useContext } from "react";
 
 type DataContextType = {
   emptylands: number[];
-  areapaths: string[][];
+  areapaths: Array<[number, string[]]>;
   countries: string[][];
   countryprovinces: number[][];
   countryoutlines: Array<[number, string[]]>;
