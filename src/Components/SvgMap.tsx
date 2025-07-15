@@ -112,7 +112,7 @@ export default function SvgMap() {
                       setReverseCircle={setReverseCircle}
                     ></AllCountries>
                     <Provinces></Provinces>
-                    <AreaOutlines></AreaOutlines>
+                    {/* <AreaOutlines></AreaOutlines> */}
                     {correctCircles.map((dets, index) => (
                       <CorrectGuessCircle
                         key={index}

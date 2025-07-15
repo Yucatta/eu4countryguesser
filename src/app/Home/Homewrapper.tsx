@@ -2,14 +2,9 @@
 import RegionSelect from "@/Components/RegionSelect";
 import { useGameContext } from "@/context/GameContext";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 export default function HomeWrapper() {
-  const { setcurrentregion, setisitloading } = useGameContext();
-
+  const { setisitloading } = useGameContext();
   const router = useRouter();
-  useEffect(() => {
-    setcurrentregion([-1, -1]);
-  }, []);
 
   return (
     <div className=" h-full mt-10  flex justify-center items-start">
