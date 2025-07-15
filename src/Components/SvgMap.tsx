@@ -13,7 +13,6 @@ import MapCountryName from "./MapCountryName";
 import CorrectGuessCircle from "./CorrectGuessCircle";
 import ReverseCircle from "./ReverseCircle";
 import { usePathname, useRouter } from "next/navigation";
-import AreaOutlines from "./AreaPaths";
 export default function SvgMap() {
   const { countrylist, mapBbox } = useGameContext();
   const svgRef = useRef<ReactZoomPanPinchContentRef | null>(null);
