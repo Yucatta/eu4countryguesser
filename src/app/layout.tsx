@@ -66,7 +66,7 @@ export default async function RootLayout({
                 <Header></Header>
                 <MapContextProvider>
                   <CurrentCountry></CurrentCountry>
-                  {/* <SvgMap></SvgMap> */}
+                  <SvgMap></SvgMap>
                 </MapContextProvider>
                 {children}
               </GameContextProvider>
