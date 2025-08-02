@@ -71,7 +71,6 @@ const AllCountries = ({
                   return prev;
                 });
               }}
-              // test
               countryclick={(bbox) => {
                 const xcord = bbox.x + bbox.width / 2;
                 const ycord = bbox.y + bbox.height / 2;

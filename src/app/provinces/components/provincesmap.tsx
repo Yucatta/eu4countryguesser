@@ -135,7 +135,7 @@ export default function ProvinceMap() {
   ]);
   return (
     <>
-      <div className="w-[1536px] h-[552px] bg-neutral-900 flex items-center justify-center">
+      <div className="w-[1536px] mt-16 h-[552px] bg-neutral-900 flex items-center justify-center">
         {Image ? Image : ""}
       </div>
     </>

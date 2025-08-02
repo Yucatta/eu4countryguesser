@@ -1,0 +1,24 @@
+# rgb(255,0,255) North halann  "rgb(126,158,125)" NOH
+# rgb(238,130,238) South Escann  "rgb(64,112,67)" SOE
+# rgb(219,112,219) Escann Proper  "rgb(64,112,67)" ESP
+# rgb(221,160,221) Deep Woods  "rgb(40,77,42)" DEW
+# rgb(255,105,180) SouthWest Serpentspine "rgb(200,200,200)" SOS
+# rgb(255,20,147) North Serpentspine "rgb(200,200,200)" NOS
+# rgb(199,21,133)  Middle Serpentspine "rgb(200,200,200)" MES
+# rgb(218,112,214) West Serpentspine "rgb(200,200,200)" WES
+# rgb(186,85,211) North Haless "rgb(126,158,125)" NLS
+# rgb(216,191,216) North Sarhal  "rgb(240,216,141)" NSR
+# rgb(255,0,191) Fangaula "rgb(40,77,42)" FAN
+# rgb(255,77,255) Really Cool Hordes  "rgb(191,179,162)" RCH
+# rgb(230,0,230) West Anbennar  "rgb(191,179,162)" WEA
+# rgb(200,0,200) Forbidden Plains  "rgb(199,175,93)" FOP
+# rgb(255,102,204) Gozangun  "rgb(191,179,162)" GOZ
+# rgb(255,0,200) Ardimya  "rgb(240,216,141)" ARD
+# rgb(238,96,167) North Aelantir Artric "rgb(126,158,125)" NAA
+# rgb(255,51,153) North Aelantir Desert  "rgb(240,216,141)" NAD
+# rgb(232,62,140) Rest of North Aelantir  "rgb(64,112,67)" RNA
+# rgb(214,0,170) Effelai  "rgb(40,77,42)" EFF
+# rgb(224,17,95) Torn Gates  "rgb(240,216,141)" TOG
+# rgb(208,32,144) Kheionai "rgb(64,112,67)" KHE
+# rgb(229,43,80) Aelantir Islands  "rgb(64,112,67)" AEL
+# rgb(246,83,166) East Sarhal  "rgb(199,175,93)" EAS
