@@ -33,7 +33,7 @@ const AllCountries = ({
       .filter((countryid) => countryid < 665)
       .filter((countryid) => !badlist.includes(countryid));
     const a = filteredids[Math.floor(Math.random() * filteredids.length)];
-    return a ? a : -1;
+    return typeof a === "number" ? a : -1;
   }
 
   useEffect(() => {
