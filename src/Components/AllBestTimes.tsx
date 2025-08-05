@@ -57,24 +57,27 @@ const AllBestTimes = () => {
   }, []);
   return (
     <>
+      <div className="flex justify-between absolute top-0 w-full items-center">
+
       <Link
         href={"/"}
         onClick={() => setisitloading(true)}
-        className="flex cursor-pointer flex-row absolute top-0 mt-5 w-20 items-center ml-2  h-10 justify-center  "
-      >
+        className="flex cursor-pointer flex-row top-0 left-0 mt-5 w-20 items-center ml-2  h-10 justify-center  "
+        >
         <svg viewBox="-10 -20 50 40" className="z-120 w-10">
           <path
             stroke="rgb(103,0,191)"
             strokeWidth={3}
             strokeLinecap="round"
             d="M 30 0 L 0 0 M 10 10 L 0 0 L 10 -10"
-          ></path>
+            ></path>
         </svg>
         <div className="w-10 font-bold text-[rgb(136,0,255)]">Back</div>
       </Link>
-      <div className="flex flex-row absolute top-0 left-7/12 transform -translate-x-1/2 ml-80 mt-5 w-full justify-center  ">
+      <div className=" mt-5 mr-5 absolute top-0 right-0 w-20">
         <Switch isswitchon={MenuSwitch} setswitch={setMenuSwitch}></Switch>
       </div>
+            </div>
       <div className="flex  flex-col mt-10 w-full  h-2/3 ">
         <div
           className="flex items-center mb-4 justify-center font-bold text-3xl"
