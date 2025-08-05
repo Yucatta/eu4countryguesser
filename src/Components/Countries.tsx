@@ -121,7 +121,7 @@ const Countries = ({ countryindex, findit, countryclick, isitin }: Props) => {
             isitoktosend = true;
             timeinterval.current = setTimeout(() => {
               isitoktosend = false;
-            }, 1500);
+            }, 1000);
           }}
           onPointerUp={() => {
             if (isitin && pathref.current.length && isitoktosend) {

@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import Switch from "./Switch";
 import { useDataContext } from "@/context/DataContext";
-import { useRouter } from "next/navigation";
 import { useGameContext } from "@/context/GameContext";
 import Link from "next/link";
 const Continents = [
@@ -17,7 +16,6 @@ const AllBestTimes = () => {
   const { regionnames } = useDataContext();
   const { setisitloading } = useGameContext();
   const [MenuSwitch, setMenuSwitch] = useState(true);
-  const router = useRouter();
   const [selectedcontinent, setselectedcontinent] = useState(0);
   const [scores, settscores] = useState<number[][][] | null>(null);
   const [personalscores, setpersonalscores] = useState<number[][][]>([]);

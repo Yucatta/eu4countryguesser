@@ -52,7 +52,7 @@ const CompletaionStats = ({
       )}
       <div className="flex w-full items-center flex-col">
         <div className="text-black text-xl font-bold ">YOUR SCORE</div>
-        <div className="flex  justify-evenly w-1/2 flex-row">
+        <div className="flex  justify-evenly w-full flex-row">
           <div className="flex-col text-center">
             <div className="text-neutral-700">Time</div>
             <div className="text-neutral-950 font-semibold text-3xl">

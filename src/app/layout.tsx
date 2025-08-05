@@ -4,7 +4,7 @@ import { Jost } from "next/font/google";
 import { DataProvider } from "@/context/DataContext";
 import { loadAppData } from "@/lib/data";
 import { Analytics } from "@vercel/analytics/next";
-import HomeButton from "@/Components/HomeButton";
+import Header from "@/Components/Header";
 import { GameContextProvider } from "@/context/GameContext";
 import { MapContextProvider } from "@/context/MapContext";
 import CurrentCountry from "@/Components/CurrentCountry";
@@ -63,7 +63,7 @@ export default async function RootLayout({
                 <Suspense>
                   <LoadingScreen></LoadingScreen>
                 </Suspense>
-                <HomeButton></HomeButton>
+                <Header></Header>
                 <MapContextProvider>
                   <CurrentCountry></CurrentCountry>
                   <SvgMap></SvgMap>

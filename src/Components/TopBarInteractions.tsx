@@ -34,6 +34,7 @@ const TopBarInteractions = ({ startdate, correctness, seconds }: Props) => {
     scores: React.RefObject<number[][][] | null>,
     seconds: number
   ) {
+    console.log(currentregion);
     if (
       scores.current &&
       (!scores.current[currentregion[0]][currentregion[1]][1] ||

@@ -169,7 +169,6 @@ const RegionAdder = () => {
       return a - b;
     });
     const countlist = temp.length ? temp : regions[4][6][1];
-
     setcountrylist(countlist);
     setallIncludedCountries(countlist);
     sethighestdevindex(countlist.filter((id) => id < 665).length);
